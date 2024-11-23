@@ -23,7 +23,7 @@ export default function ServerOverview({
           <CardContent className="px-6 py-3">
             <section className="flex flex-col gap-1">
               <p className="text-sm font-medium md:text-base">
-                {"Totalservers"}
+                {"Total servers"}
               </p>
               <div className="flex items-center gap-2">
                 <span className="relative flex h-2 w-2">
@@ -42,7 +42,7 @@ export default function ServerOverview({
           <CardContent className="px-6 py-3">
             <section className="flex flex-col gap-1">
               <p className="text-sm font-medium md:text-base">
-                {"Onlineservers"}
+                {"Online servers"}
               </p>
               <div className="flex items-center gap-2">
                 <span className="relative flex h-2 w-2">
@@ -63,7 +63,7 @@ export default function ServerOverview({
           <CardContent className="px-6 py-3">
             <section className="flex flex-col gap-1">
               <p className="text-sm font-medium md:text-base">
-                {"Offlineservers"}
+                {"Offline servers"}
               </p>
               <div className="flex items-center gap-2">
                 <span className="relative flex h-2 w-2">
@@ -83,7 +83,7 @@ export default function ServerOverview({
           <CardContent className="relative px-6 py-3">
             <section className="flex flex-col gap-1">
               <p className="text-sm font-medium md:text-base">
-                {"Totalbandwidth"}
+                {"Total bandwidth"}
               </p>
 
               <section className="flex flex-col sm:flex-row pt-[8px] sm:items-center items-start gap-1">
