@@ -3,6 +3,8 @@ import { NezhaAPIResponse } from "@/types/nezha-api";
 import ServerCard from "@/components/ServerCard";
 import { formatNezhaInfo } from "@/lib/utils";
 import ServerOverview from "@/components/ServerOverview";
+import { useEffect } from "react";
+import { toast } from "sonner";
 
 export default function Servers() {
   const { lastMessage, readyState } = useWebSocket("/api/v1/ws/server", {
@@ -10,9 +12,19 @@ export default function Servers() {
     reconnectInterval: 3000, // 重连间隔
   });
 
+  useEffect(() => {
+    if (readyState == 1 ) {
+      toast.success("WebSocket connected");
+    }
+  }, [readyState]);
+
   // 检查连接状态
   if (readyState !== 1) {
-    return null;
+    return (
+      <div className="flex flex-col items-center justify-center ">
+        <p className="font-semibold text-sm">connecting...</p>
+      </div>
+    );
   }
 
   // 解析消息
@@ -23,7 +35,7 @@ export default function Servers() {
   if (!nezhaWsData) {
     return (
       <div className="flex flex-col items-center justify-center ">
-        <p className="font-semibold text-sm">等待数据...</p>
+        <p className="font-semibold text-sm">processing...</p>
       </div>
     );
   }

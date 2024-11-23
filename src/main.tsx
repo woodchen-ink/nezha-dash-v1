@@ -11,10 +11,19 @@ const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <QueryClientProvider client={queryClient}>
         <App />
-        <Toaster richColors position="top-right" />
+        <Toaster duration={1000}
+      toastOptions={{
+        classNames: {
+          default:
+            "w-fit rounded-full px-2.5 py-1.5 bg-neutral-100 border border-neutral-200 backdrop-blur-xl shadow-none",
+        },
+      }}
+      position="top-center"
+      className={"flex items-center justify-center"}
+    />
         <ReactQueryDevtools />
       </QueryClientProvider>
     </ThemeProvider>
