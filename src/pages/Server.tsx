@@ -1,4 +1,20 @@
+import { useWebSocketContext } from "@/lib/websocketContext";
+import { NezhaAPI } from "@/types/nezha-api";
+
+
 export default function Servers() {
+  const { connected, message } = useWebSocketContext()
+
+  if (!connected || !message) {
+    return (
+      <p>连接中...</p>
+    )
+  }
+
+  const nezhaWsData = JSON.parse(message) as NezhaAPI[]
+
+  console.log(nezhaWsData)
+
   return (
     <div className="mx-auto w-full max-w-5xl px-4 lg:px-0">
       <div className="flex justify-between mb-4 mt-4 items-center">
