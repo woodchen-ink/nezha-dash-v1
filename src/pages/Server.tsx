@@ -3,17 +3,34 @@ import { NezhaAPIResponse } from "@/types/nezha-api";
 import ServerCard from "@/components/ServerCard";
 import { formatNezhaInfo } from "@/lib/utils";
 import ServerOverview from "@/components/ServerOverview";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
+import { fetchServerGroup } from "@/lib/nezha-api";
+import GroupSwitch from "@/components/GroupSwitch";
+import { ServerGroup } from "@/types/nezha-api";
 
 export default function Servers() {
+  const { data: groupData } = useQuery({
+    queryKey: ["server-group"],
+    queryFn: () => fetchServerGroup(),
+  });
   const { lastMessage, readyState } = useWebSocket("/api/v1/ws/server", {
-    shouldReconnect: () => true, // 自动重连
-    reconnectInterval: 3000, // 重连间隔
+    shouldReconnect: () => true,
+    reconnectInterval: 3000,
   });
 
+  // 添加分组状态
+  const [currentGroup, setCurrentGroup] = useState<string>("All");
+
+  // 获取所有分组名称
+  const groupTabs = [
+    "All",
+    ...(groupData?.data?.map((item: ServerGroup) => item.group.name) || []),
+  ];
+
   useEffect(() => {
-    if (readyState == 1 ) {
+    if (readyState == 1) {
       toast.success("WebSocket connected");
     }
   }, [readyState]);
@@ -40,7 +57,7 @@ export default function Servers() {
     );
   }
 
-  // 计算服务器总数和在线数量
+  // 计算所有服务器的统计数据（用于 Overview）
   const totalServers = nezhaWsData.servers.length;
   const onlineServers = nezhaWsData.servers.filter(
     (server) => formatNezhaInfo(server).online,
@@ -57,6 +74,18 @@ export default function Servers() {
     0,
   );
 
+  // 根据当前选中的分组筛选服务器（用于显示列表）
+  const filteredServers = nezhaWsData.servers.filter((server) => {
+    if (currentGroup === "All") return true;
+    const group = groupData?.data?.find(
+      (g: ServerGroup) =>
+        g.group.name === currentGroup &&
+        Array.isArray(g.servers) &&
+        g.servers.includes(server.id),
+    );
+    return !!group;
+  });
+
   return (
     <div className="mx-auto w-full max-w-5xl px-0">
       <ServerOverview
@@ -66,8 +95,15 @@ export default function Servers() {
         up={up}
         down={down}
       />
+      <div className="mt-6">
+        <GroupSwitch
+          tabs={groupTabs}
+          currentTab={currentGroup}
+          setCurrentTab={setCurrentGroup}
+        />
+      </div>
       <section className="grid grid-cols-1 gap-2 md:grid-cols-2 mt-6">
-        {nezhaWsData.servers.map((serverInfo) => (
+        {filteredServers.map((serverInfo) => (
           <ServerCard key={serverInfo.id} serverInfo={serverInfo} />
         ))}
       </section>

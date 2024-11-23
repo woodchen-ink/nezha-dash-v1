@@ -43,3 +43,18 @@ export interface NezhaAPIStatus {
   temperatures: number;
   gpu: number;
 }
+
+export interface ServerGroupResponse {
+  success: boolean;
+  data: ServerGroup[];
+}
+
+export interface ServerGroup {
+  group: {
+    id: number;
+    created_at: string;
+    updated_at: string;
+    name: string;
+  };
+  servers: number[];
+}
