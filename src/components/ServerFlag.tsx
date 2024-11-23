@@ -11,7 +11,6 @@ export default function ServerFlag({
 }) {
   const [supportsEmojiFlags, setSupportsEmojiFlags] = useState(false);
 
-
   useEffect(() => {
     const checkEmojiSupport = () => {
       const canvas = document.createElement("canvas");
@@ -38,7 +37,7 @@ export default function ServerFlag({
 
   return (
     <span className={cn("text-[12px] text-muted-foreground", className)}>
-      { !supportsEmojiFlags ? (
+      {!supportsEmojiFlags ? (
         <span className={`fi fi-${country_code}`} />
       ) : (
         getUnicodeFlagIcon(country_code)

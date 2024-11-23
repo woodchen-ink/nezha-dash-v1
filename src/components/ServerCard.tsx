@@ -5,20 +5,14 @@ import { cn, formatNezhaInfo } from "@/lib/utils";
 import { NezhaAPI } from "@/types/nezha-api";
 import { Card } from "./ui/card";
 
-export default function ServerCard({
-  serverInfo,
-}: {
-  serverInfo: NezhaAPI;
-}) {
-
-  const {  name, country_code, online, cpu, up, down, mem, stg } =
+export default function ServerCard({ serverInfo }: { serverInfo: NezhaAPI }) {
+  const { name, country_code, online, cpu, up, down, mem, stg } =
     formatNezhaInfo(serverInfo);
 
-  const showFlag = true
-
+  const showFlag = true;
 
   return online ? (
-    <section  >
+    <section>
       <Card
         className={cn(
           "flex flex-col items-center justify-start gap-3 p-3 md:px-5 lg:flex-row",
@@ -49,9 +43,7 @@ export default function ServerCard({
           </div>
         </section>
         <div className="flex flex-col gap-2">
-          <section
-            className={cn("grid grid-cols-5 items-center gap-3")}
-          >
+          <section className={cn("grid grid-cols-5 items-center gap-3")}>
             <div className={"flex w-14 flex-col"}>
               <p className="text-xs text-muted-foreground">{"CPU"}</p>
               <div className="flex items-center text-xs font-semibold">

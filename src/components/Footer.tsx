@@ -10,7 +10,10 @@ const Footer: React.FC = () => {
           <a href={"https://github.com/naiba/nezha"} target="_blank">
             Nezha
           </a>
-          <a href={"https://github.com/hamster1963/nezha-dash-react"} target="_blank">
+          <a
+            href={"https://github.com/hamster1963/nezha-dash-react"}
+            target="_blank"
+          >
             Nezha-Dash
           </a>
         </section>

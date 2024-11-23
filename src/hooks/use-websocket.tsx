@@ -48,23 +48,30 @@ export default function useWebSocket(url: string): WebSocketHook {
       setConnected(false);
       // 清理当前的 socket
       socketRef.current = null;
-      
+
       if (!isUnmounted.current) {
         // 检查是否已经在重连中
         if (reconnectTimeout.current) {
           clearTimeout(reconnectTimeout.current);
         }
-        
+
         // Attempt to reconnect with increased max attempts
         if (reconnectAttempts.current < 10) {
-          const timeout = Math.min(Math.pow(2, reconnectAttempts.current) * 1000, 30000); // 最大30秒
+          const timeout = Math.min(
+            Math.pow(2, reconnectAttempts.current) * 1000,
+            30000,
+          ); // 最大30秒
           reconnectAttempts.current += 1;
-          console.log(`Attempting to reconnect in ${timeout/1000} seconds...`);
+          console.log(
+            `Attempting to reconnect in ${timeout / 1000} seconds...`,
+          );
           reconnectTimeout.current = setTimeout(() => {
             connect();
           }, timeout);
         } else {
-          console.warn("Max reconnect attempts reached. Please refresh the page to try again.");
+          console.warn(
+            "Max reconnect attempts reached. Please refresh the page to try again.",
+          );
         }
       }
     };
