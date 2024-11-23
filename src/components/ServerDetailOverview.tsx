@@ -19,9 +19,7 @@ export default function ServerDetailOverview() {
   // 检查连接状态
   if (readyState !== 1) {
     return (
-      <div className="flex flex-col items-center justify-center">
-        <p className="font-semibold text-sm">connecting...</p>
-      </div>
+      <ServerDetailLoading />
     );
   }
 
