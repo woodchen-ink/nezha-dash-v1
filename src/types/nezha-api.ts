@@ -1,39 +1,46 @@
+export interface NezhaAPIResponse {
+  now: number;
+  servers: NezhaAPI[];
+}
+
+
 export interface NezhaAPI {
   id: number;
   name: string;
+  last_active: string;
   host: NezhaAPIHost;
-  status: NezhaAPIStatus;
+  state: NezhaAPIStatus;
 }
 
 export interface NezhaAPIHost {
-  Platform: string;
-  PlatformVersion: string;
-  CPU: string[];
-  MemTotal: number;
-  DiskTotal: number;
-  SwapTotal: number;
-  Arch: string;
-  BootTime: number;
-  CountryCode: string;
-  Version: string;
+  platform: string;
+  platform_version: string;
+  cpu: string[];
+  mem_total: number;
+  disk_total: number;
+  swap_total: number;
+  arch: string;
+  boot_time: number;
+  country_code: string;
+  version: string;
 }
 
 export interface NezhaAPIStatus {
-  CPU: number;
-  MemUsed: number;
-  SwapUsed: number;
-  DiskUsed: number;
-  NetInTransfer: number;
-  NetOutTransfer: number;
-  NetInSpeed: number;
-  NetOutSpeed: number;
-  Uptime: number;
-  Load1: number;
-  Load5: number;
-  Load15: number;
-  TcpConnCount: number;
-  UdpConnCount: number;
-  ProcessCount: number;
-  Temperatures: number;
-  GPU: number;
+  cpu: number;
+  mem_used: number;
+  swap_used: number;
+  disk_used: number;
+  net_in_transfer: number;
+  net_out_transfer: number;
+  net_in_speed: number;
+  net_out_speed: number;
+  uptime: number;
+  load_1: number;
+  load_5: number;
+  load_15: number;
+  tcp_conn_count: number;
+  udp_conn_count: number;
+  process_count: number;
+  temperatures: number;
+  gpu: number;
 }

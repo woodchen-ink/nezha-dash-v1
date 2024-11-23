@@ -21,13 +21,13 @@ function Header() {
               className="relative m-0! border-2 border-transparent h-6 w-6 object-cover object-top p-0!"
             />
           </div>
-          {"NezhaDash"}
+          {"NEZHA"}
           <Separator
             orientation="vertical"
             className="mx-2 hidden h-4 w-[1px] md:block"
           />
           <p className="hidden text-sm font-medium opacity-40 md:block">
-            哪吒监控面板
+            哪吒监控
           </p>
         </section>
         <section className="flex items-center gap-2">

@@ -1,38 +1,44 @@
-import { useWebSocketContext } from "@/lib/websocketContext";
-import { NezhaAPI } from "@/types/nezha-api";
-
+import useWebSocket from 'react-use-websocket';
+import {  NezhaAPIResponse } from "@/types/nezha-api";
+import ServerCard from '@/components/ServerCard';
+import { formatNezhaInfo } from '@/lib/utils';
+import ServerOverview from '@/components/ServerOverview';
 
 export default function Servers() {
-  const { connected, message } = useWebSocketContext()
+  const { lastMessage, readyState } = useWebSocket('/api/v1/ws/server', {
+    shouldReconnect: () => true, // 自动重连
+    reconnectInterval: 3000, // 重连间隔
+  });
 
-  if (!connected || !message) {
-    return (
-      <p>连接中...</p>
-    )
+  // 检查连接状态
+  if (readyState !== 1) {
+    return null;
   }
 
-  const nezhaWsData = JSON.parse(message) as NezhaAPI[]
+  // 解析消息
+  const nezhaWsData = lastMessage ? JSON.parse(lastMessage.data) as NezhaAPIResponse : null;
 
-  console.log(nezhaWsData)
+  if (!nezhaWsData) {
+    return <div className='flex flex-col items-center justify-center '><p className='font-semibold text-sm'>等待数据...</p></div>;
+  }
+
+    // 计算服务器总数和在线数量
+    const totalServers = nezhaWsData.servers.length;
+    const onlineServers = nezhaWsData.servers.filter(server => formatNezhaInfo(server).online).length;
+    const offlineServers = nezhaWsData.servers.filter(server => !formatNezhaInfo(server).online).length;
+    const up = nezhaWsData.servers.reduce((total, server) => total + server.state.net_out_transfer, 0);
+    const down = nezhaWsData.servers.reduce((total, server) => total + server.state.net_in_transfer, 0);
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-4 lg:px-0">
-      <div className="flex justify-between mb-4 mt-4 items-center">
-        <section className="flex flex-col gap-2">
-          <h2 className="mt-0 scroll-m-20 text-3xl font-semibold tracking-tight transition-colors">
-            服务器
-          </h2>
-          <p className="text-sm font-medium">
-            你可以在这里查看和管理全部的服务器。
-            <a
-              href="#"
-              className="font-medium text-primary underline underline-offset-4"
-            >
-              了解更多↗
-            </a>
-          </p>
-        </section>
-      </div>
+    <div className="mx-auto w-full max-w-5xl px-0">
+      <ServerOverview total={totalServers} online={onlineServers} offline={offlineServers} up={up} down={down} />
+     <section
+        className="grid grid-cols-1 gap-2 md:grid-cols-2 mt-6"
+      >
+        {nezhaWsData.servers.map((serverInfo) => (
+          <ServerCard key={serverInfo.id} serverInfo={serverInfo} />
+        ))}
+      </section>
     </div>
   );
 }

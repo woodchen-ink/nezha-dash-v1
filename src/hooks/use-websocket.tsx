@@ -19,6 +19,10 @@ export default function useWebSocket(url: string): WebSocketHook {
   const connect = useCallback(() => {
     if (isUnmounted.current) return;
 
+    console.log("Connecting to WebSocket...");
+
+    console.log("WebSocket URL:", url);
+
     const ws = new WebSocket(url);
     setSocket(ws);
     socketRef.current = ws;
