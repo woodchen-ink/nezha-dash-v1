@@ -12,14 +12,14 @@ const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-        <WebSocketProvider >
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <WebSocketProvider>
         <QueryClientProvider client={queryClient}>
           <App />
           <Toaster richColors position="top-right" />
           <ReactQueryDevtools />
         </QueryClientProvider>
-        </WebSocketProvider>
-      </ThemeProvider>
+      </WebSocketProvider>
+    </ThemeProvider>
   </React.StrictMode>,
 );

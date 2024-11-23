@@ -24,7 +24,7 @@ jobs:
 
       - name: Build static export
         run: |
-          bun run build --base=/dashboard
+          bun run build
 
       - name: Compress dist folder
         run: zip -r dist.zip dist

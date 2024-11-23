@@ -8,7 +8,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { CheckCircleIcon } from "@heroicons/react/20/solid";
 import { Moon, Sun } from "lucide-react";
 import { Theme } from "@/components/ThemeProvider";
 import { useTheme } from "../hooks/use-theme";
@@ -40,21 +39,18 @@ export function ModeToggle() {
           onSelect={(e) => handleSelect(e, "light")}
         >
           Light
-          {theme === "light" && <CheckCircleIcon className="size-4" />}
         </DropdownMenuItem>
         <DropdownMenuItem
           className={cn({ "gap-3 bg-muted": theme === "dark" })}
           onSelect={(e) => handleSelect(e, "dark")}
         >
           Dark
-          {theme === "dark" && <CheckCircleIcon className="size-4" />}
         </DropdownMenuItem>
         <DropdownMenuItem
           className={cn({ "gap-3 bg-muted": theme === "system" })}
           onSelect={(e) => handleSelect(e, "system")}
         >
           System
-          {theme === "system" && <CheckCircleIcon className="size-4" />}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

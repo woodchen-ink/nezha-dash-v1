@@ -8,13 +8,10 @@ import { DateTime } from "luxon";
 import { useEffect, useRef, useState } from "react";
 
 function Header() {
-
   return (
     <div className="mx-auto w-full max-w-5xl">
       <section className="flex items-center justify-between">
-        <section
-          className="flex items-center text-base font-medium"
-        >
+        <section className="flex items-center text-base font-medium">
           <div className="mr-1 flex flex-row items-center justify-start">
             <img
               width={40}
@@ -45,7 +42,7 @@ function Header() {
 
 // https://github.com/streamich/react-use/blob/master/src/useInterval.ts
 const useInterval = (callback: () => void, delay: number | null) => {
-  const savedCallback = useRef<() => void>(() => { });
+  const savedCallback = useRef<() => void>(() => {});
   useEffect(() => {
     savedCallback.current = callback;
   });
@@ -74,9 +71,7 @@ function Overview() {
     <section className={"mt-10 flex flex-col md:mt-16"}>
       <p className="text-base font-semibold">👋 Overview</p>
       <div className="flex items-center gap-1.5">
-        <p className="text-sm font-medium opacity-50">
-        where the time is
-        </p>
+        <p className="text-sm font-medium opacity-50">where the time is</p>
         {mouted ? (
           <p className="text-sm font-medium">{timeString}</p>
         ) : (
