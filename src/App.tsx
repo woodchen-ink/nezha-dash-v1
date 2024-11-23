@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Server from "./pages/Server";
+import ServerDetail from "./pages/ServerDetail";
 
 const App: React.FC = () => {
   return (
@@ -12,6 +13,7 @@ const App: React.FC = () => {
           <Header />
           <Routes>
             <Route path="/" element={<Server />} />
+            <Route path="/server/:id" element={<ServerDetail />} />
           </Routes>
           <Footer />
         </main>

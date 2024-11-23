@@ -4,8 +4,10 @@ import ServerUsageBar from "@/components/ServerUsageBar";
 import { cn, formatNezhaInfo } from "@/lib/utils";
 import { NezhaAPI } from "@/types/nezha-api";
 import { Card } from "./ui/card";
+import { useNavigate } from "react-router-dom";
 
 export default function ServerCard({ serverInfo }: { serverInfo: NezhaAPI }) {
+  const navigate = useNavigate();
   const { name, country_code, online, cpu, up, down, mem, stg } =
     formatNezhaInfo(serverInfo);
 
@@ -15,8 +17,9 @@ export default function ServerCard({ serverInfo }: { serverInfo: NezhaAPI }) {
     <section>
       <Card
         className={cn(
-          "flex flex-col items-center justify-start gap-3 p-3 md:px-5 lg:flex-row",
+          "flex flex-col items-center justify-start gap-3 p-3 md:px-5 lg:flex-row cursor-pointer hover:bg-accent/50 transition-colors",
         )}
+        onClick={() => navigate(`/server/${serverInfo.id}`)}
       >
         <section
           className={cn("grid items-center gap-2 lg:w-40")}
@@ -88,8 +91,9 @@ export default function ServerCard({ serverInfo }: { serverInfo: NezhaAPI }) {
   ) : (
     <Card
       className={cn(
-        "flex flex-col items-center justify-start gap-3 p-3 md:px-5 lg:flex-row",
+        "flex flex-col items-center justify-start gap-3 p-3 md:px-5 lg:flex-row cursor-pointer hover:bg-accent/50 transition-colors",
       )}
+      onClick={() => navigate(`/server/${serverInfo.id}`)}
     >
       <section
         className={cn("grid items-center gap-2 lg:w-40")}

@@ -59,32 +59,35 @@ export default function Servers() {
 
   // 计算所有服务器的统计数据（用于 Overview）
   const totalServers = nezhaWsData?.servers?.length || 0;
-  const onlineServers = nezhaWsData?.servers?.filter(
-    (server) => formatNezhaInfo(server).online,
-  )?.length || 0;
-  const offlineServers = nezhaWsData?.servers?.filter(
-    (server) => !formatNezhaInfo(server).online,
-  )?.length || 0;
-  const up = nezhaWsData?.servers?.reduce(
-    (total, server) => total + server.state.net_out_transfer,
-    0,
-  ) || 0;
-  const down = nezhaWsData?.servers?.reduce(
-    (total, server) => total + server.state.net_in_transfer,
-    0,
-  ) || 0;
+  const onlineServers =
+    nezhaWsData?.servers?.filter((server) => formatNezhaInfo(server).online)
+      ?.length || 0;
+  const offlineServers =
+    nezhaWsData?.servers?.filter((server) => !formatNezhaInfo(server).online)
+      ?.length || 0;
+  const up =
+    nezhaWsData?.servers?.reduce(
+      (total, server) => total + server.state.net_out_transfer,
+      0,
+    ) || 0;
+  const down =
+    nezhaWsData?.servers?.reduce(
+      (total, server) => total + server.state.net_in_transfer,
+      0,
+    ) || 0;
 
   // 根据当前选中的分组筛选服务器（用于显示列表）
-  const filteredServers = nezhaWsData?.servers?.filter((server) => {
-    if (currentGroup === "All") return true;
-    const group = groupData?.data?.find(
-      (g: ServerGroup) =>
-        g.group.name === currentGroup &&
-        Array.isArray(g.servers) &&
-        g.servers.includes(server.id),
-    );
-    return !!group;
-  }) || [];
+  const filteredServers =
+    nezhaWsData?.servers?.filter((server) => {
+      if (currentGroup === "All") return true;
+      const group = groupData?.data?.find(
+        (g: ServerGroup) =>
+          g.group.name === currentGroup &&
+          Array.isArray(g.servers) &&
+          g.servers.includes(server.id),
+      );
+      return !!group;
+    }) || [];
 
   return (
     <div className="mx-auto w-full max-w-5xl px-0">
