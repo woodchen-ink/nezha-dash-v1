@@ -12,11 +12,11 @@ export default defineConfig({
   },
   server: {
     proxy: {
-     '/api/v1/ws/server': {
-              target: 'ws://localhost:8080',
-              changeOrigin: true,
-              ws: true,
-            },
-    }
-  }
+      "/api/v1/ws/server": {
+        target: "ws://localhost:8080",
+        changeOrigin: true,
+        ws: true,
+      },
+    },
+  },
 });

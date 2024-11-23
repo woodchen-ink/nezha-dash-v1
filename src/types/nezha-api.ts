@@ -3,7 +3,6 @@ export interface NezhaAPIResponse {
   servers: NezhaAPI[];
 }
 
-
 export interface NezhaAPI {
   id: number;
   name: string;
