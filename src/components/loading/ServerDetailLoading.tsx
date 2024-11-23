@@ -1,4 +1,3 @@
-
 import { Skeleton } from "@/components/ui/skeleton";
 import { BackIcon } from "../Icon";
 import { useNavigate } from "react-router-dom";
