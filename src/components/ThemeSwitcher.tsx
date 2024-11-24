@@ -9,8 +9,11 @@ import { cn } from "@/lib/utils";
 import { Moon, Sun } from "lucide-react";
 import { Theme } from "@/components/ThemeProvider";
 import { useTheme } from "../hooks/use-theme";
+import { CheckCircleIcon } from "@heroicons/react/20/solid";
+import { useTranslation } from 'react-i18next';
 
 export function ModeToggle() {
+  const {t} = useTranslation();
   const { setTheme, theme } = useTheme();
 
   const handleSelect = (e: Event, newTheme: Theme) => {
@@ -36,19 +39,22 @@ export function ModeToggle() {
           className={cn({ "gap-3 bg-muted": theme === "light" })}
           onSelect={(e) => handleSelect(e, "light")}
         >
-          Light
+          {t("theme.light")}
+          {theme === "light" && <CheckCircleIcon className="size-4" />}
         </DropdownMenuItem>
         <DropdownMenuItem
           className={cn({ "gap-3 bg-muted": theme === "dark" })}
           onSelect={(e) => handleSelect(e, "dark")}
         >
-          Dark
+          {t("theme.dark")}
+          {theme === "dark" && <CheckCircleIcon className="size-4" />}
         </DropdownMenuItem>
         <DropdownMenuItem
           className={cn({ "gap-3 bg-muted": theme === "system" })}
           onSelect={(e) => handleSelect(e, "system")}
         >
-          System
+          {t("theme.system")}
+          {theme === "system" && <CheckCircleIcon className="size-4" />}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
