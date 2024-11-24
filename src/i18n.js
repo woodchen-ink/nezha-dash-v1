@@ -17,13 +17,22 @@ const resources = {
   },
 };
 
+const getStoredLanguage = () => {
+  return localStorage.getItem("language") || "zh-CN";
+};
+
 i18n.use(initReactI18next).init({
   resources,
-  lng: "zh-CN", // 默认语言
+  lng: getStoredLanguage(), // 使用localStorage中存储的语言或默认值
   fallbackLng: "en", // 当前语言的翻译没有找到时，使用的备选语言
   interpolation: {
     escapeValue: false, // react已经安全地转义
   },
+});
+
+// 添加语言改变时的处理函数
+i18n.on("languageChanged", (lng) => {
+  localStorage.setItem("language", lng);
 });
 
 export default i18n;
