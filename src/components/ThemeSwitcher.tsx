@@ -10,10 +10,10 @@ import { Moon, Sun } from "lucide-react";
 import { Theme } from "@/components/ThemeProvider";
 import { useTheme } from "../hooks/use-theme";
 import { CheckCircleIcon } from "@heroicons/react/20/solid";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 export function ModeToggle() {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const { setTheme, theme } = useTheme();
 
   const handleSelect = (e: Event, newTheme: Theme) => {
