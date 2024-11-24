@@ -2,6 +2,12 @@
   "nezha": "哪吒監控",
   "overview": "概覽",
   "whereTheTimeIs": "目前時間",
+  "info": {
+    "websocketConnecting": "WebSocket 連接中",
+    "websocketConnected": "WebSocket 連接成功",
+    "websocketDisconnected": "WebSocket 連接斷開",
+    "processing": "處理中..."
+  },
   "serverOverview": {
     "totalServers": "總服務器",
     "onlineServers": "線上服務器",
@@ -26,6 +32,14 @@
     "disk": "磁盤",
     "region": "地區",
     "system": "系統"
+  },
+  "serverDetailChart": {
+    "process": "進程數",
+    "disk": "磁盤",
+    "mem": "內存",
+    "swap": "虛擬記憶體",
+    "upload": "上傳",
+    "download": "下載"
   },
   "footer": {
     "themeBy": "主題-"

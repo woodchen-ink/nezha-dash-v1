@@ -16,6 +16,7 @@ import {
 import { ServerDetailChartLoading } from "./loading/ServerDetailLoading";
 import AnimatedCircularProgressBar from "./ui/animated-circular-progress-bar";
 import { useWebSocketContext } from "@/hooks/use-websocket-context";
+import { useTranslation } from "react-i18next";
 
 type cpuChartData = {
   timeStamp: string;
@@ -54,12 +55,10 @@ export default function ServerDetailChart() {
   const { id } = useParams();
   const { lastMessage, readyState } = useWebSocketContext();
 
-  // 检查连接状态
   if (readyState !== 1) {
     return <ServerDetailChartLoading />;
   }
 
-  // 解析消息
   const nezhaWsData = lastMessage
     ? (JSON.parse(lastMessage.data) as NezhaAPIResponse)
     : null;
@@ -183,6 +182,7 @@ function CpuChart({ data }: { data: NezhaAPI }) {
 }
 
 function ProcessChart({ data }: { data: NezhaAPI }) {
+  const { t } = useTranslation();
   const [processChartData, setProcessChartData] = useState(
     [] as processChartData[],
   );
@@ -222,7 +222,9 @@ function ProcessChart({ data }: { data: NezhaAPI }) {
       <CardContent className="px-6 py-3">
         <section className="flex flex-col gap-1">
           <div className="flex items-center justify-between">
-            <p className="text-md font-medium">{"Process"}</p>
+            <p className="text-md font-medium">
+              {t("serverDetailChart.process")}
+            </p>
             <section className="flex items-center gap-2">
               <p className="text-xs text-end w-10 font-medium">{process}</p>
             </section>
@@ -273,6 +275,7 @@ function ProcessChart({ data }: { data: NezhaAPI }) {
 }
 
 function MemChart({ data }: { data: NezhaAPI }) {
+  const { t } = useTranslation();
   const [memChartData, setMemChartData] = useState([] as memChartData[]);
 
   const { mem, swap } = formatNezhaInfo(data);
@@ -315,7 +318,9 @@ function MemChart({ data }: { data: NezhaAPI }) {
           <div className="flex items-center">
             <section className="flex items-center gap-4">
               <div className="flex flex-col">
-                <p className=" text-xs text-muted-foreground">{"Mem"}</p>
+                <p className=" text-xs text-muted-foreground">
+                  {t("serverDetailChart.mem")}
+                </p>
                 <div className="flex items-center gap-2">
                   <AnimatedCircularProgressBar
                     className="size-3 text-[0px]"
@@ -328,7 +333,9 @@ function MemChart({ data }: { data: NezhaAPI }) {
                 </div>
               </div>
               <div className="flex flex-col">
-                <p className=" text-xs text-muted-foreground">{"Swap"}</p>
+                <p className=" text-xs text-muted-foreground">
+                  {t("serverDetailChart.swap")}
+                </p>
                 <div className="flex items-center gap-2">
                   <AnimatedCircularProgressBar
                     className="size-3 text-[0px]"
@@ -398,6 +405,7 @@ function MemChart({ data }: { data: NezhaAPI }) {
 }
 
 function DiskChart({ data }: { data: NezhaAPI }) {
+  const { t } = useTranslation();
   const [diskChartData, setDiskChartData] = useState([] as diskChartData[]);
 
   const { disk } = formatNezhaInfo(data);
@@ -432,7 +440,7 @@ function DiskChart({ data }: { data: NezhaAPI }) {
       <CardContent className="px-6 py-3">
         <section className="flex flex-col gap-1">
           <div className="flex items-center justify-between">
-            <p className="text-md font-medium">{"Disk"}</p>
+            <p className="text-md font-medium">{t("serverDetailChart.disk")}</p>
             <section className="flex items-center gap-2">
               <p className="text-xs text-end w-10 font-medium">
                 {disk.toFixed(0)}%
@@ -494,6 +502,7 @@ function DiskChart({ data }: { data: NezhaAPI }) {
 }
 
 function NetworkChart({ data }: { data: NezhaAPI }) {
+  const { t } = useTranslation();
   const [networkChartData, setNetworkChartData] = useState(
     [] as networkChartData[],
   );
@@ -544,14 +553,18 @@ function NetworkChart({ data }: { data: NezhaAPI }) {
           <div className="flex items-center">
             <section className="flex items-center gap-4">
               <div className="flex flex-col w-20">
-                <p className="text-xs text-muted-foreground">{"Upload"}</p>
+                <p className="text-xs text-muted-foreground">
+                  {t("serverDetailChart.upload")}
+                </p>
                 <div className="flex items-center gap-1">
                   <span className="relative inline-flex  size-1.5 rounded-full bg-[hsl(var(--chart-1))]"></span>
                   <p className="text-xs font-medium">{up.toFixed(2)} M/s</p>
                 </div>
               </div>
               <div className="flex flex-col w-20">
-                <p className=" text-xs text-muted-foreground">{"Download"}</p>
+                <p className=" text-xs text-muted-foreground">
+                  {t("serverDetailChart.download")}
+                </p>
                 <div className="flex items-center gap-1">
                   <span className="relative inline-flex  size-1.5 rounded-full bg-[hsl(var(--chart-4))]"></span>
                   <p className="text-xs font-medium">{down.toFixed(2)} M/s</p>

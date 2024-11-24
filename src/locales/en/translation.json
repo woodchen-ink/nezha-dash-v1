@@ -2,6 +2,12 @@
   "nezha": "Nezha Monitoring",
   "overview": "Overview",
   "whereTheTimeIs": "Where the time is",
+  "info": {
+    "websocketConnecting": "WebSocket connecting",
+    "websocketConnected": "WebSocket connected",
+    "websocketDisconnected": "WebSocket disconnected",
+    "processing": "Processing..."
+  },
   "serverOverview": {
     "totalServers": "Total Servers",
     "onlineServers": "Online Servers",
@@ -26,6 +32,14 @@
     "disk": "Disk",
     "region": "Region",
     "system": "System"
+  },
+  "serverDetailChart": {
+    "process": "Process",
+    "disk": "Disk",
+    "mem": "Mem",
+    "swap": "Swap",
+    "upload": "Upload",
+    "download": "Download"
   },
   "footer": {
     "themeBy": "Theme by "

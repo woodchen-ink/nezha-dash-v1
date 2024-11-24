@@ -9,8 +9,10 @@ import { fetchServerGroup } from "@/lib/nezha-api";
 import GroupSwitch from "@/components/GroupSwitch";
 import { ServerGroup } from "@/types/nezha-api";
 import { useWebSocketContext } from "@/hooks/use-websocket-context";
+import { useTranslation } from "react-i18next";
 
 export default function Servers() {
+  const { t } = useTranslation();
   const { data: groupData } = useQuery({
     queryKey: ["server-group"],
     queryFn: () => fetchServerGroup(),
@@ -26,14 +28,14 @@ export default function Servers() {
 
   useEffect(() => {
     if (readyState == 1) {
-      toast.success("WebSocket connected");
+      toast.success(t("info.websocketConnected"));
     }
   }, [readyState]);
 
   if (readyState !== 1) {
     return (
       <div className="flex flex-col items-center justify-center ">
-        <p className="font-semibold text-sm">connecting...</p>
+        <p className="font-semibold text-sm">{t("info.websocketConnecting")}</p>
       </div>
     );
   }
@@ -45,7 +47,7 @@ export default function Servers() {
   if (!nezhaWsData) {
     return (
       <div className="flex flex-col items-center justify-center ">
-        <p className="font-semibold text-sm">processing...</p>
+        <p className="font-semibold text-sm">{t("info.processing")}</p>
       </div>
     );
   }
