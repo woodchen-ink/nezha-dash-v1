@@ -1,5 +1,3 @@
-"use client";
-
 import { LazyMotion } from "framer-motion";
 
 const loadFeatures = () =>

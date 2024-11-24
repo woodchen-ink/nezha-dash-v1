@@ -58,3 +58,14 @@ export interface ServerGroup {
   };
   servers: number[];
 }
+
+export interface LoginUserResponse {
+  success: boolean;
+  data: {
+    id: number;
+    username: string;
+    password: string;
+    created_at: string;
+    updated_at: string;
+  };
+}
