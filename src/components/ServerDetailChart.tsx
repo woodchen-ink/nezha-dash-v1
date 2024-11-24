@@ -6,7 +6,6 @@ import { formatNezhaInfo, formatRelativeTime } from "@/lib/utils";
 import { NezhaAPI, NezhaAPIResponse } from "@/types/nezha-api";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import useWebSocket from "react-use-websocket";
 import {
   Area,
   AreaChart,
@@ -18,6 +17,7 @@ import {
 } from "recharts";
 import { ServerDetailChartLoading } from "./loading/ServerDetailLoading";
 import AnimatedCircularProgressBar from "./ui/animated-circular-progress-bar";
+import { useWebSocketContext } from "@/hooks/use-websocket-context";
 
 type cpuChartData = {
   timeStamp: string;
@@ -54,16 +54,11 @@ type connectChartData = {
 
 export default function ServerDetailChart() {
   const { id } = useParams();
-  const { lastMessage, readyState } = useWebSocket("/api/v1/ws/server", {
-    shouldReconnect: () => true,
-    reconnectInterval: 3000,
-  });
+  const { lastMessage, readyState } = useWebSocketContext();
 
   // 检查连接状态
   if (readyState !== 1) {
-    return (
-      <ServerDetailChartLoading />
-    );
+    return <ServerDetailChartLoading />;
   }
 
   // 解析消息

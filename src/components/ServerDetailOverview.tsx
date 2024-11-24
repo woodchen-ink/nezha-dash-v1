@@ -3,24 +3,19 @@ import { ServerDetailLoading } from "@/components/loading/ServerDetailLoading";
 import ServerFlag from "@/components/ServerFlag";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { useWebSocketContext } from "@/hooks/use-websocket-context";
 import { cn, formatBytes, formatNezhaInfo } from "@/lib/utils";
 import { NezhaAPIResponse } from "@/types/nezha-api";
 import { useNavigate, useParams } from "react-router-dom";
-import useWebSocket from "react-use-websocket";
 
 export default function ServerDetailOverview() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { lastMessage, readyState } = useWebSocket("/api/v1/ws/server", {
-    shouldReconnect: () => true,
-    reconnectInterval: 3000,
-  });
+  const { lastMessage, readyState } = useWebSocketContext();
 
   // 检查连接状态
   if (readyState !== 1) {
-    return (
-      <ServerDetailLoading />
-    );
+    return <ServerDetailLoading />;
   }
 
   // 解析消息

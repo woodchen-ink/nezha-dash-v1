@@ -1,4 +1,3 @@
-import useWebSocket from "react-use-websocket";
 import { NezhaAPIResponse } from "@/types/nezha-api";
 import ServerCard from "@/components/ServerCard";
 import { formatNezhaInfo } from "@/lib/utils";
@@ -9,16 +8,14 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchServerGroup } from "@/lib/nezha-api";
 import GroupSwitch from "@/components/GroupSwitch";
 import { ServerGroup } from "@/types/nezha-api";
+import { useWebSocketContext } from "@/hooks/use-websocket-context";
 
 export default function Servers() {
   const { data: groupData } = useQuery({
     queryKey: ["server-group"],
     queryFn: () => fetchServerGroup(),
   });
-  const { lastMessage, readyState } = useWebSocket("/api/v1/ws/server", {
-    shouldReconnect: () => true,
-    reconnectInterval: 3000,
-  });
+  const { lastMessage, readyState } = useWebSocketContext();
 
   // 添加分组状态
   const [currentGroup, setCurrentGroup] = useState<string>("All");
