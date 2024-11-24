@@ -1,7 +1,9 @@
 // src/components/Footer.tsx
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 const Footer: React.FC = () => {
+  const { t } = useTranslation();
   return (
     <footer className="mx-auto w-full max-w-5xl px-4 lg:px-0 pb-4">
       <section className="flex flex-col">
@@ -13,7 +15,7 @@ const Footer: React.FC = () => {
             </a>
           </p>
           <p>
-            Theme by{" "}
+            {t("footer.themeBy")}
             <a
               href={"https://github.com/hamster1963/nezha-dash-react"}
               target="_blank"

@@ -17,10 +17,8 @@ export default function Servers() {
   });
   const { lastMessage, readyState } = useWebSocketContext();
 
-  // 添加分组状态
   const [currentGroup, setCurrentGroup] = useState<string>("All");
 
-  // 获取所有分组名称
   const groupTabs = [
     "All",
     ...(groupData?.data?.map((item: ServerGroup) => item.group.name) || []),
@@ -32,7 +30,6 @@ export default function Servers() {
     }
   }, [readyState]);
 
-  // 检查连接状态
   if (readyState !== 1) {
     return (
       <div className="flex flex-col items-center justify-center ">
@@ -41,7 +38,6 @@ export default function Servers() {
     );
   }
 
-  // 解析消息
   const nezhaWsData = lastMessage
     ? (JSON.parse(lastMessage.data) as NezhaAPIResponse)
     : null;
@@ -54,7 +50,6 @@ export default function Servers() {
     );
   }
 
-  // 计算所有服务器的统计数据（用于 Overview）
   const totalServers = nezhaWsData?.servers?.length || 0;
   const onlineServers =
     nezhaWsData?.servers?.filter((server) => formatNezhaInfo(server).online)
@@ -73,7 +68,6 @@ export default function Servers() {
       0,
     ) || 0;
 
-  // 根据当前选中的分组筛选服务器（用于显示列表）
   const filteredServers =
     nezhaWsData?.servers?.filter((server) => {
       if (currentGroup === "All") return true;

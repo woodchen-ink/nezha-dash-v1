@@ -1,5 +1,35 @@
 {
+  "nezha": "哪吒監控",
   "overview": "概覽",
+  "whereTheTimeIs": "目前時間",
+  "serverOverview": {
+    "totalServers": "總服務器",
+    "onlineServers": "線上服務器",
+    "offlineServers": "離線服務器",
+    "totalBandwidth": "總帶寬"
+  },
+  "serverCard": {
+    "mem": "內存",
+    "stg": "存儲",
+    "upload": "上傳",
+    "download": "下載"
+  },
+  "serverDetail": {
+    "status": "狀態",
+    "online": "線上",
+    "offline": "離線",
+    "unknown": "未知",
+    "uptime": "運行時間",
+    "version": "版本",
+    "arch": "架構",
+    "mem": "內存",
+    "disk": "磁盤",
+    "region": "地區",
+    "system": "系統"
+  },
+  "footer": {
+    "themeBy": "主題-"
+  },
   "language": {
     "zh-CN": "简体中文",
     "zh-TW": "繁體中文",
@@ -8,6 +38,6 @@
   "theme": {
     "light": "亮色",
     "dark": "暗色",
-    "system": "跟随系統"
+    "system": "跟隨系統"
   }
 }

@@ -1,5 +1,35 @@
 {
+  "nezha": "Nezha Monitoring",
   "overview": "Overview",
+  "whereTheTimeIs": "Where the time is",
+  "serverOverview": {
+    "totalServers": "Total Servers",
+    "onlineServers": "Online Servers",
+    "offlineServers": "Offline Servers",
+    "totalBandwidth": "Total Bandwidth"
+  },
+  "serverCard": {
+    "mem": "MEM",
+    "stg": "STG",
+    "upload": "Upload",
+    "download": "Download"
+  },
+  "serverDetail": {
+    "status": "Status",
+    "online": "Online",
+    "offline": "Offline",
+    "unknown": "Unknown",
+    "uptime": "Uptime",
+    "version": "Version",
+    "arch": "Arch",
+    "mem": "Mem",
+    "disk": "Disk",
+    "region": "Region",
+    "system": "System"
+  },
+  "footer": {
+    "themeBy": "Theme by "
+  },
   "language": {
     "zh-CN": "简体中文",
     "zh-TW": "繁體中文",

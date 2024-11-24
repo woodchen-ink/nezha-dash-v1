@@ -1,5 +1,35 @@
 {
+  "nezha": "哪吒监控",
   "overview": "概览",
+  "whereTheTimeIs": "当前时间",
+  "serverOverview": {
+    "totalServers": "服务器总数",
+    "onlineServers": "在线服务器",
+    "offlineServers": "离线服务器",
+    "totalBandwidth": "总流量"
+  },
+  "serverCard": {
+    "mem": "内存",
+    "stg": "存储",
+    "upload": "上传",
+    "download": "下载"
+  },
+  "serverDetail": {
+    "status": "状态",
+    "online": "在线",
+    "offline": "离线",
+    "unknown": "未知",
+    "uptime": "运行时间",
+    "version": "版本",
+    "arch": "架构",
+    "mem": "内存",
+    "disk": "磁盘",
+    "region": "区域",
+    "system": "系统"
+  },
+  "footer": {
+    "themeBy": "主题-"
+  },
   "language": {
     "zh-CN": "简体中文",
     "zh-TW": "繁體中文",

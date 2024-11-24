@@ -5,8 +5,10 @@ import { cn, formatNezhaInfo } from "@/lib/utils";
 import { NezhaAPI } from "@/types/nezha-api";
 import { Card } from "./ui/card";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function ServerCard({ serverInfo }: { serverInfo: NezhaAPI }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { name, country_code, online, cpu, up, down, mem, stg } =
     formatNezhaInfo(serverInfo);
@@ -55,21 +57,27 @@ export default function ServerCard({ serverInfo }: { serverInfo: NezhaAPI }) {
               <ServerUsageBar value={cpu} />
             </div>
             <div className={"flex w-14 flex-col"}>
-              <p className="text-xs text-muted-foreground">{"MEM"}</p>
+              <p className="text-xs text-muted-foreground">
+                {t("serverCard.mem")}
+              </p>
               <div className="flex items-center text-xs font-semibold">
                 {mem.toFixed(2)}%
               </div>
               <ServerUsageBar value={mem} />
             </div>
             <div className={"flex w-14 flex-col"}>
-              <p className="text-xs text-muted-foreground">{"STG"}</p>
+              <p className="text-xs text-muted-foreground">
+                {t("serverCard.stg")}
+              </p>
               <div className="flex items-center text-xs font-semibold">
                 {stg.toFixed(2)}%
               </div>
               <ServerUsageBar value={stg} />
             </div>
             <div className={"flex w-14 flex-col"}>
-              <p className="text-xs text-muted-foreground">{"Upload"}</p>
+              <p className="text-xs text-muted-foreground">
+                {t("serverCard.upload")}
+              </p>
               <div className="flex items-center text-xs font-semibold">
                 {up >= 1024
                   ? `${(up / 1024).toFixed(2)}G/s`
@@ -77,7 +85,9 @@ export default function ServerCard({ serverInfo }: { serverInfo: NezhaAPI }) {
               </div>
             </div>
             <div className={"flex w-14 flex-col"}>
-              <p className="text-xs text-muted-foreground">{"Download"}</p>
+              <p className="text-xs text-muted-foreground">
+                {t("serverCard.download")}
+              </p>
               <div className="flex items-center text-xs font-semibold">
                 {down >= 1024
                   ? `${(down / 1024).toFixed(2)}G/s`

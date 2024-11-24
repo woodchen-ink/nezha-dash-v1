@@ -7,18 +7,18 @@ import { useWebSocketContext } from "@/hooks/use-websocket-context";
 import { cn, formatBytes, formatNezhaInfo } from "@/lib/utils";
 import { NezhaAPIResponse } from "@/types/nezha-api";
 import { useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function ServerDetailOverview() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { id } = useParams();
   const { lastMessage, readyState } = useWebSocketContext();
 
-  // 检查连接状态
   if (readyState !== 1) {
     return <ServerDetailLoading />;
   }
 
-  // 解析消息
   const nezhaWsData = lastMessage
     ? (JSON.parse(lastMessage.data) as NezhaAPIResponse)
     : null;
@@ -48,7 +48,9 @@ export default function ServerDetailOverview() {
         <Card className="rounded-[10px] bg-transparent border-none shadow-none">
           <CardContent className="px-1.5 py-1">
             <section className="flex flex-col items-start gap-0.5">
-              <p className="text-xs text-muted-foreground">{"Status"}</p>
+              <p className="text-xs text-muted-foreground">
+                {t("serverDetail.status")}
+              </p>
               <Badge
                 className={cn(
                   "text-[9px] rounded-[6px] w-fit px-1 py-0 -mt-[0.3px] dark:text-white",
@@ -58,7 +60,7 @@ export default function ServerDetailOverview() {
                   },
                 )}
               >
-                {online ? "Online" : "Offline"}
+                {online ? t("serverDetail.online") : t("serverDetail.offline")}
               </Badge>
             </section>
           </CardContent>
@@ -66,7 +68,9 @@ export default function ServerDetailOverview() {
         <Card className="rounded-[10px] bg-transparent border-none shadow-none">
           <CardContent className="px-1.5 py-1">
             <section className="flex flex-col items-start gap-0.5">
-              <p className="text-xs text-muted-foreground">{"Uptime"}</p>
+              <p className="text-xs text-muted-foreground">
+                {t("serverDetail.uptime")}
+              </p>
               <div className="text-xs">
                 {" "}
                 {online ? (uptime / 86400).toFixed(0) : "N/A"} {"Days"}{" "}
@@ -77,23 +81,33 @@ export default function ServerDetailOverview() {
         <Card className="rounded-[10px] bg-transparent border-none shadow-none">
           <CardContent className="px-1.5 py-1">
             <section className="flex flex-col items-start gap-0.5">
-              <p className="text-xs text-muted-foreground">{"Version"}</p>
-              <div className="text-xs">{version || "Unknown"} </div>
+              <p className="text-xs text-muted-foreground">
+                {t("serverDetail.version")}
+              </p>
+              <div className="text-xs">
+                {version || t("serverDetail.unknown")}{" "}
+              </div>
             </section>
           </CardContent>
         </Card>
         <Card className="rounded-[10px] bg-transparent border-none shadow-none">
           <CardContent className="px-1.5 py-1">
             <section className="flex flex-col items-start gap-0.5">
-              <p className="text-xs text-muted-foreground">{"Arch"}</p>
-              <div className="text-xs">{server.host.arch || "Unknown"} </div>
+              <p className="text-xs text-muted-foreground">
+                {t("serverDetail.arch")}
+              </p>
+              <div className="text-xs">
+                {server.host.arch || t("serverDetail.unknown")}{" "}
+              </div>
             </section>
           </CardContent>
         </Card>
         <Card className="rounded-[10px] bg-transparent border-none shadow-none">
           <CardContent className="px-1.5 py-1">
             <section className="flex flex-col items-start gap-0.5">
-              <p className="text-xs text-muted-foreground">{"Mem"}</p>
+              <p className="text-xs text-muted-foreground">
+                {t("serverDetail.mem")}
+              </p>
               <div className="text-xs">
                 {formatBytes(server.host.mem_total)}
               </div>
@@ -103,7 +117,9 @@ export default function ServerDetailOverview() {
         <Card className="rounded-[10px] bg-transparent border-none shadow-none">
           <CardContent className="px-1.5 py-1">
             <section className="flex flex-col items-start gap-0.5">
-              <p className="text-xs text-muted-foreground">{"Disk"}</p>
+              <p className="text-xs text-muted-foreground">
+                {t("serverDetail.disk")}
+              </p>
               <div className="text-xs">
                 {formatBytes(server.host.disk_total)}
               </div>
@@ -113,10 +129,13 @@ export default function ServerDetailOverview() {
         <Card className="rounded-[10px] bg-transparent border-none shadow-none">
           <CardContent className="px-1.5 py-1">
             <section className="flex flex-col items-start gap-0.5">
-              <p className="text-xs text-muted-foreground">{"Region"}</p>
+              <p className="text-xs text-muted-foreground">
+                {t("serverDetail.region")}
+              </p>
               <section className="flex items-start gap-1">
                 <div className="text-xs text-start">
-                  {server.host.country_code?.toUpperCase() || "Unknown"}
+                  {server.host.country_code?.toUpperCase() ||
+                    t("serverDetail.unknown")}
                 </div>
                 {server.host.country_code && (
                   <ServerFlag
@@ -133,15 +152,17 @@ export default function ServerDetailOverview() {
         <Card className="rounded-[10px] bg-transparent border-none shadow-none">
           <CardContent className="px-1.5 py-1">
             <section className="flex flex-col items-start gap-0.5">
-              <p className="text-xs text-muted-foreground">{"System"}</p>
+              <p className="text-xs text-muted-foreground">
+                {t("serverDetail.system")}
+              </p>
               {server.host.platform ? (
                 <div className="text-xs">
                   {" "}
-                  {server.host.platform || "Unknown"} -{" "}
+                  {server.host.platform || t("serverDetail.unknown")} -{" "}
                   {server.host.platform_version}{" "}
                 </div>
               ) : (
-                <div className="text-xs">Unknown</div>
+                <div className="text-xs"> {t("serverDetail.unknown")}</div>
               )}
             </section>
           </CardContent>
@@ -153,7 +174,7 @@ export default function ServerDetailOverview() {
               {server.host.cpu ? (
                 <div className="text-xs"> {server.host.cpu}</div>
               ) : (
-                <div className="text-xs">Unknown</div>
+                <div className="text-xs"> {t("serverDetail.unknown")}</div>
               )}
             </section>
           </CardContent>
