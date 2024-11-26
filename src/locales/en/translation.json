@@ -53,5 +53,9 @@
     "light": "Light",
     "dark": "Dark",
     "system": "System"
+  },
+  "error": {
+    "pageNotFound": "Page not found",
+    "backToHome": "Back to home"
   }
 }

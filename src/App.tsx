@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Server from "./pages/Server";
 import ServerDetail from "./pages/ServerDetail";
+import NotFound from "./pages/NotFound";
 
 const App: React.FC = () => {
   return (
@@ -14,6 +15,7 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/" element={<Server />} />
             <Route path="/server/:id" element={<ServerDetail />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
           <Footer />
         </main>

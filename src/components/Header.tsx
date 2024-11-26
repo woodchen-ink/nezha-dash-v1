@@ -7,13 +7,18 @@ import { DateTime } from "luxon";
 import { useEffect, useRef, useState } from "react";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 function Header() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   return (
     <div className="mx-auto w-full max-w-5xl">
       <section className="flex items-center justify-between">
-        <section className="flex items-center text-base font-medium">
+        <section
+          onClick={() => navigate("/")}
+          className="cursor-pointer flex items-center text-base font-medium"
+        >
           <div className="mr-1 flex flex-row items-center justify-start">
             <img
               width={40}
