@@ -23,7 +23,7 @@ export function formatNezhaInfo(serverInfo: NezhaAPI) {
     swap: (serverInfo.state.swap_used / serverInfo.host.swap_total) * 100 || 0,
     disk: (serverInfo.state.disk_used / serverInfo.host.disk_total) * 100 || 0,
     stg: (serverInfo.state.disk_used / serverInfo.host.disk_total) * 100 || 0,
-    country_code: serverInfo.host.country_code,
+    country_code: serverInfo.country_code,
   };
 }
 

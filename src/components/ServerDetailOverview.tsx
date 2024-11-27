@@ -134,13 +134,13 @@ export default function ServerDetailOverview() {
               </p>
               <section className="flex items-start gap-1">
                 <div className="text-xs text-start">
-                  {server.host.country_code?.toUpperCase() ||
+                  {server.country_code?.toUpperCase() ||
                     t("serverDetail.unknown")}
                 </div>
-                {server.host.country_code && (
+                {server.country_code && (
                   <ServerFlag
                     className="text-[11px] -mt-[1px]"
-                    country_code={server.host.country_code}
+                    country_code={server.country_code}
                   />
                 )}
               </section>

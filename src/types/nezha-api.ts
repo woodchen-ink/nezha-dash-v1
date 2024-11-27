@@ -7,6 +7,7 @@ export interface NezhaAPI {
   id: number;
   name: string;
   last_active: string;
+  country_code: string;
   host: NezhaAPIHost;
   state: NezhaAPIStatus;
 }
