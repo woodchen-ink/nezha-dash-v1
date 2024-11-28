@@ -1,4 +1,4 @@
-import { NezhaAPI } from "@/types/nezha-api";
+import { NezhaServer } from "@/types/nezha-api";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatNezhaInfo(serverInfo: NezhaAPI) {
+export function formatNezhaInfo(serverInfo: NezhaServer) {
   const lastActiveTime = parseISOTimestamp(serverInfo.last_active);
   return {
     ...serverInfo,

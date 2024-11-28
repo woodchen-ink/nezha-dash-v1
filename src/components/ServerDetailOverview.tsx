@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { useWebSocketContext } from "@/hooks/use-websocket-context";
 import { cn, formatBytes, formatNezhaInfo } from "@/lib/utils";
-import { NezhaAPIResponse } from "@/types/nezha-api";
+import { NezhaWebsocketResponse } from "@/types/nezha-api";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -20,7 +20,7 @@ export default function ServerDetailOverview() {
   }
 
   const nezhaWsData = lastMessage
-    ? (JSON.parse(lastMessage.data) as NezhaAPIResponse)
+    ? (JSON.parse(lastMessage.data) as NezhaWebsocketResponse)
     : null;
 
   if (!nezhaWsData) {

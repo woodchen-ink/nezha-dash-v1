@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { ChartConfig, ChartContainer } from "@/components/ui/chart";
 import { formatNezhaInfo, formatRelativeTime } from "@/lib/utils";
-import { NezhaAPI, NezhaAPIResponse } from "@/types/nezha-api";
+import { NezhaServer, NezhaWebsocketResponse } from "@/types/nezha-api";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
@@ -60,7 +60,7 @@ export default function ServerDetailChart() {
   }
 
   const nezhaWsData = lastMessage
-    ? (JSON.parse(lastMessage.data) as NezhaAPIResponse)
+    ? (JSON.parse(lastMessage.data) as NezhaWebsocketResponse)
     : null;
 
   if (!nezhaWsData) {
@@ -85,7 +85,7 @@ export default function ServerDetailChart() {
   );
 }
 
-function CpuChart({ data }: { data: NezhaAPI }) {
+function CpuChart({ data }: { data: NezhaServer }) {
   const [cpuChartData, setCpuChartData] = useState([] as cpuChartData[]);
 
   const { cpu } = formatNezhaInfo(data);
@@ -181,7 +181,7 @@ function CpuChart({ data }: { data: NezhaAPI }) {
   );
 }
 
-function ProcessChart({ data }: { data: NezhaAPI }) {
+function ProcessChart({ data }: { data: NezhaServer }) {
   const { t } = useTranslation();
   const [processChartData, setProcessChartData] = useState(
     [] as processChartData[],
@@ -274,7 +274,7 @@ function ProcessChart({ data }: { data: NezhaAPI }) {
   );
 }
 
-function MemChart({ data }: { data: NezhaAPI }) {
+function MemChart({ data }: { data: NezhaServer }) {
   const { t } = useTranslation();
   const [memChartData, setMemChartData] = useState([] as memChartData[]);
 
@@ -404,7 +404,7 @@ function MemChart({ data }: { data: NezhaAPI }) {
   );
 }
 
-function DiskChart({ data }: { data: NezhaAPI }) {
+function DiskChart({ data }: { data: NezhaServer }) {
   const { t } = useTranslation();
   const [diskChartData, setDiskChartData] = useState([] as diskChartData[]);
 
@@ -501,7 +501,7 @@ function DiskChart({ data }: { data: NezhaAPI }) {
   );
 }
 
-function NetworkChart({ data }: { data: NezhaAPI }) {
+function NetworkChart({ data }: { data: NezhaServer }) {
   const { t } = useTranslation();
   const [networkChartData, setNetworkChartData] = useState(
     [] as networkChartData[],
@@ -630,7 +630,7 @@ function NetworkChart({ data }: { data: NezhaAPI }) {
   );
 }
 
-function ConnectChart({ data }: { data: NezhaAPI }) {
+function ConnectChart({ data }: { data: NezhaServer }) {
   const [connectChartData, setConnectChartData] = useState(
     [] as connectChartData[],
   );

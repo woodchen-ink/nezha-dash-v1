@@ -1,4 +1,4 @@
-import { NezhaAPIResponse } from "@/types/nezha-api";
+import { NezhaWebsocketResponse } from "@/types/nezha-api";
 import ServerCard from "@/components/ServerCard";
 import { formatNezhaInfo } from "@/lib/utils";
 import ServerOverview from "@/components/ServerOverview";
@@ -41,7 +41,7 @@ export default function Servers() {
   }
 
   const nezhaWsData = lastMessage
-    ? (JSON.parse(lastMessage.data) as NezhaAPIResponse)
+    ? (JSON.parse(lastMessage.data) as NezhaWebsocketResponse)
     : null;
 
   if (!nezhaWsData) {

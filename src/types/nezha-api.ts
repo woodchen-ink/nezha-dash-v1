@@ -1,18 +1,18 @@
-export interface NezhaAPIResponse {
+export interface NezhaWebsocketResponse {
   now: number;
-  servers: NezhaAPI[];
+  servers: NezhaServer[];
 }
 
-export interface NezhaAPI {
+export interface NezhaServer {
   id: number;
   name: string;
   last_active: string;
   country_code: string;
-  host: NezhaAPIHost;
-  state: NezhaAPIStatus;
+  host: NezhaServerHost;
+  state: NezhaServerStatus;
 }
 
-export interface NezhaAPIHost {
+export interface NezhaServerHost {
   platform: string;
   platform_version: string;
   cpu: string[];
@@ -25,7 +25,7 @@ export interface NezhaAPIHost {
   version: string;
 }
 
-export interface NezhaAPIStatus {
+export interface NezhaServerStatus {
   cpu: number;
   mem_used: number;
   swap_used: number;
