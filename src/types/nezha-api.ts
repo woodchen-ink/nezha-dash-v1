@@ -70,3 +70,25 @@ export interface LoginUserResponse {
     updated_at: string;
   };
 }
+
+
+export interface MonitorResponse {
+  success: boolean;
+  data: NezhaMonitor[];
+}
+
+export type ServerMonitorChart = {
+  [key: string]: {
+    created_at: number;
+    avg_delay: number;
+  }[];
+};
+
+export interface NezhaMonitor {
+  monitor_id: number;
+  monitor_name: string;
+  server_id: number;
+  server_name: string;
+  created_at: number[];
+  avg_delay: number[];
+}

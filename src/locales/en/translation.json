@@ -57,5 +57,14 @@
   "error": {
     "pageNotFound": "Page not found",
     "backToHome": "Back to home"
+  },
+  "tabSwitch":{
+    "Detail": "Detail",
+    "Network": "Network"
+  },
+  "monitor":{
+    "noData": "No server monitor data",
+    "avgDelay": "Latency",
+    "monitorCount": "Services"
   }
 }

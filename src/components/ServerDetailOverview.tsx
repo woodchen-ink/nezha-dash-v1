@@ -6,13 +6,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useWebSocketContext } from "@/hooks/use-websocket-context";
 import { cn, formatBytes, formatNezhaInfo } from "@/lib/utils";
 import { NezhaWebsocketResponse } from "@/types/nezha-api";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-export default function ServerDetailOverview() {
+export default function ServerDetailOverview({server_id}: {server_id: string}) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { id } = useParams();
+  
   const { lastMessage, readyState } = useWebSocketContext();
 
   if (readyState !== 1) {
@@ -27,7 +27,7 @@ export default function ServerDetailOverview() {
     return <ServerDetailLoading />;
   }
 
-  const server = nezhaWsData.servers.find((s) => s.id === Number(id));
+  const server = nezhaWsData.servers.find((s) => s.id === Number(server_id));
 
   if (!server) {
     return <ServerDetailLoading />;

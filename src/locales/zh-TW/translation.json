@@ -57,5 +57,14 @@
   "error": {
     "pageNotFound": "頁面不存在",
     "backToHome": "回到主頁"
+  },
+  "tabSwitch": {
+    "detail": "詳細資訊",
+    "network": "網路"
+  },
+  "monitor": {
+    "noData": "沒有服務器監控數據",
+    "avgDelay": "延遲",
+    "monitorCount": "個監控"
   }
 }

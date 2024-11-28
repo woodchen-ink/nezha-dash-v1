@@ -57,5 +57,14 @@
   "error": {
     "pageNotFound": "页面不存在",
     "backToHome": "回到主页"
+  },
+  "tabSwitch": {
+    "Detail": "详情",
+    "Network": "网络"
+  },
+  "monitor": {
+    "noData": "没有服务器监控数据",
+    "avgDelay": "延迟",
+    "monitorCount": "个监控服务"
   }
 }

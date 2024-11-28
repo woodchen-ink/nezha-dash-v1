@@ -3,7 +3,6 @@ import { ChartConfig, ChartContainer } from "@/components/ui/chart";
 import { formatNezhaInfo, formatRelativeTime } from "@/lib/utils";
 import { NezhaServer, NezhaWebsocketResponse } from "@/types/nezha-api";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import {
   Area,
   AreaChart,
@@ -51,8 +50,7 @@ type connectChartData = {
   udp: number;
 };
 
-export default function ServerDetailChart() {
-  const { id } = useParams();
+export default function ServerDetailChart({server_id}: {server_id: string}) {
   const { lastMessage, readyState } = useWebSocketContext();
 
   if (readyState !== 1) {
@@ -67,7 +65,7 @@ export default function ServerDetailChart() {
     return <ServerDetailChartLoading />;
   }
 
-  const server = nezhaWsData.servers.find((s) => s.id === Number(id));
+  const server = nezhaWsData.servers.find((s) => s.id === Number(server_id));
 
   if (!server) {
     return <ServerDetailChartLoading />;
