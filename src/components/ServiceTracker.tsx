@@ -40,7 +40,9 @@ export const ServiceTracker: React.FC = () => {
   }
 
   if (!serviceData?.data?.services) {
-    return <div className="mt-4">No service data available</div>;
+    return (
+      <div className="mt-4 font-thin text-sm">No service data available</div>
+    );
   }
 
   return (

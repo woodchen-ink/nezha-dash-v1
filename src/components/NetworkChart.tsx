@@ -51,12 +51,12 @@ export function NetworkChart({
 
   if (!monitorData) return <NetworkChartLoading />;
 
-  if (monitorData?.success && monitorData.data.length === 0) {
+  if (monitorData?.success && !monitorData.data) {
     return (
       <>
         <div className="flex flex-col items-center justify-center">
           <p className="text-sm font-medium opacity-40"></p>
-          <p className="text-sm font-medium opacity-40">
+          <p className="text-sm font-medium opacity-40 mb-4">
             {t("monitor.noData")}
           </p>
         </div>
