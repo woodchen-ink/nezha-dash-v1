@@ -9,10 +9,14 @@ import { NezhaWebsocketResponse } from "@/types/nezha-api";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-export default function ServerDetailOverview({server_id}: {server_id: string}) {
+export default function ServerDetailOverview({
+  server_id,
+}: {
+  server_id: string;
+}) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  
+
   const { lastMessage, readyState } = useWebSocketContext();
 
   if (readyState !== 1) {

@@ -7,7 +7,11 @@ import { Card } from "./ui/card";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-export default function ServerCard({ serverInfo }: { serverInfo: NezhaServer }) {
+export default function ServerCard({
+  serverInfo,
+}: {
+  serverInfo: NezhaServer;
+}) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { name, country_code, online, cpu, up, down, mem, stg } =

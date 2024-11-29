@@ -26,7 +26,6 @@ import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 import NetworkChartLoading from "./NetworkChartLoading";
 import { NezhaMonitor, ServerMonitorChart } from "@/types/nezha-api";
 
-
 interface ResultItem {
   created_at: number;
   [key: string]: number | null;
@@ -41,17 +40,15 @@ export function NetworkChart({
 }) {
   const { t } = useTranslation();
 
-  const { data: monitorData} = useQuery(
-    {
-      queryKey: ["monitor", server_id],
-      queryFn: () => fetchMonitor(server_id),
-      enabled: show,
-      refetchOnMount: true,
-      refetchOnWindowFocus: true,
-      refetchInterval: 10000,
-    }
-  )
-  
+  const { data: monitorData } = useQuery({
+    queryKey: ["monitor", server_id],
+    queryFn: () => fetchMonitor(server_id),
+    enabled: show,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    refetchInterval: 10000,
+  });
+
   if (!monitorData) return <NetworkChartLoading />;
 
   if (monitorData?.success && monitorData.data.length === 0) {
@@ -67,8 +64,6 @@ export function NetworkChart({
       </>
     );
   }
-
-  
 
   const transformedData = transformData(monitorData.data);
 

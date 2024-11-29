@@ -71,7 +71,6 @@ export interface LoginUserResponse {
   };
 }
 
-
 export interface MonitorResponse {
   success: boolean;
   data: NezhaMonitor[];
@@ -91,4 +90,40 @@ export interface NezhaMonitor {
   server_name: string;
   created_at: number[];
   avg_delay: number[];
+}
+
+export interface ServiceResponse {
+  success: boolean;
+  data: {
+    services: {
+      [key: string]: ServiceData;
+    };
+  };
+}
+
+export interface Service {
+  // created_at: string;
+  // updated_at: string;
+  name: string;
+  // type: number;
+  // target: string;
+  // duration: number;
+  // notification_group_id: number;
+  // cover: number;
+  // fail_trigger_tasks: null | any[];
+  // recover_trigger_tasks: null | any[];
+  // min_latency: number;
+  // max_latency: number;
+  // skip_servers: null | any[];
+}
+
+export interface ServiceData {
+  service: Service;
+  current_up: number;
+  current_down: number;
+  total_up: number;
+  total_down: number;
+  delay: number[];
+  up: number[];
+  down: number[];
 }

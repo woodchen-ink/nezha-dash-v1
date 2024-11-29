@@ -2,7 +2,6 @@ import { cn } from "@/lib/utils";
 import { m } from "framer-motion";
 import { useTranslation } from "react-i18next";
 
-
 export default function TabSwitch({
   tabs,
   currentTab,
@@ -38,7 +37,7 @@ export default function TabSwitch({
               />
             )}
             <div className="relative z-20 flex items-center gap-1">
-              <p className="whitespace-nowrap">{t("tabSwitch."+tab)}</p>
+              <p className="whitespace-nowrap">{t("tabSwitch." + tab)}</p>
             </div>
           </div>
         ))}

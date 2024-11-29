@@ -50,7 +50,11 @@ type connectChartData = {
   udp: number;
 };
 
-export default function ServerDetailChart({server_id}: {server_id: string}) {
+export default function ServerDetailChart({
+  server_id,
+}: {
+  server_id: string;
+}) {
   const { lastMessage, readyState } = useWebSocketContext();
 
   if (readyState !== 1) {

@@ -10,6 +10,8 @@ import GroupSwitch from "@/components/GroupSwitch";
 import { ServerGroup } from "@/types/nezha-api";
 import { useWebSocketContext } from "@/hooks/use-websocket-context";
 import { useTranslation } from "react-i18next";
+import { ChartBarSquareIcon } from "@heroicons/react/20/solid";
+import { ServiceTracker } from "@/components/ServiceTracker";
 
 export default function Servers() {
   const { t } = useTranslation();
@@ -19,6 +21,7 @@ export default function Servers() {
   });
   const { lastMessage, readyState } = useWebSocketContext();
 
+  const [showServices, setShowServices] = useState(false);
   const [currentGroup, setCurrentGroup] = useState<string>("All");
 
   const groupTabs = [
@@ -91,13 +94,22 @@ export default function Servers() {
         up={up}
         down={down}
       />
-      <div className="mt-6">
+      <section className="flex mt-6 items-center gap-2 w-full overflow-hidden">
+        <button
+          onClick={() => {
+            setShowServices(!showServices);
+          }}
+          className="rounded-[50px] text-white cursor-pointer [text-shadow:_0_1px_0_rgb(0_0_0_/_20%)] bg-blue-600 hover:bg-blue-500 p-[10px] transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] hover:shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] "
+        >
+          <ChartBarSquareIcon className="size-[13px]" />
+        </button>
         <GroupSwitch
           tabs={groupTabs}
           currentTab={currentGroup}
           setCurrentTab={setCurrentGroup}
         />
-      </div>
+      </section>
+      {showServices && <ServiceTracker />}
       <section className="grid grid-cols-1 gap-2 md:grid-cols-2 mt-6">
         {filteredServers.map((serverInfo) => (
           <ServerCard key={serverInfo.id} serverInfo={serverInfo} />

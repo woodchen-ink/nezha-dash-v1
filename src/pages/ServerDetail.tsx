@@ -15,10 +15,10 @@ export default function ServerDetail() {
   const { id: server_id } = useParams();
 
   if (!server_id) {
-    navigate('/404');
+    navigate("/404");
     return null;
   }
-  
+
   return (
     <div className="mx-auto w-full max-w-5xl px-0 flex flex-col gap-4">
       <ServerDetailOverview server_id={server_id} />
@@ -34,10 +34,10 @@ export default function ServerDetail() {
         <Separator className="flex-1" />
       </section>
       <div style={{ display: currentTab === tabs[0] ? "block" : "none" }}>
-      <ServerDetailChart server_id={server_id} />
+        <ServerDetailChart server_id={server_id} />
       </div>
       <div style={{ display: currentTab === tabs[1] ? "block" : "none" }}>
-      <NetworkChart
+        <NetworkChart
           server_id={Number(server_id)}
           show={currentTab === tabs[1]}
         />
