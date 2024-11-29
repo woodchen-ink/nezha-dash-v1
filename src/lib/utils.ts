@@ -14,7 +14,7 @@ export function formatNezhaInfo(serverInfo: NezhaServer) {
     process: serverInfo.state.process_count || 0,
     up: serverInfo.state.net_out_speed / 1024 / 1024 || 0,
     down: serverInfo.state.net_in_speed / 1024 / 1024 || 0,
-    online: Date.now() - lastActiveTime <= 300000,
+    online: Date.now() - lastActiveTime <= 30000,
     uptime: serverInfo.state.uptime || 0,
     version: serverInfo.host.version || null,
     tcp: serverInfo.state.tcp_conn_count || 0,
