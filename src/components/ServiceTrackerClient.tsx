@@ -1,5 +1,6 @@
 import React from "react";
 import { cn } from "@/lib/utils";
+import { Separator } from "./ui/separator";
 
 interface ServiceTrackerProps {
   days: Array<{
@@ -9,6 +10,7 @@ interface ServiceTrackerProps {
   className?: string;
   title?: string;
   uptime?: number;
+  avgDelay?: number;
 }
 
 export const ServiceTrackerClient: React.FC<ServiceTrackerProps> = ({
@@ -16,6 +18,7 @@ export const ServiceTrackerClient: React.FC<ServiceTrackerProps> = ({
   className,
   title,
   uptime = 100,
+  avgDelay = 0,
 }) => {
   return (
     <div
@@ -31,9 +34,15 @@ export const ServiceTrackerClient: React.FC<ServiceTrackerProps> = ({
           </div>
           <span className="font-medium text-sm">{title}</span>
         </div>
-        <span className="text-green-600 font-medium text-sm">
-          {uptime.toFixed(1)}% uptime
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="text-stone-600 dark:text-stone-400 font-medium text-sm">
+            {avgDelay.toFixed(0)}ms
+          </span>
+          <Separator className="h-4 mx-0" orientation="vertical" />
+          <span className="text-green-600 font-medium text-sm">
+            {uptime.toFixed(1)}% uptime
+          </span>
+        </div>
       </div>
 
       <div className="flex gap-[2px]">

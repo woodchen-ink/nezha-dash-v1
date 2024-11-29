@@ -98,6 +98,7 @@ export interface ServiceResponse {
     services: {
       [key: string]: ServiceData;
     };
+    cycle_transfer_stats: CycleTransferStats;
   };
 }
 
@@ -126,4 +127,25 @@ export interface ServiceData {
   delay: number[];
   up: number[];
   down: number[];
+}
+
+export interface CycleTransferStats {
+  [key: string]: CycleTransferData;
+}
+
+export interface CycleTransferData {
+  name: string;
+  from: string;
+  to: string;
+  max: number;
+  min: number;
+  server_name: {
+    [key: string]: string;
+  };
+  transfer: {
+    [key: string]: number;
+  };
+  next_update: {
+    [key: string]: string;
+  };
 }
