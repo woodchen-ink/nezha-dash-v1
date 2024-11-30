@@ -104,19 +104,21 @@ export default function ServerCard({
             </div>
           </section>
           <section className={"flex items-center justify-between gap-1"}>
-              <Badge
-                variant="secondary"
-                className="items-center flex-1 justify-center rounded-[8px] text-nowrap text-[11px] border-muted-50 shadow-md shadow-neutral-200/30 dark:shadow-none"
-              >
-                {t("serverCard.upload")}:{formatBytes(serverInfo.state.net_out_transfer)}
-              </Badge>
-              <Badge
-                variant="outline"
-                className="items-center flex-1 justify-center rounded-[8px] text-nowrap text-[11px] shadow-md shadow-neutral-200/30 dark:shadow-none"
-              >
-                {t("serverCard.download")}:{formatBytes(serverInfo.state.net_in_transfer)}
-              </Badge>
-            </section>
+            <Badge
+              variant="secondary"
+              className="items-center flex-1 justify-center rounded-[8px] text-nowrap text-[11px] border-muted-50 shadow-md shadow-neutral-200/30 dark:shadow-none"
+            >
+              {t("serverCard.upload")}:
+              {formatBytes(serverInfo.state.net_out_transfer)}
+            </Badge>
+            <Badge
+              variant="outline"
+              className="items-center flex-1 justify-center rounded-[8px] text-nowrap text-[11px] shadow-md shadow-neutral-200/30 dark:shadow-none"
+            >
+              {t("serverCard.download")}:
+              {formatBytes(serverInfo.state.net_in_transfer)}
+            </Badge>
+          </section>
         </div>
       </Card>
     </section>

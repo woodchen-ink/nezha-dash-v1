@@ -47,15 +47,13 @@ export const ServiceTracker: React.FC = () => {
 
   return (
     <div className="mt-4 w-full mx-auto ">
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
-        {serviceData.data.cycle_transfer_stats && (
-          <div>
-            <CycleTransferStatsCard
-              cycleStats={serviceData.data.cycle_transfer_stats}
-            />
-          </div>
-        )}
-      </section>
+      {serviceData.data.cycle_transfer_stats && (
+        <div>
+          <CycleTransferStatsCard
+            cycleStats={serviceData.data.cycle_transfer_stats}
+          />
+        </div>
+      )}
       <section className="grid grid-cols-1 md:grid-cols-2 mt-4 gap-2 md:gap-4">
         {Object.entries(serviceData.data.services).map(([name, data]) => {
           const { days, uptime, avgDelay } = processServiceData(data);

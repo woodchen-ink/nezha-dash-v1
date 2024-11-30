@@ -189,7 +189,7 @@ export default function ServerDetailOverview({
         </Card>
       </section>
       <section className="flex flex-wrap gap-2 mt-1">
-      <Card className="rounded-[10px] bg-transparent border-none shadow-none">
+        <Card className="rounded-[10px] bg-transparent border-none shadow-none">
           <CardContent className="px-1.5 py-1">
             <section className="flex flex-col items-start gap-0.5">
               <p className="text-xs text-muted-foreground">
@@ -219,7 +219,6 @@ export default function ServerDetailOverview({
             </section>
           </CardContent>
         </Card>
-
       </section>
     </div>
   );

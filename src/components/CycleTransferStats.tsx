@@ -12,7 +12,7 @@ export const CycleTransferStatsCard: React.FC<CycleTransferStatsProps> = ({
   className,
 }) => {
   return (
-    <>
+    <section className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
       {Object.entries(cycleStats).map(([cycleId, cycleData]) => {
         const serverStats = Object.entries(cycleData.server_name).map(
           ([serverId, serverName]) => ({
@@ -35,7 +35,7 @@ export const CycleTransferStatsCard: React.FC<CycleTransferStatsProps> = ({
           />
         );
       })}
-    </>
+    </section>
   );
 };
 
