@@ -1,5 +1,3 @@
-# Nezha-Dash-React
-
 > [!CAUTION]
 > 有关项目问题与意见请移步https://github.com/hamster1963/nezha-dash
 > 交流
