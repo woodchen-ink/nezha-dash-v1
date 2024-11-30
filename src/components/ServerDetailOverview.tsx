@@ -188,6 +188,39 @@ export default function ServerDetailOverview({
           </CardContent>
         </Card>
       </section>
+      <section className="flex flex-wrap gap-2 mt-1">
+      <Card className="rounded-[10px] bg-transparent border-none shadow-none">
+          <CardContent className="px-1.5 py-1">
+            <section className="flex flex-col items-start gap-0.5">
+              <p className="text-xs text-muted-foreground">
+                {t("serverDetail.upload")}
+              </p>
+              {server.state.net_out_transfer ? (
+                <div className="text-xs">
+                  {" "}
+                  {formatBytes(server.state.net_out_transfer)}{" "}
+                </div>
+              ) : null}
+            </section>
+          </CardContent>
+        </Card>
+        <Card className="rounded-[10px] bg-transparent border-none shadow-none">
+          <CardContent className="px-1.5 py-1">
+            <section className="flex flex-col items-start gap-0.5">
+              <p className="text-xs text-muted-foreground">
+                {t("serverDetail.download")}
+              </p>
+              {server.state.net_in_transfer ? (
+                <div className="text-xs">
+                  {" "}
+                  {formatBytes(server.state.net_in_transfer)}{" "}
+                </div>
+              ) : null}
+            </section>
+          </CardContent>
+        </Card>
+
+      </section>
     </div>
   );
 }

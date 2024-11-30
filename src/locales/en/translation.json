@@ -33,7 +33,9 @@
     "mem": "Mem",
     "disk": "Disk",
     "region": "Region",
-    "system": "System"
+    "system": "System",
+    "upload": "Upload",
+    "download": "Download"
   },
   "serverDetailChart": {
     "process": "Process",

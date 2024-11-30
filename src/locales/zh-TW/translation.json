@@ -33,7 +33,9 @@
     "mem": "內存",
     "disk": "磁盤",
     "region": "地區",
-    "system": "系統"
+    "system": "系統",
+    "upload": "上傳",
+    "download": "下載"
   },
   "serverDetailChart": {
     "process": "進程數",

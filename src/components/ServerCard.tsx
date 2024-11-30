@@ -104,26 +104,26 @@ export default function ServerCard({
             </div>
           </section>
           <section className={"flex items-center justify-between gap-1"}>
-            <Badge
-              variant="secondary"
-              className="items-center flex-1 justify-center rounded-[8px] text-nowrap text-[11px] border-muted-50 shadow-md shadow-neutral-200/30 dark:shadow-none"
-            >
-              {t("Upload")}:{formatBytes(serverInfo.state.net_out_transfer)}
-            </Badge>
-            <Badge
-              variant="outline"
-              className="items-center flex-1 justify-center rounded-[8px] text-nowrap text-[11px] shadow-md shadow-neutral-200/30 dark:shadow-none"
-            >
-              {t("Download")}:{formatBytes(serverInfo.state.net_in_transfer)}
-            </Badge>
-          </section>
+              <Badge
+                variant="secondary"
+                className="items-center flex-1 justify-center rounded-[8px] text-nowrap text-[11px] border-muted-50 shadow-md shadow-neutral-200/30 dark:shadow-none"
+              >
+                {t("serverCard.upload")}:{formatBytes(serverInfo.state.net_out_transfer)}
+              </Badge>
+              <Badge
+                variant="outline"
+                className="items-center flex-1 justify-center rounded-[8px] text-nowrap text-[11px] shadow-md shadow-neutral-200/30 dark:shadow-none"
+              >
+                {t("serverCard.download")}:{formatBytes(serverInfo.state.net_in_transfer)}
+              </Badge>
+            </section>
         </div>
       </Card>
     </section>
   ) : (
     <Card
       className={cn(
-        "flex flex-col items-center justify-start gap-3 p-3 md:px-5 lg:flex-row cursor-pointer hover:bg-accent/50 transition-colors",
+        "flex flex-col lg:min-h-[91px] min-h-[123px] items-center justify-start gap-3 p-3 md:px-5 lg:flex-row cursor-pointer hover:bg-accent/50 transition-colors",
       )}
       onClick={() => navigate(`/server/${serverInfo.id}`)}
     >
