@@ -4,10 +4,11 @@ import ServerFlag from "@/components/ServerFlag";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { useWebSocketContext } from "@/hooks/use-websocket-context";
-import { cn, formatBytes, formatNezhaInfo } from "@/lib/utils";
+import { cn, formatNezhaInfo } from "@/lib/utils";
 import { NezhaWebsocketResponse } from "@/types/nezha-api";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { formatBytes } from "@/lib/format";
 
 export default function ServerDetailOverview({
   server_id,
@@ -37,7 +38,10 @@ export default function ServerDetailOverview({
     return <ServerDetailLoading />;
   }
 
-  const { name, online, uptime, version } = formatNezhaInfo(nezhaWsData.now,server);
+  const { name, online, uptime, version } = formatNezhaInfo(
+    nezhaWsData.now,
+    server,
+  );
 
   return (
     <div>

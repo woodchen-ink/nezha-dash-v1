@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatNezhaInfo(now: number,serverInfo: NezhaServer) {
+export function formatNezhaInfo(now: number, serverInfo: NezhaServer) {
   const lastActiveTime = parseISOTimestamp(serverInfo.last_active);
   return {
     ...serverInfo,
@@ -25,28 +25,6 @@ export function formatNezhaInfo(now: number,serverInfo: NezhaServer) {
     stg: (serverInfo.state.disk_used / serverInfo.host.disk_total) * 100 || 0,
     country_code: serverInfo.country_code,
   };
-}
-
-export function formatBytes(bytes: number, decimals: number = 2) {
-  if (!+bytes) return "0 Bytes";
-
-  const k = 1024;
-  const dm = decimals < 0 ? 0 : decimals;
-  const sizes = [
-    "Bytes",
-    "KiB",
-    "MiB",
-    "GiB",
-    "TiB",
-    "PiB",
-    "EiB",
-    "ZiB",
-    "YiB",
-  ];
-
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-
-  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 }
 
 export function getDaysBetweenDates(date1: string, date2: string): number {

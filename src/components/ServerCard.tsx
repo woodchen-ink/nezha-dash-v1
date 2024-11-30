@@ -6,6 +6,8 @@ import { NezhaServer } from "@/types/nezha-api";
 import { Card } from "./ui/card";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { Badge } from "./ui/badge";
+import { formatBytes } from "@/lib/format";
 
 export default function ServerCard({
   now,
@@ -100,6 +102,20 @@ export default function ServerCard({
                   : `${down.toFixed(2)}M/s`}
               </div>
             </div>
+          </section>
+          <section className={"flex items-center justify-between gap-1"}>
+            <Badge
+              variant="secondary"
+              className="items-center flex-1 justify-center rounded-[8px] text-nowrap text-[11px] border-muted-50 shadow-md shadow-neutral-200/30 dark:shadow-none"
+            >
+              {t("Upload")}:{formatBytes(serverInfo.state.net_out_transfer)}
+            </Badge>
+            <Badge
+              variant="outline"
+              className="items-center flex-1 justify-center rounded-[8px] text-nowrap text-[11px] shadow-md shadow-neutral-200/30 dark:shadow-none"
+            >
+              {t("Download")}:{formatBytes(serverInfo.state.net_in_transfer)}
+            </Badge>
           </section>
         </div>
       </Card>

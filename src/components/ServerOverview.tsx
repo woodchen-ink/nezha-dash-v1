@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { cn, formatBytes } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
+import { formatBytes } from "@/lib/format";
 
 type ServerOverviewProps = {
   online: number;

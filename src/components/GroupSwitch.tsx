@@ -11,9 +11,7 @@ export default function GroupSwitch({
   setCurrentTab: (tab: string) => void;
 }) {
   return (
-    <div
-      className="scrollbar-hidden z-50 flex flex-col items-start overflow-x-scroll rounded-[50px]"
-    >
+    <div className="scrollbar-hidden z-50 flex flex-col items-start overflow-x-scroll rounded-[50px]">
       <div className="flex items-center gap-1 rounded-[50px] bg-stone-100 p-[3px] dark:bg-stone-800">
         {tabs.map((tab: string) => (
           <div

@@ -57,11 +57,13 @@ export default function Servers() {
 
   const totalServers = nezhaWsData?.servers?.length || 0;
   const onlineServers =
-    nezhaWsData?.servers?.filter((server) => formatNezhaInfo(nezhaWsData.now,server).online)
-      ?.length || 0;
+    nezhaWsData?.servers?.filter(
+      (server) => formatNezhaInfo(nezhaWsData.now, server).online,
+    )?.length || 0;
   const offlineServers =
-    nezhaWsData?.servers?.filter((server) => !formatNezhaInfo(nezhaWsData.now,server).online)
-      ?.length || 0;
+    nezhaWsData?.servers?.filter(
+      (server) => !formatNezhaInfo(nezhaWsData.now, server).online,
+    )?.length || 0;
   const up =
     nezhaWsData?.servers?.reduce(
       (total, server) => total + server.state.net_out_transfer,
@@ -112,7 +114,11 @@ export default function Servers() {
       {showServices && <ServiceTracker />}
       <section className="grid grid-cols-1 gap-2 md:grid-cols-2 mt-6">
         {filteredServers.map((serverInfo) => (
-          <ServerCard now={nezhaWsData.now} key={serverInfo.id} serverInfo={serverInfo} />
+          <ServerCard
+            now={nezhaWsData.now}
+            key={serverInfo.id}
+            serverInfo={serverInfo}
+          />
         ))}
       </section>
     </div>
