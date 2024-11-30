@@ -58,7 +58,7 @@ export const CycleTransferStatsClient: React.FC<
                     />
                   </div>
                 </section>
-                <div className="w-full bg-neutral-200 dark:bg-neutral-800 rounded-full h-2.5">
+                <div className="w-full bg-neutral-200 dark:bg-neutral-800 rounded-full overflow-hidden h-2.5">
                   <div
                     className="bg-blue-600 h-2.5 rounded-full"
                     style={{ width: `${Math.min(progress, 100)}%` }}
