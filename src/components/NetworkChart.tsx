@@ -69,13 +69,19 @@ export function NetworkChart({
 
   const formattedData = formatData(monitorData.data);
 
+  const chartDataKey = Object.keys(transformedData);
+
   const initChartConfig = {
     avg_delay: {
       label: t("monitor.avgDelay"),
     },
+    ...chartDataKey.reduce((acc, key) => {
+      acc[key] = {
+        label: key,
+      };
+      return acc;
+    }, {} as ChartConfig),
   } satisfies ChartConfig;
-
-  const chartDataKey = Object.keys(transformedData);
 
   return (
     <NetworkChartClient
