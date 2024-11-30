@@ -1,6 +1,8 @@
 {
   "nezha": "Nezha Monitoring",
   "overview": "Overview",
+  "dashboard": "Dashboard",
+  "login": "Login",
   "whereTheTimeIs": "Where the time is",
   "info": {
     "websocketConnecting": "WebSocket connecting",

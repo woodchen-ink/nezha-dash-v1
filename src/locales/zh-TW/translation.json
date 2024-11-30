@@ -1,6 +1,8 @@
 {
   "nezha": "哪吒監控",
   "overview": "概覽",
+  "dashboard": "管理後台",
+  "login": "登錄",
   "whereTheTimeIs": "目前時間",
   "info": {
     "websocketConnecting": "WebSocket 連接中",

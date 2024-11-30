@@ -37,7 +37,7 @@ export default function ServerDetailOverview({
     return <ServerDetailLoading />;
   }
 
-  const { name, online, uptime, version } = formatNezhaInfo(server);
+  const { name, online, uptime, version } = formatNezhaInfo(nezhaWsData.now,server);
 
   return (
     <div>

@@ -49,14 +49,13 @@ function Header() {
 }
 
 function DashboardLink() {
+  const { t } = useTranslation();
   const { data: userData } = useQuery({
     queryKey: ["login-user"],
     queryFn: () => fetchLoginUser(),
     refetchOnMount: true,
     refetchOnWindowFocus: true,
   });
-
-  if (!userData?.data?.id) return null;
 
   return (
     <div className="flex items-center gap-2">
@@ -66,7 +65,8 @@ function DashboardLink() {
         rel="noopener noreferrer"
         className="flex items-center gap-1 text-sm font-medium opacity-50 transition-opacity hover:opacity-100"
       >
-        Dashboard
+        {!userData?.data?.id && t("login")}
+        {userData?.data?.id && t("dashboard")}
       </a>
     </div>
   );

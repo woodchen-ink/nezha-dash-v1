@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatNezhaInfo(serverInfo: NezhaServer) {
+export function formatNezhaInfo(now: number,serverInfo: NezhaServer) {
   const lastActiveTime = parseISOTimestamp(serverInfo.last_active);
   return {
     ...serverInfo,
@@ -14,7 +14,7 @@ export function formatNezhaInfo(serverInfo: NezhaServer) {
     process: serverInfo.state.process_count || 0,
     up: serverInfo.state.net_out_speed / 1024 / 1024 || 0,
     down: serverInfo.state.net_in_speed / 1024 / 1024 || 0,
-    online: Date.now() - lastActiveTime <= 30000,
+    online: now - lastActiveTime <= 30000,
     uptime: serverInfo.state.uptime || 0,
     version: serverInfo.host.version || null,
     tcp: serverInfo.state.tcp_conn_count || 0,

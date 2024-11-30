@@ -77,20 +77,20 @@ export default function ServerDetailChart({
 
   return (
     <section className="grid md:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-3">
-      <CpuChart data={server} />
-      <ProcessChart data={server} />
-      <DiskChart data={server} />
-      <MemChart data={server} />
-      <NetworkChart data={server} />
-      <ConnectChart data={server} />
+      <CpuChart now={nezhaWsData.now} data={server} />
+      <ProcessChart now={nezhaWsData.now} data={server} />
+      <DiskChart now={nezhaWsData.now} data={server} />
+      <MemChart now={nezhaWsData.now} data={server} />
+      <NetworkChart now={nezhaWsData.now} data={server} />
+      <ConnectChart now={nezhaWsData.now} data={server} />
     </section>
   );
 }
 
-function CpuChart({ data }: { data: NezhaServer }) {
+function CpuChart({ now,data }: { now: number;data: NezhaServer }) {
   const [cpuChartData, setCpuChartData] = useState([] as cpuChartData[]);
 
-  const { cpu } = formatNezhaInfo(data);
+  const { cpu } = formatNezhaInfo(now,data);
 
   useEffect(() => {
     if (data) {
@@ -183,13 +183,13 @@ function CpuChart({ data }: { data: NezhaServer }) {
   );
 }
 
-function ProcessChart({ data }: { data: NezhaServer }) {
+function ProcessChart({ now, data }: { now: number; data: NezhaServer }) {
   const { t } = useTranslation();
   const [processChartData, setProcessChartData] = useState(
     [] as processChartData[],
   );
 
-  const { process } = formatNezhaInfo(data);
+  const { process } = formatNezhaInfo(now,data);
 
   useEffect(() => {
     if (data) {
@@ -276,11 +276,11 @@ function ProcessChart({ data }: { data: NezhaServer }) {
   );
 }
 
-function MemChart({ data }: { data: NezhaServer }) {
+function MemChart({ now,data }: { now: number;data: NezhaServer }) {
   const { t } = useTranslation();
   const [memChartData, setMemChartData] = useState([] as memChartData[]);
 
-  const { mem, swap } = formatNezhaInfo(data);
+  const { mem, swap } = formatNezhaInfo(now,data);
 
   useEffect(() => {
     if (data) {
@@ -406,11 +406,11 @@ function MemChart({ data }: { data: NezhaServer }) {
   );
 }
 
-function DiskChart({ data }: { data: NezhaServer }) {
+function DiskChart({ now,data }: { now: number;data: NezhaServer }) {
   const { t } = useTranslation();
   const [diskChartData, setDiskChartData] = useState([] as diskChartData[]);
 
-  const { disk } = formatNezhaInfo(data);
+  const { disk } = formatNezhaInfo(now,data);
 
   useEffect(() => {
     if (data) {
@@ -503,13 +503,13 @@ function DiskChart({ data }: { data: NezhaServer }) {
   );
 }
 
-function NetworkChart({ data }: { data: NezhaServer }) {
+function NetworkChart({ now,data }: { now: number;data: NezhaServer }) {
   const { t } = useTranslation();
   const [networkChartData, setNetworkChartData] = useState(
     [] as networkChartData[],
   );
 
-  const { up, down } = formatNezhaInfo(data);
+  const { up, down } = formatNezhaInfo(now,data);
 
   useEffect(() => {
     if (data) {
@@ -632,12 +632,12 @@ function NetworkChart({ data }: { data: NezhaServer }) {
   );
 }
 
-function ConnectChart({ data }: { data: NezhaServer }) {
+function ConnectChart({ now,data }: { now: number;data: NezhaServer }) {
   const [connectChartData, setConnectChartData] = useState(
     [] as connectChartData[],
   );
 
-  const { tcp, udp } = formatNezhaInfo(data);
+  const { tcp, udp } = formatNezhaInfo(now,data);
 
   useEffect(() => {
     if (data) {
