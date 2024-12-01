@@ -84,7 +84,7 @@ export default function ServerCardInline({
                 </div>
               </div>
             </div>
-            <div className={"flex w-14 flex-col"}>
+            <div className={"flex w-20 flex-col"}>
               <p className="text-xs text-muted-foreground">
                 {t("serverCard.uptime")}
               </p>
@@ -117,7 +117,7 @@ export default function ServerCardInline({
               </div>
               <ServerUsageBar value={stg} />
             </div>
-            <div className={"flex w-14 flex-col"}>
+            <div className={"flex w-16 flex-col"}>
               <p className="text-xs text-muted-foreground">
                 {t("serverCard.upload")}
               </p>
@@ -127,7 +127,7 @@ export default function ServerCardInline({
                   : `${up.toFixed(2)}M/s`}
               </div>
             </div>
-            <div className={"flex w-14 flex-col"}>
+            <div className={"flex w-16 flex-col"}>
               <p className="text-xs text-muted-foreground">
                 {t("serverCard.download")}
               </p>
@@ -137,7 +137,7 @@ export default function ServerCardInline({
                   : `${down.toFixed(2)}M/s`}
               </div>
             </div>
-            <div className={"flex flex-col"}>
+            <div className={"flex w-20 flex-col"}>
               <p className="text-xs text-muted-foreground">
                 {t("serverCard.totalUpload")}
               </p>
@@ -145,7 +145,7 @@ export default function ServerCardInline({
                 {formatBytes(serverInfo.state.net_out_transfer)}
               </div>
             </div>
-            <div className={"flex flex-col"}>
+            <div className={"flex w-20 flex-col"}>
               <p className="text-xs text-muted-foreground">
                 {t("serverCard.totalDownload")}
               </p>
