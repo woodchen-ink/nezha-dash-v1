@@ -51,7 +51,7 @@ export const ServiceTrackerClient: React.FC<ServiceTrackerProps> = ({
             key={index}
             className={cn(
               "flex-1 h-6 rounded-[5px] transition-colors",
-              day.completed ? "bg-green-600" : "bg-red-500",
+              day.completed ? "bg-green-600" : "bg-red-500/60",
             )}
             title={
               day.date ? day.date.toLocaleDateString() : `Day ${index + 1}`
