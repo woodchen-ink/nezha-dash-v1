@@ -162,7 +162,7 @@ export default function Servers() {
       </section>
       {showServices === "1" && <ServiceTracker />}
       {inline === "1" && (
-        <section className="flex flex-col gap-2 overflow-x-scroll mt-6">
+        <section className="flex flex-col gap-2 overflow-x-scroll scrollbar-hidden mt-6">
           {filteredServers.map((serverInfo) => (
             <ServerCardInline
               now={nezhaWsData.now}
