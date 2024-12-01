@@ -189,7 +189,7 @@ export default function ServerDetailOverview({
         </Card>
       </section>
       <section className="flex flex-wrap gap-2 mt-1">
-      <Card className="rounded-[10px] bg-transparent border-none shadow-none">
+        <Card className="rounded-[10px] bg-transparent border-none shadow-none">
           <CardContent className="px-1.5 py-1">
             <section className="flex flex-col items-start gap-0.5">
               <p className="text-xs text-muted-foreground">{"Load"}</p>
@@ -198,7 +198,9 @@ export default function ServerDetailOverview({
                   {server.state.load_1} / {server.state.load_5} /{" "}
                   {server.state.load_15}
                 </div>
-              ) : null}
+              ) : (
+                <div className="text-xs"> {t("serverDetail.unknown")}</div>
+              )}
             </section>
           </CardContent>
         </Card>
@@ -213,7 +215,9 @@ export default function ServerDetailOverview({
                   {" "}
                   {formatBytes(server.state.net_out_transfer)}{" "}
                 </div>
-              ) : null}
+              ) : (
+                <div className="text-xs"> {t("serverDetail.unknown")}</div>
+              )}
             </section>
           </CardContent>
         </Card>
@@ -228,7 +232,9 @@ export default function ServerDetailOverview({
                   {" "}
                   {formatBytes(server.state.net_in_transfer)}{" "}
                 </div>
-              ) : null}
+              ) : (
+                <div className="text-xs"> {t("serverDetail.unknown")}</div>
+              )}
             </section>
           </CardContent>
         </Card>

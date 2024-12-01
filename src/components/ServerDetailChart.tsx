@@ -16,6 +16,7 @@ import { ServerDetailChartLoading } from "./loading/ServerDetailLoading";
 import AnimatedCircularProgressBar from "./ui/animated-circular-progress-bar";
 import { useWebSocketContext } from "@/hooks/use-websocket-context";
 import { useTranslation } from "react-i18next";
+import { formatBytes } from "@/lib/format";
 
 type cpuChartData = {
   timeStamp: string;
@@ -317,7 +318,7 @@ function MemChart({ now, data }: { now: number; data: NezhaServer }) {
     <Card>
       <CardContent className="px-6 py-3">
         <section className="flex flex-col gap-1">
-          <div className="flex items-center">
+          <div className="flex items-center justify-between">
             <section className="flex items-center gap-4">
               <div className="flex flex-col">
                 <p className=" text-xs text-muted-foreground">
@@ -348,6 +349,15 @@ function MemChart({ now, data }: { now: number; data: NezhaServer }) {
                   />
                   <p className="text-xs font-medium">{swap.toFixed(0)}%</p>
                 </div>
+              </div>
+            </section>
+            <section className="flex flex-col items-end gap-0.5">
+              <div className="flex text-[11px] font-medium items-center gap-2">
+                {formatBytes(data.state.mem_used)} /{" "}
+                {formatBytes(data.state.mem_total)}
+              </div>
+              <div className="flex text-[11px] font-medium items-center gap-2">
+                swap: {formatBytes(data.state.swap_used)}
               </div>
             </section>
           </div>
@@ -443,17 +453,23 @@ function DiskChart({ now, data }: { now: number; data: NezhaServer }) {
         <section className="flex flex-col gap-1">
           <div className="flex items-center justify-between">
             <p className="text-md font-medium">{t("serverDetailChart.disk")}</p>
-            <section className="flex items-center gap-2">
-              <p className="text-xs text-end w-10 font-medium">
-                {disk.toFixed(0)}%
-              </p>
-              <AnimatedCircularProgressBar
-                className="size-3 text-[0px]"
-                max={100}
-                min={0}
-                value={disk}
-                primaryColor="hsl(var(--chart-5))"
-              />
+            <section className="flex flex-col items-end gap-0.5">
+              <section className="flex items-center gap-2">
+                <p className="text-xs text-end w-10 font-medium">
+                  {disk.toFixed(0)}%
+                </p>
+                <AnimatedCircularProgressBar
+                  className="size-3 text-[0px]"
+                  max={100}
+                  min={0}
+                  value={disk}
+                  primaryColor="hsl(var(--chart-5))"
+                />
+              </section>
+              <div className="flex text-[11px] font-medium items-center gap-2">
+                {formatBytes(data.state.disk_used)} /{" "}
+                {formatBytes(data.state.disk_total)}
+              </div>
             </section>
           </div>
           <ChartContainer
