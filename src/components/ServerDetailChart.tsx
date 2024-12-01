@@ -354,10 +354,17 @@ function MemChart({ now, data }: { now: number; data: NezhaServer }) {
             <section className="flex flex-col items-end gap-0.5">
               <div className="flex text-[11px] font-medium items-center gap-2">
                 {formatBytes(data.state.mem_used)} /{" "}
-                {formatBytes(data.state.mem_total)}
+                {formatBytes(data.host.mem_total)}
               </div>
               <div className="flex text-[11px] font-medium items-center gap-2">
-                swap: {formatBytes(data.state.swap_used)}
+                {data.host.swap_total ? (
+                  <>
+                    swap: {formatBytes(data.state.swap_used)} /{" "}
+                    {formatBytes(data.host.swap_total)}
+                  </>
+                ) : (
+                  <>no swap</>
+                )}
               </div>
             </section>
           </div>
@@ -468,7 +475,7 @@ function DiskChart({ now, data }: { now: number; data: NezhaServer }) {
               </section>
               <div className="flex text-[11px] font-medium items-center gap-2">
                 {formatBytes(data.state.disk_used)} /{" "}
-                {formatBytes(data.state.disk_total)}
+                {formatBytes(data.host.disk_total)}
               </div>
             </section>
           </div>

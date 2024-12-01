@@ -28,10 +28,8 @@ export interface NezhaServerHost {
 export interface NezhaServerStatus {
   cpu: number;
   mem_used: number;
-  mem_total: number;
   swap_used: number;
   disk_used: number;
-  disk_total: number;
   net_in_transfer: number;
   net_out_transfer: number;
   net_in_speed: number;
