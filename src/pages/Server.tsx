@@ -22,14 +22,20 @@ export default function Servers() {
   });
   const { lastMessage, readyState } = useWebSocketContext();
 
-  const [showServices, setShowServices] = useState(false);
-  const [currentGroup, setCurrentGroup] = useState<string>("All");
+  const [showServices, setShowServices] = useState<string>("0");
   const [inline, setInline] = useState<string>("0");
+  const [currentGroup, setCurrentGroup] = useState<string>("All");
+
+  useEffect(() => {
+    const showServicesState = localStorage.getItem("showServices");
+    if (showServicesState !== null) {
+      setShowServices(showServicesState);
+    }
+  }, []);
 
   useEffect(() => {
     const inlineState = localStorage.getItem("inline");
     if (inlineState !== null) {
-      console.log("inlineState", inlineState);
       setInline(inlineState);
     }
   }, []);
@@ -115,9 +121,19 @@ export default function Servers() {
       <section className="flex mt-6 items-center gap-2 w-full overflow-hidden">
         <button
           onClick={() => {
-            setShowServices(!showServices);
+            setShowServices(showServices === "0" ? "1" : "0");
+            localStorage.setItem(
+              "showServices",
+              showServices === "0" ? "1" : "0",
+            );
           }}
-          className="rounded-[50px] text-white cursor-pointer [text-shadow:_0_1px_0_rgb(0_0_0_/_20%)] bg-blue-600 hover:bg-blue-500 p-[10px] transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] hover:shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] "
+          className={cn(
+            "rounded-[50px] text-white cursor-pointer [text-shadow:_0_1px_0_rgb(0_0_0_/_20%)] bg-blue-600  p-[10px] transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ",
+            {
+              "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] bg-blue-500":
+                showServices === "1",
+            },
+          )}
         >
           <ChartBarSquareIcon className="size-[13px]" />
         </button>
@@ -142,7 +158,7 @@ export default function Servers() {
           setCurrentTab={setCurrentGroup}
         />
       </section>
-      {showServices && <ServiceTracker />}
+      {showServices === "1" && <ServiceTracker />}
       {inline === "1" && (
         <section className="flex flex-col gap-2 overflow-x-scroll mt-6">
           {filteredServers.map((serverInfo) => (
