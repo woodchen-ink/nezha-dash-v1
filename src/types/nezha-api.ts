@@ -149,3 +149,13 @@ export interface CycleTransferData {
     [key: string]: string;
   };
 }
+
+
+export interface SettingResponse {
+  success: boolean;
+  data: {
+    language: string;
+    site_name: string;
+    custom_code: string;
+  };
+}

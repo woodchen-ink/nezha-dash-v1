@@ -3,6 +3,7 @@ import {
   MonitorResponse,
   ServerGroupResponse,
   ServiceResponse,
+  SettingResponse,
 } from "@/types/nezha-api";
 
 export const fetchServerGroup = async (): Promise<ServerGroupResponse> => {
@@ -36,6 +37,15 @@ export const fetchMonitor = async (
 
 export const fetchService = async (): Promise<ServiceResponse> => {
   const response = await fetch("/api/v1/service");
+  const data = await response.json();
+  if (data.error) {
+    throw new Error(data.error);
+  }
+  return data;
+};
+
+export const fetchSetting = async (): Promise<SettingResponse> => {
+  const response = await fetch("/api/v1/setting");
   const data = await response.json();
   if (data.error) {
     throw new Error(data.error);

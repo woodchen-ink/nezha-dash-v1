@@ -1,7 +1,7 @@
 import { ModeToggle } from "@/components/ThemeSwitcher";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import { fetchLoginUser } from "@/lib/nezha-api";
+import { fetchLoginUser, fetchSetting } from "@/lib/nezha-api";
 import { useQuery } from "@tanstack/react-query";
 import { DateTime } from "luxon";
 import { useEffect, useRef, useState } from "react";
@@ -12,6 +12,16 @@ import { useNavigate } from "react-router-dom";
 function Header() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+
+  const { data: settingData,isLoading } = useQuery({
+    queryKey: ["setting"],
+    queryFn: () => fetchSetting(),
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+  });
+
+  const siteName = settingData?.data?.site_name;
+
   return (
     <div className="mx-auto w-full max-w-5xl">
       <section className="flex items-center justify-between">
@@ -28,7 +38,11 @@ function Header() {
               className="relative m-0! border-2 border-transparent h-6 w-6 object-cover object-top p-0!"
             />
           </div>
-          {"NEZHA"}
+          {isLoading ? (
+            <Skeleton className="h-6 w-20 rounded-[5px] bg-muted-foreground/10 animate-none" />
+          ) : (
+            siteName || "NEZHA"
+          )}
           <Separator
             orientation="vertical"
             className="mx-2 hidden h-4 w-[1px] md:block"
