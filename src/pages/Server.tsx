@@ -66,12 +66,18 @@ export default function Servers() {
     )?.length || 0;
   const up =
     nezhaWsData?.servers?.reduce(
-      (total, server) => total + server.state.net_out_transfer,
+      (total, server) =>
+        formatNezhaInfo(nezhaWsData.now, server).online
+          ? total + (server.state?.net_out_transfer ?? 0)
+          : total,
       0,
     ) || 0;
   const down =
     nezhaWsData?.servers?.reduce(
-      (total, server) => total + server.state.net_in_transfer,
+      (total, server) =>
+        formatNezhaInfo(nezhaWsData.now, server).online
+          ? total + (server.state?.net_in_transfer ?? 0)
+          : total,
       0,
     ) || 0;
 
