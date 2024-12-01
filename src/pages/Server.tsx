@@ -46,8 +46,10 @@ export default function Servers() {
   ];
 
   useEffect(() => {
-    if (readyState == 1) {
+    const hasShownToast = sessionStorage.getItem("websocket-connected-toast");
+    if (readyState == 1 && !hasShownToast) {
       toast.success(t("info.websocketConnected"));
+      sessionStorage.setItem("websocket-connected-toast", "true");
     }
   }, [readyState]);
 

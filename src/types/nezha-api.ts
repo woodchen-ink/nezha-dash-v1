@@ -150,7 +150,6 @@ export interface CycleTransferData {
   };
 }
 
-
 export interface SettingResponse {
   success: boolean;
   data: {

@@ -13,7 +13,7 @@ function Header() {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const { data: settingData,isLoading } = useQuery({
+  const { data: settingData, isLoading } = useQuery({
     queryKey: ["setting"],
     queryFn: () => fetchSetting(),
     refetchOnMount: true,
