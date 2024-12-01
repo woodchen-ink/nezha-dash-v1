@@ -22,8 +22,20 @@ export default function ServerCardInline({
 }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { name, country_code, online, cpu, up, down, mem, stg } =
-    formatNezhaInfo(now, serverInfo);
+  const {
+    name,
+    country_code,
+    online,
+    cpu,
+    up,
+    down,
+    mem,
+    stg,
+    platform,
+    uptime,
+    net_in_transfer,
+    net_out_transfer,
+  } = formatNezhaInfo(now, serverInfo);
 
   const showFlag = true;
 
@@ -65,12 +77,10 @@ export default function ServerCardInline({
               className={"items-center flex flex-row gap-2 whitespace-nowrap"}
             >
               <div className="text-xs font-semibold">
-                {serverInfo.host.platform.includes("Windows") ? (
+                {platform.includes("Windows") ? (
                   <MageMicrosoftWindows className="size-[10px]" />
                 ) : (
-                  <p
-                    className={`fl-${GetFontLogoClass(serverInfo.host.platform)}`}
-                  />
+                  <p className={`fl-${GetFontLogoClass(platform)}`} />
                 )}
               </div>
               <div className={"flex w-14 flex-col"}>
@@ -78,9 +88,9 @@ export default function ServerCardInline({
                   {t("serverCard.system")}
                 </p>
                 <div className="flex items-center text-[10.5px] font-semibold">
-                  {serverInfo.host.platform.includes("Windows")
+                  {platform.includes("Windows")
                     ? "Windows"
-                    : GetOsName(serverInfo.host.platform)}
+                    : GetOsName(platform)}
                 </div>
               </div>
             </div>
@@ -89,7 +99,7 @@ export default function ServerCardInline({
                 {t("serverCard.uptime")}
               </p>
               <div className="flex items-center text-xs font-semibold">
-                {(serverInfo.state.uptime / 86400).toFixed(0)} {"Days"}
+                {(uptime / 86400).toFixed(0)} {"Days"}
               </div>
             </div>
             <div className={"flex w-14 flex-col"}>
@@ -142,7 +152,7 @@ export default function ServerCardInline({
                 {t("serverCard.totalUpload")}
               </p>
               <div className="flex items-center text-xs font-semibold">
-                {formatBytes(serverInfo.state.net_out_transfer)}
+                {formatBytes(net_out_transfer)}
               </div>
             </div>
             <div className={"flex w-20 flex-col"}>
@@ -150,7 +160,7 @@ export default function ServerCardInline({
                 {t("serverCard.totalDownload")}
               </p>
               <div className="flex items-center text-xs font-semibold">
-                {formatBytes(serverInfo.state.net_in_transfer)}
+                {formatBytes(net_in_transfer)}
               </div>
             </div>
           </section>

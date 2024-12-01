@@ -18,8 +18,18 @@ export default function ServerCard({
 }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { name, country_code, online, cpu, up, down, mem, stg } =
-    formatNezhaInfo(now, serverInfo);
+  const {
+    name,
+    country_code,
+    online,
+    cpu,
+    up,
+    down,
+    mem,
+    stg,
+    net_in_transfer,
+    net_out_transfer,
+  } = formatNezhaInfo(now, serverInfo);
 
   const showFlag = true;
 
@@ -108,15 +118,13 @@ export default function ServerCard({
               variant="secondary"
               className="items-center flex-1 justify-center rounded-[8px] text-nowrap text-[11px] border-muted-50 shadow-md shadow-neutral-200/30 dark:shadow-none"
             >
-              {t("serverCard.upload")}:
-              {formatBytes(serverInfo.state.net_out_transfer)}
+              {t("serverCard.upload")}:{formatBytes(net_out_transfer)}
             </Badge>
             <Badge
               variant="outline"
               className="items-center flex-1 justify-center rounded-[8px] text-nowrap text-[11px] shadow-md shadow-neutral-200/30 dark:shadow-none"
             >
-              {t("serverCard.download")}:
-              {formatBytes(serverInfo.state.net_in_transfer)}
+              {t("serverCard.download")}:{formatBytes(net_in_transfer)}
             </Badge>
           </section>
         </div>

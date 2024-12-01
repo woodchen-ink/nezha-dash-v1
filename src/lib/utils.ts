@@ -24,6 +24,9 @@ export function formatNezhaInfo(now: number, serverInfo: NezhaServer) {
     disk: (serverInfo.state.disk_used / serverInfo.host.disk_total) * 100 || 0,
     stg: (serverInfo.state.disk_used / serverInfo.host.disk_total) * 100 || 0,
     country_code: serverInfo.country_code,
+    platform: serverInfo.host.platform || "",
+    net_out_transfer: serverInfo.state.net_out_transfer || 0,
+    net_in_transfer: serverInfo.state.net_in_transfer || 0,
   };
 }
 
