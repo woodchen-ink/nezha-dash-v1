@@ -20,7 +20,11 @@
     "mem": "內存",
     "stg": "存儲",
     "upload": "上傳",
-    "download": "下載"
+    "download": "下載",
+    "system": "系統",
+    "uptime": "運行時間",
+    "totalUpload": "總上傳",
+    "totalDownload": "總下載"
   },
   "serverDetail": {
     "status": "狀態",

@@ -1,6 +1,6 @@
 import { NezhaWebsocketResponse } from "@/types/nezha-api";
 import ServerCard from "@/components/ServerCard";
-import { formatNezhaInfo } from "@/lib/utils";
+import { cn, formatNezhaInfo } from "@/lib/utils";
 import ServerOverview from "@/components/ServerOverview";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -10,8 +10,9 @@ import GroupSwitch from "@/components/GroupSwitch";
 import { ServerGroup } from "@/types/nezha-api";
 import { useWebSocketContext } from "@/hooks/use-websocket-context";
 import { useTranslation } from "react-i18next";
-import { ChartBarSquareIcon } from "@heroicons/react/20/solid";
+import { ChartBarSquareIcon, ViewColumnsIcon } from "@heroicons/react/20/solid";
 import { ServiceTracker } from "@/components/ServiceTracker";
+import ServerCardInline from "@/components/ServerCardInline";
 
 export default function Servers() {
   const { t } = useTranslation();
@@ -23,6 +24,15 @@ export default function Servers() {
 
   const [showServices, setShowServices] = useState(false);
   const [currentGroup, setCurrentGroup] = useState<string>("All");
+  const [inline, setInline] = useState<string>("0");
+
+  useEffect(() => {
+    const inlineState = localStorage.getItem("inline");
+    if (inlineState !== null) {
+      console.log("inlineState", inlineState);
+      setInline(inlineState);
+    }
+  }, []);
 
   const groupTabs = [
     "All",
@@ -111,6 +121,21 @@ export default function Servers() {
         >
           <ChartBarSquareIcon className="size-[13px]" />
         </button>
+        <button
+          onClick={() => {
+            setInline(inline === "0" ? "1" : "0");
+            localStorage.setItem("inline", inline === "0" ? "1" : "0");
+          }}
+          className={cn(
+            "rounded-[50px] text-white cursor-pointer [text-shadow:_0_1px_0_rgb(0_0_0_/_20%)] bg-blue-600  p-[10px] transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ",
+            {
+              "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] bg-blue-500":
+                inline === "1",
+            },
+          )}
+        >
+          <ViewColumnsIcon className="size-[13px]" />
+        </button>
         <GroupSwitch
           tabs={groupTabs}
           currentTab={currentGroup}
@@ -118,15 +143,28 @@ export default function Servers() {
         />
       </section>
       {showServices && <ServiceTracker />}
-      <section className="grid grid-cols-1 gap-2 md:grid-cols-2 mt-6">
-        {filteredServers.map((serverInfo) => (
-          <ServerCard
-            now={nezhaWsData.now}
-            key={serverInfo.id}
-            serverInfo={serverInfo}
-          />
-        ))}
-      </section>
+      {inline === "1" && (
+        <section className="flex flex-col gap-2 overflow-x-scroll mt-6">
+          {filteredServers.map((serverInfo) => (
+            <ServerCardInline
+              now={nezhaWsData.now}
+              key={serverInfo.id}
+              serverInfo={serverInfo}
+            />
+          ))}
+        </section>
+      )}
+      {inline === "0" && (
+        <section className="grid grid-cols-1 gap-2 md:grid-cols-2 mt-6">
+          {filteredServers.map((serverInfo) => (
+            <ServerCard
+              now={nezhaWsData.now}
+              key={serverInfo.id}
+              serverInfo={serverInfo}
+            />
+          ))}
+        </section>
+      )}
     </div>
   );
 }

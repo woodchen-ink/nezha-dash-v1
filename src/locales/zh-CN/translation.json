@@ -20,7 +20,11 @@
     "mem": "内存",
     "stg": "存储",
     "upload": "上传",
-    "download": "下载"
+    "download": "下载",
+    "system": "系统",
+    "uptime": "运行时间",
+    "totalUpload": "总上传",
+    "totalDownload": "总下载"
   },
   "serverDetail": {
     "status": "状态",

@@ -20,7 +20,11 @@
     "mem": "MEM",
     "stg": "STG",
     "upload": "Upload",
-    "download": "Download"
+    "download": "Download",
+    "system": "System",
+    "uptime": "Uptime",
+    "totalUpload": "Total Upload",
+    "totalDownload": "Total Download"
   },
   "serverDetail": {
     "status": "Status",
