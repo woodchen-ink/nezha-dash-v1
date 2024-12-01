@@ -1,11 +1,11 @@
 import { createContext } from "react";
 
 export interface WebSocketContextType {
-  sendMessage: (message: string) => void;
-  lastMessage: MessageEvent | null;
-  readyState: number;
+  lastMessage: { data: string } | null;
+  connected: boolean;
 }
 
-export const WebSocketContext = createContext<WebSocketContextType | undefined>(
-  undefined,
-);
+export const WebSocketContext = createContext<WebSocketContextType>({
+  lastMessage: null,
+  connected: false,
+});

@@ -18,9 +18,9 @@ export default function ServerDetailOverview({
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const { lastMessage, readyState } = useWebSocketContext();
+  const { lastMessage, connected } = useWebSocketContext();
 
-  if (readyState !== 1) {
+  if (!connected) {
     return <ServerDetailLoading />;
   }
 
@@ -195,8 +195,9 @@ export default function ServerDetailOverview({
               <p className="text-xs text-muted-foreground">{"Load"}</p>
               {server.state.load_1 ? (
                 <div className="text-xs">
-                  {server.state.load_1} / {server.state.load_5} /{" "}
-                  {server.state.load_15}
+                  {server.state.load_1.toFixed(2)} /{" "}
+                  {server.state.load_5.toFixed(2)} /{" "}
+                  {server.state.load_15.toFixed(2)}
                 </div>
               ) : (
                 <div className="text-xs"> {t("serverDetail.unknown")}</div>

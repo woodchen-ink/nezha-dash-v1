@@ -56,9 +56,9 @@ export default function ServerDetailChart({
 }: {
   server_id: string;
 }) {
-  const { lastMessage, readyState } = useWebSocketContext();
+  const { lastMessage, connected } = useWebSocketContext();
 
-  if (readyState !== 1) {
+  if (!connected) {
     return <ServerDetailChartLoading />;
   }
 

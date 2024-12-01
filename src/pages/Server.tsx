@@ -13,6 +13,7 @@ import { useTranslation } from "react-i18next";
 import { ChartBarSquareIcon, ViewColumnsIcon } from "@heroicons/react/20/solid";
 import { ServiceTracker } from "@/components/ServiceTracker";
 import ServerCardInline from "@/components/ServerCardInline";
+import { Loader } from "@/components/loading/Loader";
 
 export default function Servers() {
   const { t } = useTranslation();
@@ -20,7 +21,7 @@ export default function Servers() {
     queryKey: ["server-group"],
     queryFn: () => fetchServerGroup(),
   });
-  const { lastMessage, readyState } = useWebSocketContext();
+  const { lastMessage, connected } = useWebSocketContext();
 
   const [showServices, setShowServices] = useState<string>("0");
   const [inline, setInline] = useState<string>("0");
@@ -47,16 +48,19 @@ export default function Servers() {
 
   useEffect(() => {
     const hasShownToast = sessionStorage.getItem("websocket-connected-toast");
-    if (readyState == 1 && !hasShownToast) {
+    if (connected && !hasShownToast) {
       toast.success(t("info.websocketConnected"));
       sessionStorage.setItem("websocket-connected-toast", "true");
     }
-  }, [readyState]);
+  }, [connected]);
 
-  if (readyState !== 1) {
+  if (!connected) {
     return (
-      <div className="flex flex-col items-center justify-center ">
-        <p className="font-semibold text-sm">{t("info.websocketConnecting")}</p>
+      <div className="flex flex-col items-center min-h-96 justify-center ">
+        <p className="font-semibold flex items-center gap-2 text-sm">
+          <Loader visible={true} />
+          {t("info.websocketConnecting")}
+        </p>
       </div>
     );
   }
