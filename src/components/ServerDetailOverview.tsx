@@ -38,10 +38,25 @@ export default function ServerDetailOverview({
     return <ServerDetailLoading />;
   }
 
-  const { name, online, uptime, version } = formatNezhaInfo(
-    nezhaWsData.now,
-    server,
-  );
+  const {
+    name,
+    online,
+    uptime,
+    version,
+    arch,
+    mem_total,
+    disk_total,
+    country_code,
+    platform,
+    platform_version,
+    cpu_info,
+    gpu_info,
+    load_1,
+    load_5,
+    load_15,
+    net_out_transfer,
+    net_in_transfer,
+  } = formatNezhaInfo(nezhaWsData.now, server);
 
   return (
     <div>
@@ -105,7 +120,7 @@ export default function ServerDetailOverview({
                 {t("serverDetail.arch")}
               </p>
               <div className="text-xs">
-                {server.host.arch || t("serverDetail.unknown")}{" "}
+                {arch || t("serverDetail.unknown")}{" "}
               </div>
             </section>
           </CardContent>
@@ -116,9 +131,7 @@ export default function ServerDetailOverview({
               <p className="text-xs text-muted-foreground">
                 {t("serverDetail.mem")}
               </p>
-              <div className="text-xs">
-                {formatBytes(server.host.mem_total)}
-              </div>
+              <div className="text-xs">{formatBytes(mem_total)}</div>
             </section>
           </CardContent>
         </Card>
@@ -128,9 +141,7 @@ export default function ServerDetailOverview({
               <p className="text-xs text-muted-foreground">
                 {t("serverDetail.disk")}
               </p>
-              <div className="text-xs">
-                {formatBytes(server.host.disk_total)}
-              </div>
+              <div className="text-xs">{formatBytes(disk_total)}</div>
             </section>
           </CardContent>
         </Card>
@@ -142,13 +153,12 @@ export default function ServerDetailOverview({
               </p>
               <section className="flex items-start gap-1">
                 <div className="text-xs text-start">
-                  {server.country_code?.toUpperCase() ||
-                    t("serverDetail.unknown")}
+                  {country_code?.toUpperCase() || t("serverDetail.unknown")}
                 </div>
-                {server.country_code && (
+                {country_code && (
                   <ServerFlag
                     className="text-[11px] -mt-[1px]"
-                    country_code={server.country_code}
+                    country_code={country_code}
                   />
                 )}
               </section>
@@ -163,11 +173,10 @@ export default function ServerDetailOverview({
               <p className="text-xs text-muted-foreground">
                 {t("serverDetail.system")}
               </p>
-              {server.host.platform ? (
+              {platform ? (
                 <div className="text-xs">
                   {" "}
-                  {server.host.platform || t("serverDetail.unknown")} -{" "}
-                  {server.host.platform_version}{" "}
+                  {platform || t("serverDetail.unknown")} - {platform_version}{" "}
                 </div>
               ) : (
                 <div className="text-xs"> {t("serverDetail.unknown")}</div>
@@ -179,8 +188,8 @@ export default function ServerDetailOverview({
           <CardContent className="px-1.5 py-1">
             <section className="flex flex-col items-start gap-0.5">
               <p className="text-xs text-muted-foreground">{"CPU"}</p>
-              {server.host.cpu.length > 0 ? (
-                <div className="text-xs"> {server.host.cpu.join(", ")}</div>
+              {cpu_info.length > 0 ? (
+                <div className="text-xs"> {cpu_info.join(", ")}</div>
               ) : (
                 <div className="text-xs"> {t("serverDetail.unknown")}</div>
               )}
@@ -191,8 +200,8 @@ export default function ServerDetailOverview({
           <CardContent className="px-1.5 py-1">
             <section className="flex flex-col items-start gap-0.5">
               <p className="text-xs text-muted-foreground">{"GPU"}</p>
-              {server.host.gpu.length > 0 ? (
-                <div className="text-xs">{server.host.gpu.join(", ")}</div>
+              {gpu_info.length > 0 ? (
+                <div className="text-xs">{gpu_info.join(", ")}</div>
               ) : (
                 <div className="text-xs"> {t("serverDetail.unknown")}</div>
               )}
@@ -205,15 +214,10 @@ export default function ServerDetailOverview({
           <CardContent className="px-1.5 py-1">
             <section className="flex flex-col items-start gap-0.5">
               <p className="text-xs text-muted-foreground">{"Load"}</p>
-              {server.state.load_1 ? (
-                <div className="text-xs">
-                  {server.state.load_1.toFixed(2)} /{" "}
-                  {server.state.load_5.toFixed(2)} /{" "}
-                  {server.state.load_15.toFixed(2)}
-                </div>
-              ) : (
-                <div className="text-xs"> {t("serverDetail.unknown")}</div>
-              )}
+
+              <div className="text-xs">
+                {load_1} / {load_5} / {load_15}
+              </div>
             </section>
           </CardContent>
         </Card>
@@ -223,11 +227,8 @@ export default function ServerDetailOverview({
               <p className="text-xs text-muted-foreground">
                 {t("serverDetail.upload")}
               </p>
-              {server.state.net_out_transfer ? (
-                <div className="text-xs">
-                  {" "}
-                  {formatBytes(server.state.net_out_transfer)}{" "}
-                </div>
+              {net_out_transfer ? (
+                <div className="text-xs"> {formatBytes(net_out_transfer)} </div>
               ) : (
                 <div className="text-xs"> {t("serverDetail.unknown")}</div>
               )}
@@ -240,11 +241,8 @@ export default function ServerDetailOverview({
               <p className="text-xs text-muted-foreground">
                 {t("serverDetail.download")}
               </p>
-              {server.state.net_in_transfer ? (
-                <div className="text-xs">
-                  {" "}
-                  {formatBytes(server.state.net_in_transfer)}{" "}
-                </div>
+              {net_in_transfer ? (
+                <div className="text-xs"> {formatBytes(net_in_transfer)} </div>
               ) : (
                 <div className="text-xs"> {t("serverDetail.unknown")}</div>
               )}
