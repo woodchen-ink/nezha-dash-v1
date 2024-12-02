@@ -22,6 +22,10 @@ function Header() {
 
   const siteName = settingData?.data?.site_name;
 
+  useEffect(() => {
+    document.title = siteName || "NEZHA";
+  }, [siteName]);
+
   return (
     <div className="mx-auto w-full max-w-5xl">
       <section className="flex items-center justify-between">
