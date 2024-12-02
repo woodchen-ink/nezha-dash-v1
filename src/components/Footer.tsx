@@ -17,10 +17,10 @@ const Footer: React.FC = () => {
           <p>
             {t("footer.themeBy")}
             <a
-              href={"https://github.com/hamster1963/nezha-dash-react"}
+              href={"https://github.com/hamster1963/nezha-dash"}
               target="_blank"
             >
-              Nezha-Dash
+              nezha-dash
             </a>
           </p>
         </section>
