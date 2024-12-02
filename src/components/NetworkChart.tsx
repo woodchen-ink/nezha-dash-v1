@@ -111,27 +111,14 @@ export const NetworkChartClient = React.memo(function NetworkChart({
 
   const defaultChart = "All";
 
-  const [activeCharts, setActiveCharts] = React.useState<string[]>([
-    defaultChart,
-  ]);
+  const [activeChart, setActiveChart] = React.useState(defaultChart);
 
-  const handleButtonClick = useCallback((chart: string) => {
-    setActiveCharts((prev) => {
-      if (chart === defaultChart) {
-        return [defaultChart];
-      }
-
-      const newCharts = prev.filter((c) => c !== defaultChart);
-      const chartIndex = newCharts.indexOf(chart);
-
-      if (chartIndex === -1) {
-        return newCharts.length === 0 ? [chart] : [...newCharts, chart];
-      } else {
-        const result = newCharts.filter((c) => c !== chart);
-        return result.length === 0 ? [defaultChart] : result;
-      }
-    });
-  }, []);
+  const handleButtonClick = useCallback(
+    (chart: string) => {
+      setActiveChart((prev) => (prev === chart ? defaultChart : chart));
+    },
+    [defaultChart],
+  );
 
   const getColorByIndex = useCallback(
     (chart: string) => {
@@ -146,7 +133,7 @@ export const NetworkChartClient = React.memo(function NetworkChart({
       chartDataKey.map((key) => (
         <button
           key={key}
-          data-active={activeCharts.includes(key)}
+          data-active={activeChart === key}
           className={`relative z-30 flex cursor-pointer flex-1 flex-col justify-center gap-1 border-b border-neutral-200 dark:border-neutral-800 px-6 py-4 text-left data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-6`}
           onClick={() => handleButtonClick(key)}
         >
@@ -158,38 +145,35 @@ export const NetworkChartClient = React.memo(function NetworkChart({
           </span>
         </button>
       )),
-    [chartDataKey, activeCharts, chartData, handleButtonClick],
+    [chartDataKey, activeChart, chartData, handleButtonClick],
   );
 
   const chartLines = useMemo(() => {
-    if (activeCharts.includes(defaultChart)) {
-      return chartDataKey.map((key) => (
+    if (activeChart !== defaultChart) {
+      return (
         <Line
-          key={key}
           isAnimationActive={false}
           strokeWidth={1}
           type="linear"
           dot={false}
-          dataKey={key}
-          stroke={getColorByIndex(key)}
-          connectNulls={true}
+          dataKey="avg_delay"
+          stroke={getColorByIndex(activeChart)}
         />
-      ));
+      );
     }
-
-    return activeCharts.map((chart) => (
+    return chartDataKey.map((key) => (
       <Line
-        key={chart}
+        key={key}
         isAnimationActive={false}
         strokeWidth={1}
         type="linear"
         dot={false}
-        dataKey={chart}
-        stroke={getColorByIndex(chart)}
+        dataKey={key}
+        stroke={getColorByIndex(key)}
         connectNulls={true}
       />
     ));
-  }, [activeCharts, chartDataKey, getColorByIndex]);
+  }, [activeChart, defaultChart, chartDataKey, getColorByIndex]);
 
   return (
     <Card>
@@ -212,9 +196,9 @@ export const NetworkChartClient = React.memo(function NetworkChart({
           <LineChart
             accessibilityLayer
             data={
-              activeCharts.includes(defaultChart)
+              activeChart === defaultChart
                 ? formattedData
-                : chartData[activeCharts[0]]
+                : chartData[activeChart]
             }
             margin={{ left: 12, right: 12 }}
           >
@@ -247,7 +231,7 @@ export const NetworkChartClient = React.memo(function NetworkChart({
                 />
               }
             />
-            {activeCharts.includes(defaultChart) && (
+            {activeChart === defaultChart && (
               <ChartLegend content={<ChartLegendContent />} />
             )}
             {chartLines}
