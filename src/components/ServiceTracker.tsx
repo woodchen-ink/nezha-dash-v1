@@ -39,7 +39,10 @@ export const ServiceTracker: React.FC = () => {
     return <div className="mt-4">Loading...</div>;
   }
 
-  if (!serviceData?.data?.services) {
+  if (
+    !serviceData?.data?.services &&
+    !serviceData?.data?.cycle_transfer_stats
+  ) {
     return (
       <div className="mt-4 font-thin text-sm">No service data available</div>
     );
@@ -54,20 +57,22 @@ export const ServiceTracker: React.FC = () => {
           />
         </div>
       )}
-      <section className="grid grid-cols-1 md:grid-cols-2 mt-4 gap-2 md:gap-4">
-        {Object.entries(serviceData.data.services).map(([name, data]) => {
-          const { days, uptime, avgDelay } = processServiceData(data);
-          return (
-            <ServiceTrackerClient
-              key={name}
-              days={days}
-              title={data.service.name}
-              uptime={uptime}
-              avgDelay={avgDelay}
-            />
-          );
-        })}
-      </section>
+      {serviceData.data.services && (
+        <section className="grid grid-cols-1 md:grid-cols-2 mt-4 gap-2 md:gap-4">
+          {Object.entries(serviceData.data.services).map(([name, data]) => {
+            const { days, uptime, avgDelay } = processServiceData(data);
+            return (
+              <ServiceTrackerClient
+                key={name}
+                days={days}
+                title={data.service.name}
+                uptime={uptime}
+                avgDelay={avgDelay}
+              />
+            );
+          })}
+        </section>
+      )}
     </div>
   );
 };
