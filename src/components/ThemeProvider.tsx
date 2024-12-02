@@ -40,10 +40,18 @@ export function ThemeProvider({
         : "light";
 
       root.classList.add(systemTheme);
+      const themeColor = systemTheme === "dark" ? "#242424" : "#fafafa";
+      document
+        .querySelector('meta[name="theme-color"]')
+        ?.setAttribute("content", themeColor);
       return;
     }
 
     root.classList.add(theme);
+    const themeColor = theme === "dark" ? "#242424" : "#fafafa";
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute("content", themeColor);
   }, [theme]);
 
   const value = {

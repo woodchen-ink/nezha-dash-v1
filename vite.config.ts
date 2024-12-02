@@ -15,7 +15,7 @@ export default defineConfig({
         name: "哪吒面板",
         short_name: "哪吒",
         description: "哪吒监控面板",
-        theme_color: "#ffffff",
+        theme_color: "#242424",
         icons: [
           {
             src: "pwa-192x192.png",

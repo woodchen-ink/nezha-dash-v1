@@ -10,6 +10,7 @@
       name="apple-mobile-web-app-status-bar-style"
       content="black-translucent"
     />
+    <meta name="theme-color" content="#242424" />
     <title>NEZHA</title>
     <script>
       (function () {
@@ -17,14 +18,23 @@
         const theme = localStorage.getItem(storageKey) || "system";
         const root = document.documentElement;
 
+        function updateThemeColor(isDark) {
+          const themeColor = isDark ? "#242424" : "#fafafa";
+          document
+            .querySelector('meta[name="theme-color"]')
+            .setAttribute("content", themeColor);
+        }
+
         if (theme === "system") {
           const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
             .matches
             ? "dark"
             : "light";
           root.classList.add(systemTheme);
+          updateThemeColor(systemTheme === "dark");
         } else {
           root.classList.add(theme);
+          updateThemeColor(theme === "dark");
         }
       })();
     </script>
