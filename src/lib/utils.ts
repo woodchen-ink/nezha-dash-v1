@@ -38,6 +38,7 @@ export function formatNezhaInfo(now: number, serverInfo: NezhaServer) {
     load_1: serverInfo.state.load_1?.toFixed(2) || 0.0,
     load_5: serverInfo.state.load_5?.toFixed(2) || 0.0,
     load_15: serverInfo.state.load_15?.toFixed(2) || 0.0,
+    public_note: handlePublicNote(serverInfo.id, serverInfo.public_note || ""),
   };
 }
 
@@ -47,9 +48,7 @@ export function getDaysBetweenDates(date1: string, date2: string): number {
   const secondDate = new Date(date2);
 
   // 计算两个日期之间的天数差异
-  return Math.round(
-    Math.abs((firstDate.getTime() - secondDate.getTime()) / oneDay),
-  );
+  return Math.round((firstDate.getTime() - secondDate.getTime()) / oneDay);
 }
 
 export const fetcher = (url: string) =>
@@ -114,4 +113,74 @@ export function formatTime(timestamp: number): string {
   const minutes = date.getMinutes().toString().padStart(2, "0");
   const seconds = date.getSeconds().toString().padStart(2, "0");
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
+interface BillingData {
+  startDate: string;
+  endDate: string;
+  autoRenewal: string;
+  cycle: string;
+  amount: string;
+}
+
+interface PlanData {
+  bandwidth: string;
+  trafficVol: string;
+  trafficType: string;
+  IPv4: string;
+  IPv6: string;
+  networkRoute: string;
+  extra: string;
+}
+
+interface PublicNoteData {
+  billingDataMod: BillingData;
+  planDataMod: PlanData;
+}
+
+export function parsePublicNote(publicNote: string): PublicNoteData | null {
+  try {
+    if (!publicNote) {
+      return null;
+    }
+    const data = JSON.parse(publicNote);
+    return {
+      billingDataMod: {
+        startDate: data.billingDataMod.startDate,
+        endDate: data.billingDataMod.endDate,
+        autoRenewal: data.billingDataMod.autoRenewal,
+        cycle: data.billingDataMod.cycle,
+        amount: data.billingDataMod.amount,
+      },
+      planDataMod: {
+        bandwidth: data.planDataMod.bandwidth,
+        trafficVol: data.planDataMod.trafficVol,
+        trafficType: data.planDataMod.trafficType,
+        IPv4: data.planDataMod.IPv4,
+        IPv6: data.planDataMod.IPv6,
+        networkRoute: data.planDataMod.networkRoute,
+        extra: data.planDataMod.extra,
+      },
+    };
+  } catch (error) {
+    console.error("Error parsing public note:", error);
+    return null;
+  }
+}
+
+// Function to handle public_note with sessionStorage
+export function handlePublicNote(serverId: number, publicNote: string): string {
+  const storageKey = `server_${serverId}_public_note`;
+  const storedNote = sessionStorage.getItem(storageKey);
+
+  if (!publicNote && storedNote) {
+    return storedNote;
+  }
+
+  if (publicNote) {
+    sessionStorage.setItem(storageKey, publicNote);
+    return publicNote;
+  }
+
+  return "";
 }

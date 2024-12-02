@@ -6,6 +6,7 @@ export interface NezhaWebsocketResponse {
 export interface NezhaServer {
   id: number;
   name: string;
+  public_note: string;
   last_active: string;
   country_code: string;
   host: NezhaServerHost;

@@ -1,7 +1,12 @@
 import ServerFlag from "@/components/ServerFlag";
 import ServerUsageBar from "@/components/ServerUsageBar";
 
-import { cn, formatNezhaInfo } from "@/lib/utils";
+import {
+  cn,
+  formatNezhaInfo,
+  parsePublicNote,
+  getDaysBetweenDates,
+} from "@/lib/utils";
 import { NezhaServer } from "@/types/nezha-api";
 import { Card } from "./ui/card";
 import { useNavigate } from "react-router-dom";
@@ -29,9 +34,26 @@ export default function ServerCard({
     stg,
     net_in_transfer,
     net_out_transfer,
+    public_note,
   } = formatNezhaInfo(now, serverInfo);
 
   const showFlag = true;
+
+  const parsedData = parsePublicNote(public_note);
+
+  let daysLeft = 0;
+  let isNeverExpire = false;
+
+  if (parsedData?.billingDataMod?.endDate) {
+    if (parsedData.billingDataMod.endDate.startsWith("0000-00-00")) {
+      isNeverExpire = true;
+    } else {
+      daysLeft = getDaysBetweenDates(
+        parsedData.billingDataMod.endDate,
+        new Date().toISOString(),
+      );
+    }
+  }
 
   return online ? (
     <section>
@@ -54,7 +76,7 @@ export default function ServerCard({
           >
             {showFlag ? <ServerFlag country_code={country_code} /> : null}
           </div>
-          <div className="relative">
+          <div className="relative flex flex-col">
             <p
               className={cn(
                 "break-all font-bold tracking-tight",
@@ -63,6 +85,20 @@ export default function ServerCard({
             >
               {name}
             </p>
+            {parsedData &&
+              (daysLeft >= 0 ? (
+                <p className={cn("text-[10px] text-muted-foreground")}>
+                  剩余时间: {isNeverExpire ? "永久" : daysLeft + "天"}
+                </p>
+              ) : (
+                <p
+                  className={cn(
+                    "text-[10px] text-muted-foreground text-red-600",
+                  )}
+                >
+                  已过期: {daysLeft * -1} 天
+                </p>
+              ))}
           </div>
         </section>
         <div className="flex flex-col gap-2">
@@ -135,7 +171,7 @@ export default function ServerCard({
       className={cn(
         "flex flex-col lg:min-h-[91px] min-h-[123px] items-center justify-start gap-3 p-3 md:px-5 lg:flex-row cursor-pointer hover:bg-accent/50 transition-colors",
       )}
-      onClick={() => navigate(`/server/${serverInfo.id}`)}
+      onClick={() => navigate(`/server/${serverInfo.id}`, { replace: true })}
     >
       <section
         className={cn("grid items-center gap-2 lg:w-40")}
