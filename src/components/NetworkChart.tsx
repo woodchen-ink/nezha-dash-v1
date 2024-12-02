@@ -111,28 +111,27 @@ export const NetworkChartClient = React.memo(function NetworkChart({
 
   const defaultChart = "All";
 
-  const [activeCharts, setActiveCharts] = React.useState<string[]>([defaultChart]);
+  const [activeCharts, setActiveCharts] = React.useState<string[]>([
+    defaultChart,
+  ]);
 
-  const handleButtonClick = useCallback(
-    (chart: string) => {
-      setActiveCharts((prev) => {
-        if (chart === defaultChart) {
-          return [defaultChart];
-        }
-        
-        const newCharts = prev.filter(c => c !== defaultChart);
-        const chartIndex = newCharts.indexOf(chart);
-        
-        if (chartIndex === -1) {
-          return newCharts.length === 0 ? [chart] : [...newCharts, chart];
-        } else {
-          const result = newCharts.filter(c => c !== chart);
-          return result.length === 0 ? [defaultChart] : result;
-        }
-      });
-    },
-    [],
-  );
+  const handleButtonClick = useCallback((chart: string) => {
+    setActiveCharts((prev) => {
+      if (chart === defaultChart) {
+        return [defaultChart];
+      }
+
+      const newCharts = prev.filter((c) => c !== defaultChart);
+      const chartIndex = newCharts.indexOf(chart);
+
+      if (chartIndex === -1) {
+        return newCharts.length === 0 ? [chart] : [...newCharts, chart];
+      } else {
+        const result = newCharts.filter((c) => c !== chart);
+        return result.length === 0 ? [defaultChart] : result;
+      }
+    });
+  }, []);
 
   const getColorByIndex = useCallback(
     (chart: string) => {
@@ -177,7 +176,7 @@ export const NetworkChartClient = React.memo(function NetworkChart({
         />
       ));
     }
-    
+
     return activeCharts.map((chart) => (
       <Line
         key={chart}
