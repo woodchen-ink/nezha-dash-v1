@@ -57,10 +57,10 @@ export default function Servers() {
   if (!connected) {
     return (
       <div className="flex flex-col items-center min-h-96 justify-center ">
-        <p className="font-semibold flex items-center gap-2 text-sm">
+        <div className="font-semibold flex items-center gap-2 text-sm">
           <Loader visible={true} />
           {t("info.websocketConnecting")}
-        </p>
+        </div>
       </div>
     );
   }
