@@ -37,7 +37,12 @@ export const ServiceTracker: React.FC = () => {
   };
 
   if (isLoading) {
-    return <div className="mt-4 text-sm font-medium flex items-center gap-1"><Loader visible={true} />Loading...</div>;
+    return (
+      <div className="mt-4 text-sm font-medium flex items-center gap-1">
+        <Loader visible={true} />
+        Loading...
+      </div>
+    );
   }
 
   if (
@@ -58,22 +63,23 @@ export const ServiceTracker: React.FC = () => {
           />
         </div>
       )}
-      {serviceData.data.services && Object.keys(serviceData.data.services).length > 0 && (
-        <section className="grid grid-cols-1 md:grid-cols-2 mt-4 gap-2 md:gap-4">
-          {Object.entries(serviceData.data.services).map(([name, data]) => {
-            const { days, uptime, avgDelay } = processServiceData(data);
-            return (
-              <ServiceTrackerClient
-                key={name}
-                days={days}
-                title={data.service.name}
-                uptime={uptime}
-                avgDelay={avgDelay}
-              />
-            );
-          })}
-        </section>
-      )}
+      {serviceData.data.services &&
+        Object.keys(serviceData.data.services).length > 0 && (
+          <section className="grid grid-cols-1 md:grid-cols-2 mt-4 gap-2 md:gap-4">
+            {Object.entries(serviceData.data.services).map(([name, data]) => {
+              const { days, uptime, avgDelay } = processServiceData(data);
+              return (
+                <ServiceTrackerClient
+                  key={name}
+                  days={days}
+                  title={data.service.name}
+                  uptime={uptime}
+                  avgDelay={avgDelay}
+                />
+              );
+            })}
+          </section>
+        )}
     </div>
   );
 };

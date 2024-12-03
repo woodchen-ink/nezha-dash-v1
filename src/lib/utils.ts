@@ -123,15 +123,15 @@ interface BillingData {
   amount: string;
 }
 
-interface PlanData {
-  bandwidth: string;
-  trafficVol: string;
-  trafficType: string;
-  IPv4: string;
-  IPv6: string;
-  networkRoute: string;
-  extra: string;
-}
+// interface PlanData {
+//   bandwidth: string;
+//   trafficVol: string;
+//   trafficType: string;
+//   IPv4: string;
+//   IPv6: string;
+//   networkRoute: string;
+//   extra: string;
+// }
 
 interface PublicNoteData {
   billingDataMod: BillingData;
@@ -151,7 +151,7 @@ export function parsePublicNote(publicNote: string): PublicNoteData | null {
         autoRenewal: data.billingDataMod.autoRenewal || "",
         cycle: data.billingDataMod.cycle || "",
         amount: data.billingDataMod.amount || "",
-      }
+      },
       // planDataMod: {
       //   bandwidth: data.planDataMod.bandwidth || "",
       //   trafficVol: data.planDataMod.trafficVol || "",

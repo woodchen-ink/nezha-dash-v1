@@ -18,31 +18,35 @@ export const CycleTransferStatsCard: React.FC<CycleTransferStatsProps> = ({
           return null;
         }
 
-        return Object.entries(cycleData.server_name).map(([serverId, serverName]) => {
-          const transfer = cycleData.transfer?.[serverId] || 0;
-          const nextUpdate = cycleData.next_update?.[serverId];
+        return Object.entries(cycleData.server_name).map(
+          ([serverId, serverName]) => {
+            const transfer = cycleData.transfer?.[serverId] || 0;
+            const nextUpdate = cycleData.next_update?.[serverId];
 
-          if (!transfer && !nextUpdate) {
-            return null;
-          }
+            if (!transfer && !nextUpdate) {
+              return null;
+            }
 
-          return (
-            <CycleTransferStatsClient
-              key={`${cycleId}-${serverId}`}
-              name={cycleData.name}
-              from={cycleData.from}
-              to={cycleData.to}
-              max={cycleData.max}
-              serverStats={[{
-                serverId,
-                serverName,
-                transfer,
-                nextUpdate: nextUpdate || "",
-              }]}
-              className={className}
-            />
-          );
-        });
+            return (
+              <CycleTransferStatsClient
+                key={`${cycleId}-${serverId}`}
+                name={cycleData.name}
+                from={cycleData.from}
+                to={cycleData.to}
+                max={cycleData.max}
+                serverStats={[
+                  {
+                    serverId,
+                    serverName,
+                    transfer,
+                    nextUpdate: nextUpdate || "",
+                  },
+                ]}
+                className={className}
+              />
+            );
+          },
+        );
       })}
     </section>
   );

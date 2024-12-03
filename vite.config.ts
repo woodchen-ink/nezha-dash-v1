@@ -2,10 +2,24 @@ import path from "path";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import { VitePWA } from "vite-plugin-pwa";
+import { execSync } from "child_process";
+
+// Get git commit hash
+const getGitHash = () => {
+  try {
+    return execSync("git rev-parse --short HEAD").toString().trim();
+  } catch (e) {
+    console.log(e);
+    return "unknown";
+  }
+};
 
 // https://vite.dev/config/
 export default defineConfig({
   base: "/",
+  define: {
+    "import.meta.env.VITE_GIT_HASH": JSON.stringify(getGitHash()),
+  },
   plugins: [
     react(),
     VitePWA({
