@@ -43,8 +43,13 @@ export interface NezhaServerStatus {
   tcp_conn_count: number;
   udp_conn_count: number;
   process_count: number;
-  temperatures: number;
-  gpu: number;
+  temperatures: temperature[];
+  gpu: number[];
+}
+
+interface temperature {
+  Name: string;
+  Temperature: number;
 }
 
 export interface ServerGroupResponse {
