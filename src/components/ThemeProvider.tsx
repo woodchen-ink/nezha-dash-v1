@@ -40,7 +40,8 @@ export function ThemeProvider({
         : "light";
 
       root.classList.add(systemTheme);
-      const themeColor = systemTheme === "dark" ? "#242424" : "#fafafa";
+      const themeColor =
+        systemTheme === "dark" ? "hsl(30 15% 8%)" : "hsl(0 0% 98%)";
       document
         .querySelector('meta[name="theme-color"]')
         ?.setAttribute("content", themeColor);
@@ -48,7 +49,7 @@ export function ThemeProvider({
     }
 
     root.classList.add(theme);
-    const themeColor = theme === "dark" ? "#242424" : "#fafafa";
+    const themeColor = theme === "dark" ? "hsl(30 15% 8%)" : "hsl(0 0% 98%)";
     document
       .querySelector('meta[name="theme-color"]')
       ?.setAttribute("content", themeColor);
