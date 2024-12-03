@@ -14,7 +14,8 @@
     "totalServers": "總服務器",
     "onlineServers": "線上服務器",
     "offlineServers": "離線服務器",
-    "totalBandwidth": "總帶寬"
+    "totalBandwidth": "總帶寬",
+    "speed": "速率"
   },
   "serverCard": {
     "mem": "內存",

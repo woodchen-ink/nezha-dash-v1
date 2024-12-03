@@ -14,7 +14,8 @@
     "totalServers": "服务器总数",
     "onlineServers": "在线服务器",
     "offlineServers": "离线服务器",
-    "totalBandwidth": "总流量"
+    "totalBandwidth": "总流量",
+    "speed": "速率"
   },
   "serverCard": {
     "mem": "内存",

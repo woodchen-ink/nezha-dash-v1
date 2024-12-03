@@ -103,6 +103,23 @@ export default function Servers() {
       0,
     ) || 0;
 
+  const upSpeed =
+    nezhaWsData?.servers?.reduce(
+      (total, server) =>
+        formatNezhaInfo(nezhaWsData.now, server).online
+          ? total + (server.state?.net_out_speed ?? 0)
+          : total,
+      0,
+    ) || 0;
+  const downSpeed =
+    nezhaWsData?.servers?.reduce(
+      (total, server) =>
+        formatNezhaInfo(nezhaWsData.now, server).online
+          ? total + (server.state?.net_in_speed ?? 0)
+          : total,
+      0,
+    ) || 0;
+
   const filteredServers =
     nezhaWsData?.servers?.filter((server) => {
       if (currentGroup === "All") return true;
@@ -123,6 +140,8 @@ export default function Servers() {
         offline={offlineServers}
         up={up}
         down={down}
+        upSpeed={upSpeed}
+        downSpeed={downSpeed}
       />
       <section className="flex mt-6 items-center gap-2 w-full overflow-hidden">
         <button
