@@ -2,7 +2,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 import { formatBytes } from "@/lib/format";
-import { Separator } from "./ui/separator";
+import {
+  ArrowDownCircleIcon,
+  ArrowUpCircleIcon,
+} from "@heroicons/react/20/solid";
 
 type ServerOverviewProps = {
   online: number;
@@ -90,33 +93,30 @@ export default function ServerOverview({
           )}
         >
           <CardContent className="flex h-full items-center relative px-6 py-3">
-            <section className="flex flex-col gap-1">
-              <div className="flex items-center gap-1">
+            <section className="flex flex-col gap-1 w-full">
+              <div className="flex items-center w-full justify-between">
                 <p className="text-sm font-medium md:text-base">
-                  {t("serverOverview.totalBandwidth")}
+                  {t("serverOverview.network")}
                 </p>
-                <Separator
-                  orientation="vertical"
-                  className="h-4 w-[1px]"
-                />
-                <p className="text-sm font-medium md:text-base">
-                  {t("serverOverview.speed")}
-                </p>
+                <section className="flex flex-row z-[999] sm:items-center items-start pr-2 sm:pr-0 gap-1 ml-auto">
+                  <p className="sm:text-[12px] text-[10px]   text-nowrap font-semibold">
+                    ↑{formatBytes(up)}
+                  </p>
+                  <p className="sm:text-[12px] text-[10px]  text-nowrap font-semibold">
+                    ↓{formatBytes(down)}
+                  </p>
+                </section>
               </div>
-              <section className="flex flex-row sm:items-center items-start gap-1">
-                <p className="sm:text-[12px] text-[10px]  text-nowrap font-semibold">
-                  ↑{formatBytes(up)}
+              <section className="flex flex-row mt-1.5 -mr-1 sm:items-center items-start gap-1">
+                <p className="sm:text-[12px] flex items-center text-[10px] text-nowrap font-bold">
+                  <ArrowUpCircleIcon className="size-3 mr-0.5 sm:mb-[1.1px]" />
+                  {formatBytes(
+                    upSpeed,
+                  )}/s
                 </p>
-                <p className="sm:text-[12px] text-[10px]  text-nowrap font-semibold">
-                  ↓{formatBytes(down)}
-                </p>
-              </section>
-              <section className="flex flex-row  sm:items-center items-start gap-1">
-                <p className="sm:text-[12px]  text-[10px] text-nowrap font-semibold">
-                  ↑{formatBytes(upSpeed)}/s
-                </p>
-                <p className="sm:text-[12px] text-[10px] text-nowrap font-semibold">
-                  ↓{formatBytes(downSpeed)}/s
+                <p className="sm:text-[12px] flex items-center text-[10px] text-nowrap font-bold">
+                  <ArrowDownCircleIcon className="size-3 mr-0.5" />↓
+                  {formatBytes(downSpeed)}/s
                 </p>
               </section>
             </section>

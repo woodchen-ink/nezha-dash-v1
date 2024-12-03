@@ -15,7 +15,8 @@
     "onlineServers": "Online Servers",
     "offlineServers": "Offline Servers",
     "totalBandwidth": "Total Bandwidth",
-    "speed": "Speed"
+    "speed": "Speed",
+    "network": "Network"
   },
   "serverCard": {
     "mem": "MEM",
