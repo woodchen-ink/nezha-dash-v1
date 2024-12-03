@@ -57,7 +57,7 @@ export const ServiceTracker: React.FC = () => {
           />
         </div>
       )}
-      {serviceData.data.services && (
+      {serviceData.data.services && Object.keys(serviceData.data.services).length > 0 && (
         <section className="grid grid-cols-1 md:grid-cols-2 mt-4 gap-2 md:gap-4">
           {Object.entries(serviceData.data.services).map(([name, data]) => {
             const { days, uptime, avgDelay } = processServiceData(data);

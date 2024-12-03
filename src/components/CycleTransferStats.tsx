@@ -14,14 +14,20 @@ export const CycleTransferStatsCard: React.FC<CycleTransferStatsProps> = ({
   return (
     <section className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
       {Object.entries(cycleStats).map(([cycleId, cycleData]) => {
-        const serverStats = Object.entries(cycleData.server_name).map(
-          ([serverId, serverName]) => ({
-            serverId,
-            serverName,
-            transfer: cycleData.transfer[serverId] || 0,
-            nextUpdate: cycleData.next_update[serverId],
-          }),
-        );
+        const serverStats = cycleData.server_name 
+          ? Object.entries(cycleData.server_name).map(
+              ([serverId, serverName]) => ({
+                serverId,
+                serverName,
+                transfer: cycleData.transfer?.[serverId] || 0,
+                nextUpdate: cycleData.next_update?.[serverId],
+              })
+            )
+          : [];
+
+          if (serverStats.length === 0) {
+            return null;
+          }
 
         return (
           <CycleTransferStatsClient
