@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchService } from "@/lib/nezha-api";
 import { ServiceData } from "@/types/nezha-api";
 import { CycleTransferStatsCard } from "./CycleTransferStats";
+import { Loader } from "./loading/Loader";
 
 export const ServiceTracker: React.FC = () => {
   const { data: serviceData, isLoading } = useQuery({
@@ -36,7 +37,7 @@ export const ServiceTracker: React.FC = () => {
   };
 
   if (isLoading) {
-    return <div className="mt-4">Loading...</div>;
+    return <div className="mt-4 text-sm font-medium flex items-center gap-1"><Loader visible={true} />Loading...</div>;
   }
 
   if (
