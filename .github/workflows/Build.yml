@@ -34,22 +34,8 @@ jobs:
         with:
           files: dist.zip
 
-  changelog:
-    needs: release
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Set node
-        uses: actions/setup-node@v4
-        with:
-          registry-url: https://registry.npmjs.org/
-          node-version: lts/*
-
-      - run: npx changelogithub
+      - name: Changelog
+        run: bun x changelogithub
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        
