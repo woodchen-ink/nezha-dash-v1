@@ -101,30 +101,30 @@ export default function ServerDetailOverview({
             </section>
           </CardContent>
         </Card>
-        <Card className="rounded-[10px] bg-transparent border-none shadow-none">
-          <CardContent className="px-1.5 py-1">
-            <section className="flex flex-col items-start gap-0.5">
-              <p className="text-xs text-muted-foreground">
-                {t("serverDetail.version")}
-              </p>
-              <div className="text-xs">
-                {version || t("serverDetail.unknown")}{" "}
-              </div>
-            </section>
-          </CardContent>
-        </Card>
-        <Card className="rounded-[10px] bg-transparent border-none shadow-none">
-          <CardContent className="px-1.5 py-1">
-            <section className="flex flex-col items-start gap-0.5">
-              <p className="text-xs text-muted-foreground">
-                {t("serverDetail.arch")}
-              </p>
-              <div className="text-xs">
-                {arch || t("serverDetail.unknown")}{" "}
-              </div>
-            </section>
-          </CardContent>
-        </Card>
+        {version && (
+          <Card className="rounded-[10px] bg-transparent border-none shadow-none">
+            <CardContent className="px-1.5 py-1">
+              <section className="flex flex-col items-start gap-0.5">
+                <p className="text-xs text-muted-foreground">
+                  {t("serverDetail.version")}
+                </p>
+                <div className="text-xs">{version} </div>
+              </section>
+            </CardContent>
+          </Card>
+        )}
+        {arch && (
+          <Card className="rounded-[10px] bg-transparent border-none shadow-none">
+            <CardContent className="px-1.5 py-1">
+              <section className="flex flex-col items-start gap-0.5">
+                <p className="text-xs text-muted-foreground">
+                  {t("serverDetail.arch")}
+                </p>
+                <div className="text-xs">{arch} </div>
+              </section>
+            </CardContent>
+          </Card>
+        )}
         <Card className="rounded-[10px] bg-transparent border-none shadow-none">
           <CardContent className="px-1.5 py-1">
             <section className="flex flex-col items-start gap-0.5">
@@ -145,69 +145,65 @@ export default function ServerDetailOverview({
             </section>
           </CardContent>
         </Card>
-        <Card className="rounded-[10px] bg-transparent border-none shadow-none">
-          <CardContent className="px-1.5 py-1">
-            <section className="flex flex-col items-start gap-0.5">
-              <p className="text-xs text-muted-foreground">
-                {t("serverDetail.region")}
-              </p>
-              <section className="flex items-start gap-1">
-                <div className="text-xs text-start">
-                  {country_code?.toUpperCase() || t("serverDetail.unknown")}
-                </div>
-                {country_code && (
-                  <ServerFlag
-                    className="text-[11px] -mt-[1px]"
-                    country_code={country_code}
-                  />
-                )}
+        {country_code && (
+          <Card className="rounded-[10px] bg-transparent border-none shadow-none">
+            <CardContent className="px-1.5 py-1">
+              <section className="flex flex-col items-start gap-0.5">
+                <p className="text-xs text-muted-foreground">
+                  {t("serverDetail.region")}
+                </p>
+                <section className="flex items-start gap-1">
+                  <div className="text-xs text-start">
+                    {country_code?.toUpperCase()}
+                  </div>
+                  {country_code && (
+                    <ServerFlag
+                      className="text-[11px] -mt-[1px]"
+                      country_code={country_code}
+                    />
+                  )}
+                </section>
               </section>
-            </section>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        )}
       </section>
       <section className="flex flex-wrap gap-2 mt-1">
-        <Card className="rounded-[10px] bg-transparent border-none shadow-none">
-          <CardContent className="px-1.5 py-1">
-            <section className="flex flex-col items-start gap-0.5">
-              <p className="text-xs text-muted-foreground">
-                {t("serverDetail.system")}
-              </p>
-              {platform ? (
+        {platform && (
+          <Card className="rounded-[10px] bg-transparent border-none shadow-none">
+            <CardContent className="px-1.5 py-1">
+              <section className="flex flex-col items-start gap-0.5">
+                <p className="text-xs text-muted-foreground">
+                  {t("serverDetail.system")}
+                </p>
                 <div className="text-xs">
                   {" "}
-                  {platform || t("serverDetail.unknown")} - {platform_version}{" "}
+                  {platform} - {platform_version || ""}{" "}
                 </div>
-              ) : (
-                <div className="text-xs"> {t("serverDetail.unknown")}</div>
-              )}
-            </section>
-          </CardContent>
-        </Card>
-        <Card className="rounded-[10px] bg-transparent border-none shadow-none">
-          <CardContent className="px-1.5 py-1">
-            <section className="flex flex-col items-start gap-0.5">
-              <p className="text-xs text-muted-foreground">{"CPU"}</p>
-              {cpu_info.length > 0 ? (
+              </section>
+            </CardContent>
+          </Card>
+        )}
+        {cpu_info.length > 0 && (
+          <Card className="rounded-[10px] bg-transparent border-none shadow-none">
+            <CardContent className="px-1.5 py-1">
+              <section className="flex flex-col items-start gap-0.5">
+                <p className="text-xs text-muted-foreground">{"CPU"}</p>
                 <div className="text-xs"> {cpu_info.join(", ")}</div>
-              ) : (
-                <div className="text-xs"> {t("serverDetail.unknown")}</div>
-              )}
-            </section>
-          </CardContent>
-        </Card>
-        <Card className="rounded-[10px] bg-transparent border-none shadow-none">
-          <CardContent className="px-1.5 py-1">
-            <section className="flex flex-col items-start gap-0.5">
-              <p className="text-xs text-muted-foreground">{"GPU"}</p>
-              {gpu_info.length > 0 ? (
+              </section>
+            </CardContent>
+          </Card>
+        )}
+        {gpu_info.length > 0 && (
+          <Card className="rounded-[10px] bg-transparent border-none shadow-none">
+            <CardContent className="px-1.5 py-1">
+              <section className="flex flex-col items-start gap-0.5">
+                <p className="text-xs text-muted-foreground">{"GPU"}</p>
                 <div className="text-xs">{gpu_info.join(", ")}</div>
-              ) : (
-                <div className="text-xs"> {t("serverDetail.unknown")}</div>
-              )}
-            </section>
-          </CardContent>
-        </Card>
+              </section>
+            </CardContent>
+          </Card>
+        )}
       </section>
       <section className="flex flex-wrap gap-2 mt-1">
         <Card className="rounded-[10px] bg-transparent border-none shadow-none">
