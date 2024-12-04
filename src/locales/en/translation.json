@@ -25,8 +25,8 @@
     "download": "Download",
     "system": "System",
     "uptime": "Uptime",
-    "totalUpload": "Total Upload",
-    "totalDownload": "Total Download"
+    "totalUpload": "Upload",
+    "totalDownload": "Download"
   },
   "serverDetail": {
     "status": "Status",
