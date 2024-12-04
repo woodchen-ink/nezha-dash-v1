@@ -221,24 +221,6 @@ export default function ServerDetailOverview({
             </section>
           </CardContent>
         </Card>
-        {server?.state.temperatures &&
-          server?.state.temperatures.length > 0 && (
-            <Card className="rounded-[10px] bg-transparent border-none shadow-none">
-              <CardContent className="px-1.5 py-1">
-                <section className="flex flex-col items-start gap-0.5">
-                  <p className="text-xs text-muted-foreground">{"温度"}</p>
-                  <section className="flex items-start gap-2">
-                    {server?.state.temperatures.map((item, index) => (
-                      <div className="text-xs flex items-center" key={index}>
-                        <p className=" font-semibold">{item.Name}</p>:{" "}
-                        {item.Temperature.toFixed(2)} °C
-                      </div>
-                    ))}
-                  </section>
-                </section>
-              </CardContent>
-            </Card>
-          )}
         <Card className="rounded-[10px] bg-transparent border-none shadow-none">
           <CardContent className="px-1.5 py-1">
             <section className="flex flex-col items-start gap-0.5">
@@ -268,6 +250,25 @@ export default function ServerDetailOverview({
           </CardContent>
         </Card>
       </section>
+      {server?.state.temperatures && server?.state.temperatures.length > 0 && (
+        <section className="flex flex-wrap gap-2 mt-1">
+          <Card className="rounded-[10px] bg-transparent border-none shadow-none">
+            <CardContent className="px-1.5 py-1">
+              <section className="flex flex-col items-start gap-0.5">
+                <p className="text-xs text-muted-foreground">{"温度"}</p>
+                <section className="flex items-start flex-wrap gap-2">
+                  {server?.state.temperatures.map((item, index) => (
+                    <div className="text-xs flex items-center" key={index}>
+                      <p className="font-semibold">{item.Name}</p>:{" "}
+                      {item.Temperature.toFixed(2)} °C
+                    </div>
+                  ))}
+                </section>
+              </section>
+            </CardContent>
+          </Card>
+        </section>
+      )}
     </div>
   );
 }
