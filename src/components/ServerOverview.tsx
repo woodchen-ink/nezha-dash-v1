@@ -99,24 +99,26 @@ export default function ServerOverview({
                   {t("serverOverview.network")}
                 </p>
                 <section className="flex flex-row z-[999] sm:items-center items-start pr-2 sm:pr-0 gap-1 ml-auto">
-                  <p className="sm:text-[12px] text-[10px]   text-nowrap font-semibold">
+                  <p className="sm:text-[12px] text-[10px] text-blue-800   text-nowrap font-medium">
                     ↑{formatBytes(up)}
                   </p>
-                  <p className="sm:text-[12px] text-[10px]  text-nowrap font-semibold">
+                  <p className="sm:text-[12px] text-[10px]  text-purple-800  text-nowrap font-medium">
                     ↓{formatBytes(down)}
                   </p>
                 </section>
               </div>
               <section className="flex flex-row mt-1.5 -mr-1 sm:items-center items-start gap-1">
-                <p className="sm:text-[12px] flex items-center text-[10px] text-nowrap font-bold">
-                  <ArrowUpCircleIcon className="size-3 mr-0.5 sm:mb-[1.1px]" />
+                <p className="sm:text-[12px] flex items-center text-[10px] text-nowrap font-semibold">
+                  <ArrowUpCircleIcon className="size-3 mr-0.5 sm:mb-[1px]" />
                   {formatBytes(
                     upSpeed,
                   )}/s
                 </p>
-                <p className="sm:text-[12px] flex items-center text-[10px] text-nowrap font-bold">
-                  <ArrowDownCircleIcon className="size-3 mr-0.5" />↓
-                  {formatBytes(downSpeed)}/s
+                <p className="sm:text-[12px] flex items-center text-[10px] text-nowrap font-semibold">
+                  <ArrowDownCircleIcon className="size-3 mr-0.5" />
+                  {formatBytes(
+                    downSpeed,
+                  )}/s
                 </p>
               </section>
             </section>
