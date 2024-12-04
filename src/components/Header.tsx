@@ -52,7 +52,7 @@ function Header() {
         (handlers[element.tagName] || handlers.DEFAULT)(element);
       } else if (node.nodeType === Node.TEXT_NODE) {
         document.body.appendChild(
-          document.createTextNode(node.textContent || "")
+          document.createTextNode(node.textContent || ""),
         );
       }
     });
@@ -155,7 +155,7 @@ function Overview() {
   const timeOption = DateTime.TIME_SIMPLE;
   timeOption.hour12 = true;
   const [timeString, setTimeString] = useState(
-    DateTime.now().setLocale("en-US").toLocaleString(timeOption)
+    DateTime.now().setLocale("en-US").toLocaleString(timeOption),
   );
   useInterval(() => {
     setTimeString(DateTime.now().setLocale("en-US").toLocaleString(timeOption));

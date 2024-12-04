@@ -98,21 +98,21 @@ export default function ServerOverview({
                 <p className="text-sm font-medium md:text-base">
                   {t("serverOverview.network")}
                 </p>
-                <section className="flex flex-row z-[999] sm:items-center items-start pr-2 sm:pr-0 gap-1 ml-auto">
-                  <p className="sm:text-[12px] text-[10px] text-blue-800 dark:text-blue-400   text-nowrap font-medium">
-                    ↑{formatBytes(up)}
-                  </p>
-                  <p className="sm:text-[12px] text-[10px]  text-purple-800 dark:text-purple-400  text-nowrap font-medium">
-                    ↓{formatBytes(down)}
-                  </p>
-                </section>
               </div>
-              <section className="flex flex-row mt-1.5 -mr-1 sm:items-center items-start gap-1">
-                <p className="sm:text-[12px] flex items-center text-[10px] text-nowrap font-semibold">
+              <section className="flex items-start flex-row z-[999] pr-2 sm:pr-0 gap-1">
+                <p className="sm:text-[12px] text-[10px] text-blue-800 dark:text-blue-400   text-nowrap font-medium">
+                  ↑{formatBytes(up)}
+                </p>
+                <p className="sm:text-[12px] text-[10px]  text-purple-800 dark:text-purple-400  text-nowrap font-medium">
+                  ↓{formatBytes(down)}
+                </p>
+              </section>
+              <section className="flex flex-col sm:flex-row -mr-1 sm:items-center items-start gap-1">
+                <p className="text-[11px] flex items-center text-nowrap font-semibold">
                   <ArrowUpCircleIcon className="size-3 mr-0.5 sm:mb-[1px]" />
                   {formatBytes(upSpeed)}/s
                 </p>
-                <p className="sm:text-[12px] flex items-center text-[10px] text-nowrap font-semibold">
+                <p className="text-[11px] flex items-center  text-nowrap font-semibold">
                   <ArrowDownCircleIcon className="size-3 mr-0.5" />
                   {formatBytes(downSpeed)}/s
                 </p>
