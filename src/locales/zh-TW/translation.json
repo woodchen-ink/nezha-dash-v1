@@ -18,6 +18,11 @@
     "speed": "速率",
     "network": "網路"
   },
+  "map": {
+    "Distributions": "服務器分布在",
+    "Regions": "個區域",
+    "Servers": "個服務器"
+  },
   "serverCard": {
     "mem": "內存",
     "stg": "存儲",

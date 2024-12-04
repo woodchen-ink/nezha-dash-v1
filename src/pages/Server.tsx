@@ -10,10 +10,15 @@ import GroupSwitch from "@/components/GroupSwitch";
 import { ServerGroup } from "@/types/nezha-api";
 import { useWebSocketContext } from "@/hooks/use-websocket-context";
 import { useTranslation } from "react-i18next";
-import { ChartBarSquareIcon, ViewColumnsIcon } from "@heroicons/react/20/solid";
+import {
+  ChartBarSquareIcon,
+  ViewColumnsIcon,
+  MapIcon,
+} from "@heroicons/react/20/solid";
 import { ServiceTracker } from "@/components/ServiceTracker";
 import ServerCardInline from "@/components/ServerCardInline";
 import { Loader } from "@/components/loading/Loader";
+import GlobalMap from "@/components/GlobalMap";
 
 export default function Servers() {
   const { t } = useTranslation();
@@ -24,6 +29,7 @@ export default function Servers() {
   const { lastMessage, connected } = useWebSocketContext();
 
   const [showServices, setShowServices] = useState<string>("0");
+  const [showMap, setShowMap] = useState<string>("0");
   const [inline, setInline] = useState<string>("0");
   const [currentGroup, setCurrentGroup] = useState<string>("All");
 
@@ -146,6 +152,20 @@ export default function Servers() {
       <section className="flex mt-6 items-center gap-2 w-full overflow-hidden">
         <button
           onClick={() => {
+            setShowMap(showMap === "0" ? "1" : "0");
+          }}
+          className={cn(
+            "rounded-[50px] text-white cursor-pointer [text-shadow:_0_1px_0_rgb(0_0_0_/_20%)] bg-blue-600  p-[10px] transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ",
+            {
+              "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] bg-blue-500":
+                showMap === "1",
+            },
+          )}
+        >
+          <MapIcon className="size-[13px]" />
+        </button>
+        <button
+          onClick={() => {
             setShowServices(showServices === "0" ? "1" : "0");
             localStorage.setItem(
               "showServices",
@@ -183,6 +203,7 @@ export default function Servers() {
           setCurrentTab={setCurrentGroup}
         />
       </section>
+      {showMap === "1" && <GlobalMap serverList={nezhaWsData?.servers || []} />}
       {showServices === "1" && <ServiceTracker />}
       {inline === "1" && (
         <section className="flex flex-col gap-2 overflow-x-scroll scrollbar-hidden mt-6">

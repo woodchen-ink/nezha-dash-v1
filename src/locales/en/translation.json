@@ -18,6 +18,11 @@
     "speed": "Speed",
     "network": "Network"
   },
+  "map": {
+    "Distributions": "Servers are distributed in",
+    "Regions": "Regions",
+    "Servers": "servers"
+  },
   "serverCard": {
     "mem": "MEM",
     "stg": "STG",

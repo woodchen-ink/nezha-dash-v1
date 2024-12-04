@@ -99,10 +99,10 @@ export default function ServerOverview({
                   {t("serverOverview.network")}
                 </p>
                 <section className="flex flex-row z-[999] sm:items-center items-start pr-2 sm:pr-0 gap-1 ml-auto">
-                  <p className="sm:text-[12px] text-[10px] text-blue-800   text-nowrap font-medium">
+                  <p className="sm:text-[12px] text-[10px] text-blue-800 dark:text-blue-400   text-nowrap font-medium">
                     ↑{formatBytes(up)}
                   </p>
-                  <p className="sm:text-[12px] text-[10px]  text-purple-800  text-nowrap font-medium">
+                  <p className="sm:text-[12px] text-[10px]  text-purple-800 dark:text-purple-400  text-nowrap font-medium">
                     ↓{formatBytes(down)}
                   </p>
                 </section>
