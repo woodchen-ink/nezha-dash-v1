@@ -110,15 +110,11 @@ export default function ServerOverview({
               <section className="flex flex-row mt-1.5 -mr-1 sm:items-center items-start gap-1">
                 <p className="sm:text-[12px] flex items-center text-[10px] text-nowrap font-semibold">
                   <ArrowUpCircleIcon className="size-3 mr-0.5 sm:mb-[1px]" />
-                  {formatBytes(
-                    upSpeed,
-                  )}/s
+                  {formatBytes(upSpeed)}/s
                 </p>
                 <p className="sm:text-[12px] flex items-center text-[10px] text-nowrap font-semibold">
                   <ArrowDownCircleIcon className="size-3 mr-0.5" />
-                  {formatBytes(
-                    downSpeed,
-                  )}/s
+                  {formatBytes(downSpeed)}/s
                 </p>
               </section>
             </section>

@@ -163,5 +163,6 @@ export interface SettingResponse {
     language: string;
     site_name: string;
     custom_code: string;
+    version: string;
   };
 }
