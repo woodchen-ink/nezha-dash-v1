@@ -78,7 +78,7 @@ export const ServiceTracker: React.FC = () => {
                 <ServiceTrackerClient
                   key={name}
                   days={days}
-                  title={data.service.name}
+                  title={data.service_name}
                   uptime={uptime}
                   avgDelay={avgDelay}
                 />
