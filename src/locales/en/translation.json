@@ -95,5 +95,10 @@
     "noData": "No server monitor data",
     "avgDelay": "Latency",
     "monitorCount": "Services"
+  },
+  "pwa": {
+    "offlineReady": "App ready to work offline",
+    "newContent": "New content available",
+    "reload": "Update"
   }
 }

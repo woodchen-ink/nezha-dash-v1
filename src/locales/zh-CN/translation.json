@@ -95,5 +95,10 @@
     "noData": "没有服务器监控数据",
     "avgDelay": "延迟",
     "monitorCount": "个监控服务"
+  },
+  "pwa": {
+    "offlineReady": "应用可以离线使用了",
+    "newContent": "发现新版本",
+    "reload": "更新"
   }
 }

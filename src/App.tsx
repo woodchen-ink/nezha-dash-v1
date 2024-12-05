@@ -6,6 +6,7 @@ import Server from "./pages/Server";
 import ServerDetail from "./pages/ServerDetail";
 import NotFound from "./pages/NotFound";
 import ErrorPage from "./pages/ErrorPage";
+import ReloadPrompt from "./components/ReloadPrompt";
 
 const App: React.FC = () => {
   return (
@@ -20,6 +21,7 @@ const App: React.FC = () => {
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Footer />
+          <ReloadPrompt />
         </main>
       </div>
     </Router>
