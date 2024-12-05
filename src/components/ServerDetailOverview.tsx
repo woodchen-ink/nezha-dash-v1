@@ -96,7 +96,8 @@ export default function ServerDetailOverview({
               </p>
               <div className="text-xs">
                 {" "}
-                {online ? (uptime / 86400).toFixed(0) : "N/A"} {"Days"}{" "}
+                {online ? (uptime / 86400).toFixed(0) : "N/A"}{" "}
+                {t("serverDetail.days")}
               </div>
             </section>
           </CardContent>

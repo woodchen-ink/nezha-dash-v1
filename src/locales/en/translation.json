@@ -26,6 +26,7 @@
   "serverCard": {
     "mem": "MEM",
     "stg": "STG",
+    "days": "Days",
     "upload": "Upload",
     "download": "Download",
     "system": "System",
@@ -33,9 +34,22 @@
     "totalUpload": "Upload",
     "totalDownload": "Download"
   },
+  "cycleTransfer": {
+    "used": "used",
+    "total": "total",
+    "nextUpdate": "next update"
+  },
+  "serviceTracker": {
+    "noService": "No service data",
+    "uptime": "Uptime",
+    "daysAgo": "days ago",
+    "today": "Today",
+    "loading": "Loading..."
+  },
   "serverDetail": {
     "status": "Status",
     "online": "Online",
+    "days": "Days",
     "offline": "Offline",
     "unknown": "Unknown",
     "uptime": "Uptime",

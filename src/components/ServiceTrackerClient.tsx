@@ -1,6 +1,7 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { Separator } from "./ui/separator";
+import { useTranslation } from "react-i18next";
 
 interface ServiceTrackerProps {
   days: Array<{
@@ -20,6 +21,7 @@ export const ServiceTrackerClient: React.FC<ServiceTrackerProps> = ({
   uptime = 100,
   avgDelay = 0,
 }) => {
+  const { t } = useTranslation();
   return (
     <div
       className={cn(
@@ -40,7 +42,7 @@ export const ServiceTrackerClient: React.FC<ServiceTrackerProps> = ({
           </span>
           <Separator className="h-4 mx-0" orientation="vertical" />
           <span className="text-green-600 font-medium text-sm">
-            {uptime.toFixed(1)}% uptime
+            {uptime.toFixed(1)}% {t("serviceTracker.uptime")}
           </span>
         </div>
       </div>
@@ -61,8 +63,8 @@ export const ServiceTrackerClient: React.FC<ServiceTrackerProps> = ({
       </div>
 
       <div className="flex justify-between text-xs text-stone-500 dark:text-stone-400">
-        <span>30 DAYS AGO</span>
-        <span>TODAY</span>
+        <span>30 {t("serviceTracker.daysAgo")}</span>
+        <span>{t("serviceTracker.today")}</span>
       </div>
     </div>
   );

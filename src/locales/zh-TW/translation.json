@@ -26,6 +26,7 @@
   "serverCard": {
     "mem": "內存",
     "stg": "存儲",
+    "days": "天",
     "upload": "上傳",
     "download": "下載",
     "system": "系統",
@@ -33,9 +34,22 @@
     "totalUpload": "總上傳",
     "totalDownload": "總下載"
   },
+  "cycleTransfer": {
+    "used": "已使用",
+    "total": "總量",
+    "nextUpdate": "下次更新"
+  },
+  "serviceTracker": {
+    "noService": "沒有服務監控數據",
+    "uptime": "可用率",
+    "daysAgo": "天前",
+    "today": "今天",
+    "loading": "載入中..."
+  },
   "serverDetail": {
     "status": "狀態",
     "online": "線上",
+    "days": "天",
     "offline": "離線",
     "unknown": "未知",
     "uptime": "運行時間",

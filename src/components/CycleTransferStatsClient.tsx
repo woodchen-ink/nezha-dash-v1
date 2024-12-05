@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { formatBytes } from "@/lib/format";
 import AnimatedCircularProgressBar from "./ui/animated-circular-progress-bar";
 import { CircleStackIcon } from "@heroicons/react/24/outline";
+import { useTranslation } from "react-i18next";
 
 interface CycleTransferStatsClientProps {
   name: string;
@@ -21,6 +22,7 @@ interface CycleTransferStatsClientProps {
 export const CycleTransferStatsClient: React.FC<
   CycleTransferStatsClientProps
 > = ({ name, from, to, max, serverStats, className }) => {
+  const { t } = useTranslation();
   return (
     <div
       className={cn(
@@ -71,16 +73,17 @@ export const CycleTransferStatsClient: React.FC<
 
             <section className="flex justify-between items-center mt-2">
               <span className="text-[13px] text-stone-800 dark:text-stone-400 font-medium">
-                {formatBytes(transfer)} used
+                {formatBytes(transfer)} {t("cycleTransfer.used")}
               </span>
               <span className="text-xs text-stone-500 dark:text-stone-400 font-normal">
-                {formatBytes(max)} total
+                {formatBytes(max)} {t("cycleTransfer.total")}
               </span>
             </section>
 
             <section className="flex justify-between items-center mt-2">
               <div className="text-xs text-stone-500 dark:text-stone-400">
-                Next update: {new Date(nextUpdate).toLocaleString()}
+                {t("cycleTransfer.nextUpdate")}:{" "}
+                {new Date(nextUpdate).toLocaleString()}
               </div>
             </section>
           </div>

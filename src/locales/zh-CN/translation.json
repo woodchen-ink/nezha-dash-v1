@@ -26,6 +26,7 @@
   "serverCard": {
     "mem": "内存",
     "stg": "存储",
+    "days": "天",
     "upload": "上传",
     "download": "下载",
     "system": "系统",
@@ -33,9 +34,22 @@
     "totalUpload": "总上传",
     "totalDownload": "总下载"
   },
+  "cycleTransfer": {
+    "used": "已使用",
+    "total": "总计",
+    "nextUpdate": "下次更新"
+  },
+  "serviceTracker": {
+    "noService": "没有服务监测数据",
+    "uptime": "可用率",
+    "daysAgo": "天前",
+    "today": "今天",
+    "loading": "加载中..."
+  },
   "serverDetail": {
     "status": "状态",
     "online": "在线",
+    "days": "天",
     "offline": "离线",
     "unknown": "未知",
     "uptime": "运行时间",

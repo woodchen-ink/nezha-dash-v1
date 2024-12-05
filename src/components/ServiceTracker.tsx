@@ -5,8 +5,11 @@ import { fetchService } from "@/lib/nezha-api";
 import { ServiceData } from "@/types/nezha-api";
 import { CycleTransferStatsCard } from "./CycleTransferStats";
 import { Loader } from "./loading/Loader";
+import { useTranslation } from "react-i18next";
+import { ExclamationTriangleIcon } from "@heroicons/react/20/solid";
 
 export const ServiceTracker: React.FC = () => {
+  const { t } = useTranslation();
   const { data: serviceData, isLoading } = useQuery({
     queryKey: ["service"],
     queryFn: () => fetchService(),
@@ -40,7 +43,7 @@ export const ServiceTracker: React.FC = () => {
     return (
       <div className="mt-4 text-sm font-medium flex items-center gap-1">
         <Loader visible={true} />
-        Loading...
+        {t("serviceTracker.loading")}
       </div>
     );
   }
@@ -50,7 +53,10 @@ export const ServiceTracker: React.FC = () => {
     !serviceData?.data?.cycle_transfer_stats
   ) {
     return (
-      <div className="mt-4 font-thin text-sm">No service data available</div>
+      <div className="mt-4 text-sm font-medium flex items-center gap-1">
+        <ExclamationTriangleIcon className="w-4 h-4" />
+        {t("serviceTracker.noService")}
+      </div>
     );
   }
 
