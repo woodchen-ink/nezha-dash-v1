@@ -54,6 +54,7 @@ export default defineConfig({
         clientsClaim: true,
         skipWaiting: true,
         cleanupOutdatedCaches: true,
+        navigateFallbackDenylist: [/^\/dashboard/],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -83,20 +84,6 @@ export default defineConfig({
               }
             }
           },
-          {
-            urlPattern: /^https:\/\/api\.nezha\.dev\/.*/i,
-            handler: 'NetworkFirst',
-            options: {
-              cacheName: 'api-cache',
-              expiration: {
-                maxEntries: 100,
-                maxAgeSeconds: 60 * 5 // <== 5 minutes
-              },
-              cacheableResponse: {
-                statuses: [0, 200]
-              }
-            }
-          }
         ]
       },
       devOptions: {
