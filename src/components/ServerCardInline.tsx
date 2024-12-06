@@ -17,6 +17,7 @@ import {
   MageMicrosoftWindows,
 } from "@/lib/logo-class";
 import { formatBytes } from "@/lib/format";
+import { Separator } from "./ui/separator";
 
 export default function ServerCardInline({
   now,
@@ -70,7 +71,7 @@ export default function ServerCardInline({
         onClick={() => navigate(`/server/${serverInfo.id}`)}
       >
         <section
-          className={cn("grid items-center gap-2 lg:w-40")}
+          className={cn("grid items-center gap-2 lg:w-36")}
           style={{ gridTemplateColumns: "auto auto 1fr" }}
         >
           <span className="h-2 w-2 shrink-0 rounded-full bg-green-500 self-center"></span>
@@ -82,7 +83,7 @@ export default function ServerCardInline({
           >
             {showFlag ? <ServerFlag country_code={country_code} /> : null}
           </div>
-          <div className="relative w-24 flex flex-col">
+          <div className="relative w-28 flex flex-col">
             <p
               className={cn(
                 "break-all font-bold tracking-tight",
@@ -107,6 +108,7 @@ export default function ServerCardInline({
               ))}
           </div>
         </section>
+        <Separator orientation="vertical" className="h-8 mx-0 ml-2" />
         <div className="flex flex-col gap-2">
           <section className={cn("grid grid-cols-9 items-center gap-3 flex-1")}>
             <div
@@ -226,7 +228,7 @@ export default function ServerCardInline({
         <div className="relative">
           <p
             className={cn(
-              "break-all font-bold w-24 tracking-tight",
+              "break-all font-bold w-28 tracking-tight",
               showFlag ? "text-xs" : "text-sm",
             )}
           >
