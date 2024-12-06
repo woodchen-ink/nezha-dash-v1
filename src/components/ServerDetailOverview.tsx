@@ -179,7 +179,7 @@ export default function ServerDetailOverview({
                 </p>
                 <div className="text-xs">
                   {" "}
-                  {platform} - {platform_version || ""}{" "}
+                  {platform} {platform_version ? " - " + platform_version : ""}
                 </div>
               </section>
             </CardContent>
