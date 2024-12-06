@@ -10,7 +10,7 @@ function ReloadPrompt() {
     updateServiceWorker,
   } = useRegisterSW({
     onRegisteredSW(swUrl) {
-      console.log(`SW Registered: ${swUrl} (Version: ${import.meta.env.VITE_APP_VERSION})`);
+      console.log(`SW Registered: ${swUrl} (Version: ${import.meta.env.VITE_GIT_HASH})`);
     },
     onRegisterError(error) {
       console.log('SW registration error', error);
@@ -35,7 +35,7 @@ function ReloadPrompt() {
   
 
   toast.message(
-    `${t('pwa.newContent')} (${import.meta.env.VITE_APP_VERSION})`, 
+    `${t('pwa.newContent')} (${import.meta.env.VITE_GIT_HASH})`, 
     {
       action: {
         label: t('pwa.reload'),
