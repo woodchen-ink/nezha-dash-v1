@@ -83,49 +83,6 @@ export default function Servers() {
     );
   }
 
-  const totalServers = nezhaWsData?.servers?.length || 0;
-  const onlineServers =
-    nezhaWsData?.servers?.filter(
-      (server) => formatNezhaInfo(nezhaWsData.now, server).online,
-    )?.length || 0;
-  const offlineServers =
-    nezhaWsData?.servers?.filter(
-      (server) => !formatNezhaInfo(nezhaWsData.now, server).online,
-    )?.length || 0;
-  const up =
-    nezhaWsData?.servers?.reduce(
-      (total, server) =>
-        formatNezhaInfo(nezhaWsData.now, server).online
-          ? total + (server.state?.net_out_transfer ?? 0)
-          : total,
-      0,
-    ) || 0;
-  const down =
-    nezhaWsData?.servers?.reduce(
-      (total, server) =>
-        formatNezhaInfo(nezhaWsData.now, server).online
-          ? total + (server.state?.net_in_transfer ?? 0)
-          : total,
-      0,
-    ) || 0;
-
-  const upSpeed =
-    nezhaWsData?.servers?.reduce(
-      (total, server) =>
-        formatNezhaInfo(nezhaWsData.now, server).online
-          ? total + (server.state?.net_out_speed ?? 0)
-          : total,
-      0,
-    ) || 0;
-  const downSpeed =
-    nezhaWsData?.servers?.reduce(
-      (total, server) =>
-        formatNezhaInfo(nezhaWsData.now, server).online
-          ? total + (server.state?.net_in_speed ?? 0)
-          : total,
-      0,
-    ) || 0;
-
   const filteredServers =
     nezhaWsData?.servers?.filter((server) => {
       if (currentGroup === "All") return true;
@@ -137,6 +94,49 @@ export default function Servers() {
       );
       return !!group;
     }) || [];
+
+  const totalServers = filteredServers.length || 0;
+  const onlineServers =
+    filteredServers.filter(
+      (server) => formatNezhaInfo(nezhaWsData.now, server).online,
+    )?.length || 0;
+  const offlineServers =
+    filteredServers.filter(
+      (server) => !formatNezhaInfo(nezhaWsData.now, server).online,
+    )?.length || 0;
+  const up =
+    filteredServers.reduce(
+      (total, server) =>
+        formatNezhaInfo(nezhaWsData.now, server).online
+          ? total + (server.state?.net_out_transfer ?? 0)
+          : total,
+      0,
+    ) || 0;
+  const down =
+    filteredServers.reduce(
+      (total, server) =>
+        formatNezhaInfo(nezhaWsData.now, server).online
+          ? total + (server.state?.net_in_transfer ?? 0)
+          : total,
+      0,
+    ) || 0;
+
+  const upSpeed =
+    filteredServers.reduce(
+      (total, server) =>
+        formatNezhaInfo(nezhaWsData.now, server).online
+          ? total + (server.state?.net_out_speed ?? 0)
+          : total,
+      0,
+    ) || 0;
+  const downSpeed =
+    filteredServers.reduce(
+      (total, server) =>
+        formatNezhaInfo(nezhaWsData.now, server).online
+          ? total + (server.state?.net_in_speed ?? 0)
+          : total,
+      0,
+    ) || 0;
 
   return (
     <div className="mx-auto w-full max-w-5xl px-0">
