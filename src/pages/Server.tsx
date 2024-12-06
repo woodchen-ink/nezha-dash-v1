@@ -19,6 +19,8 @@ import { ServiceTracker } from "@/components/ServiceTracker";
 import ServerCardInline from "@/components/ServerCardInline";
 import { Loader } from "@/components/loading/Loader";
 import GlobalMap from "@/components/GlobalMap";
+import { useStatus } from "@/hooks/use-status";
+import useFilter from "@/hooks/use-filter";
 
 export default function Servers() {
   const { t } = useTranslation();
@@ -27,7 +29,8 @@ export default function Servers() {
     queryFn: () => fetchServerGroup(),
   });
   const { lastMessage, connected } = useWebSocketContext();
-
+  const { status } = useStatus();
+  const { filter } = useFilter();
   const [showServices, setShowServices] = useState<string>("0");
   const [showMap, setShowMap] = useState<string>("0");
   const [inline, setInline] = useState<string>("0");
@@ -83,7 +86,7 @@ export default function Servers() {
     );
   }
 
-  const filteredServers =
+  let filteredServers =
     nezhaWsData?.servers?.filter((server) => {
       if (currentGroup === "All") return true;
       const group = groupData?.data?.find(
@@ -137,6 +140,43 @@ export default function Servers() {
           : total,
       0,
     ) || 0;
+
+  filteredServers =
+    status === "all"
+      ? filteredServers
+      : filteredServers.filter((server) =>
+          [status].includes(
+            formatNezhaInfo(nezhaWsData.now, server).online
+              ? "online"
+              : "offline",
+          ),
+        );
+
+  if (filter) {
+    filteredServers.sort((a, b) => {
+      if (
+        !formatNezhaInfo(nezhaWsData.now, a).online &&
+        formatNezhaInfo(nezhaWsData.now, b).online
+      )
+        return 1;
+      if (
+        formatNezhaInfo(nezhaWsData.now, a).online &&
+        !formatNezhaInfo(nezhaWsData.now, b).online
+      )
+        return -1;
+      if (
+        !formatNezhaInfo(nezhaWsData.now, a).online &&
+        !formatNezhaInfo(nezhaWsData.now, b).online
+      )
+        return 0;
+      return (
+        formatNezhaInfo(nezhaWsData.now, b).state.net_in_speed +
+        formatNezhaInfo(nezhaWsData.now, b).state.net_out_speed -
+        (formatNezhaInfo(nezhaWsData.now, a).state.net_in_speed +
+          formatNezhaInfo(nezhaWsData.now, a).state.net_out_speed)
+      );
+    });
+  }
 
   return (
     <div className="mx-auto w-full max-w-5xl px-0">

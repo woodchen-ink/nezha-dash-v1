@@ -110,8 +110,8 @@ export default function ServerDetailChart({
             gpuName={`#${index + 1}`}
             key={index}
           />
-        )
-      )) : (
+        ))
+      ) : (
         <></>
       )}
       <ProcessChart now={nezhaWsData.now} data={server} />
