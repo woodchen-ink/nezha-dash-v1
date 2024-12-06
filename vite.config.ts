@@ -53,7 +53,7 @@ export default defineConfig({
         clientsClaim: true,
         skipWaiting: true,
         cleanupOutdatedCaches: true,
-        navigateFallbackDenylist: [/^\/dashboard/],
+        navigateFallbackDenylist: [/^\/dashboard/, /^\/swagger/],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
