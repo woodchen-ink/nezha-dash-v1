@@ -93,7 +93,7 @@ export default function ServerDetailChart({
   return (
     <section className="grid md:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-3">
       <CpuChart now={nezhaWsData.now} data={server} />
-      {gpuStats.length > 1 && gpuList.length === gpuStats.length ? (
+      {gpuStats.length >= 1 && gpuList.length === gpuStats.length ? (
         gpuList.map((gpu, index) => (
           <GpuChart
             now={nezhaWsData.now}
@@ -103,8 +103,15 @@ export default function ServerDetailChart({
           />
         ))
       ) : gpuStats.length > 0 ? (
-        <GpuChart now={nezhaWsData.now} gpuStat={gpuStats[0]} />
-      ) : (
+        gpuStats.map((gpu, index) => (
+          <GpuChart
+            now={nezhaWsData.now}
+            gpuStat={gpu}
+            gpuName={`#${index + 1}`}
+            key={index}
+          />
+        )
+      )) : (
         <></>
       )}
       <ProcessChart now={nezhaWsData.now} data={server} />
