@@ -56,6 +56,7 @@ export default function ServerDetailOverview({
     load_15,
     net_out_transfer,
     net_in_transfer,
+    last_active_time_string,
   } = formatNezhaInfo(nezhaWsData.now, server);
 
   return (
@@ -88,7 +89,8 @@ export default function ServerDetailOverview({
             </section>
           </CardContent>
         </Card>
-        <Card className="rounded-[10px] bg-transparent border-none shadow-none">
+        {online && (
+          <Card className="rounded-[10px] bg-transparent border-none shadow-none">
           <CardContent className="px-1.5 py-1">
             <section className="flex flex-col items-start gap-0.5">
               <p className="text-xs text-muted-foreground">
@@ -102,6 +104,7 @@ export default function ServerDetailOverview({
             </section>
           </CardContent>
         </Card>
+        )}
         {version && (
           <Card className="rounded-[10px] bg-transparent border-none shadow-none">
             <CardContent className="px-1.5 py-1">
@@ -126,7 +129,10 @@ export default function ServerDetailOverview({
             </CardContent>
           </Card>
         )}
-        <Card className="rounded-[10px] bg-transparent border-none shadow-none">
+
+
+
+        {mem_total ? (<Card className="rounded-[10px] bg-transparent border-none shadow-none">
           <CardContent className="px-1.5 py-1">
             <section className="flex flex-col items-start gap-0.5">
               <p className="text-xs text-muted-foreground">
@@ -135,8 +141,11 @@ export default function ServerDetailOverview({
               <div className="text-xs">{formatBytes(mem_total)}</div>
             </section>
           </CardContent>
-        </Card>
-        <Card className="rounded-[10px] bg-transparent border-none shadow-none">
+        </Card>) : null}
+        
+
+
+        {disk_total ? (<Card className="rounded-[10px] bg-transparent border-none shadow-none">
           <CardContent className="px-1.5 py-1">
             <section className="flex flex-col items-start gap-0.5">
               <p className="text-xs text-muted-foreground">
@@ -145,7 +154,10 @@ export default function ServerDetailOverview({
               <div className="text-xs">{formatBytes(disk_total)}</div>
             </section>
           </CardContent>
-        </Card>
+        </Card>) : null}
+
+
+        
         {country_code && (
           <Card className="rounded-[10px] bg-transparent border-none shadow-none">
             <CardContent className="px-1.5 py-1">
@@ -211,14 +223,14 @@ export default function ServerDetailOverview({
           <CardContent className="px-1.5 py-1">
             <section className="flex flex-col items-start gap-0.5">
               <p className="text-xs text-muted-foreground">{"Load"}</p>
-
               <div className="text-xs">
                 {load_1} / {load_5} / {load_15}
               </div>
             </section>
           </CardContent>
         </Card>
-        <Card className="rounded-[10px] bg-transparent border-none shadow-none">
+        {net_out_transfer ? (
+          <Card className="rounded-[10px] bg-transparent border-none shadow-none">
           <CardContent className="px-1.5 py-1">
             <section className="flex flex-col items-start gap-0.5">
               <p className="text-xs text-muted-foreground">
@@ -232,7 +244,8 @@ export default function ServerDetailOverview({
             </section>
           </CardContent>
         </Card>
-        <Card className="rounded-[10px] bg-transparent border-none shadow-none">
+        ): null}
+        {net_in_transfer ? (<Card className="rounded-[10px] bg-transparent border-none shadow-none">
           <CardContent className="px-1.5 py-1">
             <section className="flex flex-col items-start gap-0.5">
               <p className="text-xs text-muted-foreground">
@@ -245,7 +258,7 @@ export default function ServerDetailOverview({
               )}
             </section>
           </CardContent>
-        </Card>
+        </Card>): null}
       </section>
       {server?.state.temperatures && server?.state.temperatures.length > 0 && (
         <section className="flex flex-wrap gap-2 mt-1">
@@ -266,6 +279,20 @@ export default function ServerDetailOverview({
           </Card>
         </section>
       )}
+      <section className="flex flex-wrap gap-2 mt-1">
+        <Card className="rounded-[10px] bg-transparent border-none shadow-none">
+          <CardContent className="px-1.5 py-1">
+            <section className="flex flex-col items-start gap-0.5">
+              <p className="text-xs text-muted-foreground">
+                {t("serverDetail.lastActive")}
+              </p>
+              <div className="text-xs">
+                {last_active_time_string ? last_active_time_string : "N/A"}
+              </div>
+            </section>
+          </CardContent>
+        </Card>
+      </section>
     </div>
   );
 }

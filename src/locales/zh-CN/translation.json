@@ -60,7 +60,8 @@
     "region": "区域",
     "system": "系统",
     "upload": "上传",
-    "download": "下载"
+    "download": "下载",
+    "lastActive": "最后上报时间"
   },
   "serverDetailChart": {
     "process": "进程数",

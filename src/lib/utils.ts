@@ -7,13 +7,16 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatNezhaInfo(now: number, serverInfo: NezhaServer) {
-  const lastActiveTime = parseISOTimestamp(serverInfo.last_active);
+  const lastActiveTime = serverInfo.last_active.startsWith("000") ? 0 : parseISOTimestamp(serverInfo.last_active);
   return {
     ...serverInfo,
     cpu: serverInfo.state.cpu || 0,
     process: serverInfo.state.process_count || 0,
     up: serverInfo.state.net_out_speed / 1024 / 1024 || 0,
     down: serverInfo.state.net_in_speed / 1024 / 1024 || 0,
+    last_active_time_string: lastActiveTime
+      ? new Date(lastActiveTime).toLocaleString()
+      : "",
     online: now - lastActiveTime <= 30000,
     uptime: serverInfo.state.uptime || 0,
     version: serverInfo.host.version || null,

@@ -60,7 +60,8 @@
     "region": "Region",
     "system": "System",
     "upload": "Upload",
-    "download": "Download"
+    "download": "Download",
+    "lastActive": "Last active time"
   },
   "serverDetailChart": {
     "process": "Process",
