@@ -82,7 +82,7 @@ export default function ServerCardInline({
           >
             {showFlag ? <ServerFlag country_code={country_code} /> : null}
           </div>
-          <div className="relative flex flex-col">
+          <div className="relative w-24 flex flex-col">
             <p
               className={cn(
                 "break-all font-bold tracking-tight",
@@ -226,7 +226,7 @@ export default function ServerCardInline({
         <div className="relative">
           <p
             className={cn(
-              "break-all font-bold tracking-tight",
+              "break-all font-bold w-24 tracking-tight",
               showFlag ? "text-xs" : "text-sm",
             )}
           >
