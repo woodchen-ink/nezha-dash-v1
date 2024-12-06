@@ -18,6 +18,11 @@ import { useWebSocketContext } from "@/hooks/use-websocket-context";
 import { useTranslation } from "react-i18next";
 import { formatBytes } from "@/lib/format";
 
+type gpuChartData = {
+  timeStamp: string;
+  gpu: number;
+};
+
 type cpuChartData = {
   timeStamp: string;
   cpu: number;
@@ -82,15 +87,137 @@ export default function ServerDetailChart({
     return <ServerDetailChartLoading />;
   }
 
+  const gpuStats = server.state.gpu || [];
+  const gpuList = server.host.gpu || [];
+
   return (
     <section className="grid md:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-3">
       <CpuChart now={nezhaWsData.now} data={server} />
+      {gpuStats.length > 1 && gpuList.length === gpuStats.length ? (
+        gpuList.map((gpu, index) => (
+          <GpuChart
+            now={nezhaWsData.now}
+            gpuStat={gpuStats[index]}
+            gpuName={gpu}
+            key={index}
+          />
+        ))
+      ) : gpuStats.length > 0 ? (
+        <GpuChart now={nezhaWsData.now} gpuStat={gpuStats[0]} />
+      ) : (
+        <></>
+      )}
       <ProcessChart now={nezhaWsData.now} data={server} />
       <DiskChart now={nezhaWsData.now} data={server} />
       <MemChart now={nezhaWsData.now} data={server} />
       <NetworkChart now={nezhaWsData.now} data={server} />
       <ConnectChart now={nezhaWsData.now} data={server} />
     </section>
+  );
+}
+
+function GpuChart({
+  now,
+  gpuStat,
+  gpuName,
+}: {
+  now: number;
+  gpuStat: number;
+  gpuName?: string;
+}) {
+  const [gpuChartData, setGpuChartData] = useState([] as gpuChartData[]);
+
+  useEffect(() => {
+    if (gpuStat) {
+      const timestamp = Date.now().toString();
+      let newData = [] as gpuChartData[];
+      if (gpuChartData.length === 0) {
+        newData = [
+          { timeStamp: timestamp, gpu: gpuStat },
+          { timeStamp: timestamp, gpu: gpuStat },
+        ];
+      } else {
+        newData = [...gpuChartData, { timeStamp: timestamp, gpu: gpuStat }];
+      }
+      if (newData.length > 30) {
+        newData.shift();
+      }
+      setGpuChartData(newData);
+    }
+  }, [now, gpuStat]);
+
+  const chartConfig = {
+    gpu: {
+      label: "GPU",
+    },
+  } satisfies ChartConfig;
+
+  return (
+    <Card>
+      <CardContent className="px-6 py-3">
+        <section className="flex flex-col gap-1">
+          <div className="flex items-center justify-between">
+            <section className="flex flex-col items-center gap-2">
+              {!gpuName && <p className="text-md font-medium">GPU</p>}
+              {gpuName && <p className="text-xs mt-1 mb-1.5">GPU: {gpuName}</p>}
+            </section>
+            <section className="flex items-center gap-2">
+              <p className="text-xs text-end w-10 font-medium">
+                {gpuStat.toFixed(0)}%
+              </p>
+              <AnimatedCircularProgressBar
+                className="size-3 text-[0px]"
+                max={100}
+                min={0}
+                value={gpuStat}
+                primaryColor="hsl(var(--chart-3))"
+              />
+            </section>
+          </div>
+          <ChartContainer
+            config={chartConfig}
+            className="aspect-auto h-[130px] w-full"
+          >
+            <AreaChart
+              accessibilityLayer
+              data={gpuChartData}
+              margin={{
+                top: 12,
+                left: 12,
+                right: 12,
+              }}
+            >
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="timeStamp"
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+                minTickGap={200}
+                interval="preserveStartEnd"
+                tickFormatter={(value) => formatRelativeTime(value)}
+              />
+              <YAxis
+                tickLine={false}
+                axisLine={false}
+                mirror={true}
+                tickMargin={-15}
+                domain={[0, 100]}
+                tickFormatter={(value) => `${value}%`}
+              />
+              <Area
+                isAnimationActive={false}
+                dataKey="gpu"
+                type="step"
+                fill="hsl(var(--chart-3))"
+                fillOpacity={0.3}
+                stroke="hsl(var(--chart-3))"
+              />
+            </AreaChart>
+          </ChartContainer>
+        </section>
+      </CardContent>
+    </Card>
   );
 }
 
