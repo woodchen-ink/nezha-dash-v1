@@ -76,6 +76,12 @@ export default function ServerDetailChart({
     return <ServerDetailChartLoading />;
   }
 
+  const { online } = formatNezhaInfo(nezhaWsData.now, server);
+
+  if (!online) {
+    return <ServerDetailChartLoading />;
+  }
+
   return (
     <section className="grid md:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-3">
       <CpuChart now={nezhaWsData.now} data={server} />

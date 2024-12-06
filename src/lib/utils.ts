@@ -7,7 +7,9 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatNezhaInfo(now: number, serverInfo: NezhaServer) {
-  const lastActiveTime = serverInfo.last_active.startsWith("000") ? 0 : parseISOTimestamp(serverInfo.last_active);
+  const lastActiveTime = serverInfo.last_active.startsWith("000")
+    ? 0
+    : parseISOTimestamp(serverInfo.last_active);
   return {
     ...serverInfo,
     cpu: serverInfo.state.cpu || 0,

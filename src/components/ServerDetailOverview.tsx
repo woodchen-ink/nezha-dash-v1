@@ -91,19 +91,19 @@ export default function ServerDetailOverview({
         </Card>
         {online && (
           <Card className="rounded-[10px] bg-transparent border-none shadow-none">
-          <CardContent className="px-1.5 py-1">
-            <section className="flex flex-col items-start gap-0.5">
-              <p className="text-xs text-muted-foreground">
-                {t("serverDetail.uptime")}
-              </p>
-              <div className="text-xs">
-                {" "}
-                {online ? (uptime / 86400).toFixed(0) : "N/A"}{" "}
-                {t("serverDetail.days")}
-              </div>
-            </section>
-          </CardContent>
-        </Card>
+            <CardContent className="px-1.5 py-1">
+              <section className="flex flex-col items-start gap-0.5">
+                <p className="text-xs text-muted-foreground">
+                  {t("serverDetail.uptime")}
+                </p>
+                <div className="text-xs">
+                  {" "}
+                  {online ? (uptime / 86400).toFixed(0) : "N/A"}{" "}
+                  {t("serverDetail.days")}
+                </div>
+              </section>
+            </CardContent>
+          </Card>
         )}
         {version && (
           <Card className="rounded-[10px] bg-transparent border-none shadow-none">
@@ -130,34 +130,32 @@ export default function ServerDetailOverview({
           </Card>
         )}
 
+        {mem_total ? (
+          <Card className="rounded-[10px] bg-transparent border-none shadow-none">
+            <CardContent className="px-1.5 py-1">
+              <section className="flex flex-col items-start gap-0.5">
+                <p className="text-xs text-muted-foreground">
+                  {t("serverDetail.mem")}
+                </p>
+                <div className="text-xs">{formatBytes(mem_total)}</div>
+              </section>
+            </CardContent>
+          </Card>
+        ) : null}
 
+        {disk_total ? (
+          <Card className="rounded-[10px] bg-transparent border-none shadow-none">
+            <CardContent className="px-1.5 py-1">
+              <section className="flex flex-col items-start gap-0.5">
+                <p className="text-xs text-muted-foreground">
+                  {t("serverDetail.disk")}
+                </p>
+                <div className="text-xs">{formatBytes(disk_total)}</div>
+              </section>
+            </CardContent>
+          </Card>
+        ) : null}
 
-        {mem_total ? (<Card className="rounded-[10px] bg-transparent border-none shadow-none">
-          <CardContent className="px-1.5 py-1">
-            <section className="flex flex-col items-start gap-0.5">
-              <p className="text-xs text-muted-foreground">
-                {t("serverDetail.mem")}
-              </p>
-              <div className="text-xs">{formatBytes(mem_total)}</div>
-            </section>
-          </CardContent>
-        </Card>) : null}
-        
-
-
-        {disk_total ? (<Card className="rounded-[10px] bg-transparent border-none shadow-none">
-          <CardContent className="px-1.5 py-1">
-            <section className="flex flex-col items-start gap-0.5">
-              <p className="text-xs text-muted-foreground">
-                {t("serverDetail.disk")}
-              </p>
-              <div className="text-xs">{formatBytes(disk_total)}</div>
-            </section>
-          </CardContent>
-        </Card>) : null}
-
-
-        
         {country_code && (
           <Card className="rounded-[10px] bg-transparent border-none shadow-none">
             <CardContent className="px-1.5 py-1">
@@ -231,34 +229,42 @@ export default function ServerDetailOverview({
         </Card>
         {net_out_transfer ? (
           <Card className="rounded-[10px] bg-transparent border-none shadow-none">
-          <CardContent className="px-1.5 py-1">
-            <section className="flex flex-col items-start gap-0.5">
-              <p className="text-xs text-muted-foreground">
-                {t("serverDetail.upload")}
-              </p>
-              {net_out_transfer ? (
-                <div className="text-xs"> {formatBytes(net_out_transfer)} </div>
-              ) : (
-                <div className="text-xs"> {t("serverDetail.unknown")}</div>
-              )}
-            </section>
-          </CardContent>
-        </Card>
-        ): null}
-        {net_in_transfer ? (<Card className="rounded-[10px] bg-transparent border-none shadow-none">
-          <CardContent className="px-1.5 py-1">
-            <section className="flex flex-col items-start gap-0.5">
-              <p className="text-xs text-muted-foreground">
-                {t("serverDetail.download")}
-              </p>
-              {net_in_transfer ? (
-                <div className="text-xs"> {formatBytes(net_in_transfer)} </div>
-              ) : (
-                <div className="text-xs"> {t("serverDetail.unknown")}</div>
-              )}
-            </section>
-          </CardContent>
-        </Card>): null}
+            <CardContent className="px-1.5 py-1">
+              <section className="flex flex-col items-start gap-0.5">
+                <p className="text-xs text-muted-foreground">
+                  {t("serverDetail.upload")}
+                </p>
+                {net_out_transfer ? (
+                  <div className="text-xs">
+                    {" "}
+                    {formatBytes(net_out_transfer)}{" "}
+                  </div>
+                ) : (
+                  <div className="text-xs"> {t("serverDetail.unknown")}</div>
+                )}
+              </section>
+            </CardContent>
+          </Card>
+        ) : null}
+        {net_in_transfer ? (
+          <Card className="rounded-[10px] bg-transparent border-none shadow-none">
+            <CardContent className="px-1.5 py-1">
+              <section className="flex flex-col items-start gap-0.5">
+                <p className="text-xs text-muted-foreground">
+                  {t("serverDetail.download")}
+                </p>
+                {net_in_transfer ? (
+                  <div className="text-xs">
+                    {" "}
+                    {formatBytes(net_in_transfer)}{" "}
+                  </div>
+                ) : (
+                  <div className="text-xs"> {t("serverDetail.unknown")}</div>
+                )}
+              </section>
+            </CardContent>
+          </Card>
+        ) : null}
       </section>
       {server?.state.temperatures && server?.state.temperatures.length > 0 && (
         <section className="flex flex-wrap gap-2 mt-1">
