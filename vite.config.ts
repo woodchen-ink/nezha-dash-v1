@@ -19,9 +19,7 @@ export default defineConfig({
   define: {
     "import.meta.env.VITE_GIT_HASH": JSON.stringify(getGitHash()),
   },
-  plugins: [
-    react(),
-  ],
+  plugins: [react()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
