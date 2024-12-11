@@ -93,7 +93,7 @@
     "Network": "Network"
   },
   "monitor": {
-    "noData": "No server monitor data",
+    "noData": "No server monitor data, please add a service monitor first",
     "avgDelay": "Latency",
     "monitorCount": "Services"
   },

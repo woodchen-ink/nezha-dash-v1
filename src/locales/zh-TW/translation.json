@@ -93,7 +93,8 @@
     "network": "網路"
   },
   "monitor": {
-    "noData": "沒有服務器監控數據",
+    "noData": "沒有服務監控數據，請在管理後台服務新增監控任務",
+    "status": "狀態",
     "avgDelay": "延遲",
     "monitorCount": "個監控"
   }

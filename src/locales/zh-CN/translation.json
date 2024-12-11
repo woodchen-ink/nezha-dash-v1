@@ -93,7 +93,7 @@
     "Network": "网络"
   },
   "monitor": {
-    "noData": "没有服务器监控数据",
+    "noData": "没有服务监控数据，请在管理后台服务页添加监控任务",
     "avgDelay": "延迟",
     "monitorCount": "个监控服务"
   },
