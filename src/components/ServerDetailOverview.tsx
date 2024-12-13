@@ -10,6 +10,8 @@ import { NezhaWebsocketResponse } from "@/types/nezha-api"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./ui/accordion"
+
 export default function ServerDetailOverview({ server_id }: { server_id: string }) {
   const { t } = useTranslation()
   const navigate = useNavigate()
@@ -228,12 +230,15 @@ export default function ServerDetailOverview({ server_id }: { server_id: string 
           </Card>
         ) : null}
       </section>
+      <section className="flex flex-wrap gap-2 mt-1">
       {server?.state.temperatures && server?.state.temperatures.length > 0 && (
-        <section className="flex flex-wrap gap-2 mt-1">
-          <Card className="rounded-[10px] bg-transparent border-none shadow-none">
-            <CardContent className="px-1.5 py-1">
-              <section className="flex flex-col items-start gap-0.5">
-                <p className="text-xs text-muted-foreground">{"温度"}</p>
+        <section className="flex flex-wrap gap-2 ml-1.5">
+          <Accordion type="single" collapsible className="w-fit">
+            <AccordionItem value="item-1" className="border-none">
+              <AccordionTrigger className="text-xs py-0 text-muted-foreground font-normal">
+                {t("serverDetail.temperature")}
+              </AccordionTrigger>
+              <AccordionContent className="pb-0">
                 <section className="flex items-start flex-wrap gap-2">
                   {server?.state.temperatures.map((item, index) => (
                     <div className="text-xs flex items-center" key={index}>
@@ -241,11 +246,13 @@ export default function ServerDetailOverview({ server_id }: { server_id: string 
                     </div>
                   ))}
                 </section>
-              </section>
-            </CardContent>
-          </Card>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </section>
       )}
+      </section>
+      
       <section className="flex flex-wrap gap-2 mt-1">
         <Card className="rounded-[10px] bg-transparent border-none shadow-none">
           <CardContent className="px-1.5 py-1">

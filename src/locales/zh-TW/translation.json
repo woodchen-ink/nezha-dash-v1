@@ -61,7 +61,8 @@
     "system": "系統",
     "upload": "上傳",
     "download": "下載",
-    "lastActive": "最後上報時間"
+    "lastActive": "最後上報時間",
+    "temperature": "溫度"
   },
   "serverDetailChart": {
     "process": "進程數",
