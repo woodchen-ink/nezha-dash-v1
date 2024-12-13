@@ -1,17 +1,17 @@
-import { cn } from "@/lib/utils";
-import { m } from "framer-motion";
-import { useTranslation } from "react-i18next";
+import { cn } from "@/lib/utils"
+import { m } from "framer-motion"
+import { useTranslation } from "react-i18next"
 
 export default function TabSwitch({
   tabs,
   currentTab,
   setCurrentTab,
 }: {
-  tabs: string[];
-  currentTab: string;
-  setCurrentTab: (tab: string) => void;
+  tabs: string[]
+  currentTab: string
+  setCurrentTab: (tab: string) => void
 }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
   return (
     <div className="z-50 flex flex-col items-start rounded-[50px]">
       <div className="flex items-center gap-1 rounded-[50px] bg-stone-100 p-[3px] dark:bg-stone-800">
@@ -43,5 +43,5 @@ export default function TabSwitch({
         ))}
       </div>
     </div>
-  );
+  )
 }

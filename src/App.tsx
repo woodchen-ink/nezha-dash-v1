@@ -1,11 +1,12 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import Server from "./pages/Server";
-import ServerDetail from "./pages/ServerDetail";
-import NotFound from "./pages/NotFound";
-import ErrorPage from "./pages/ErrorPage";
+import React from "react"
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom"
+
+import Footer from "./components/Footer"
+import Header from "./components/Header"
+import ErrorPage from "./pages/ErrorPage"
+import NotFound from "./pages/NotFound"
+import Server from "./pages/Server"
+import ServerDetail from "./pages/ServerDetail"
 
 const App: React.FC = () => {
   return (
@@ -23,7 +24,7 @@ const App: React.FC = () => {
         </main>
       </div>
     </Router>
-  );
-};
+  )
+}
 
-export default App;
+export default App

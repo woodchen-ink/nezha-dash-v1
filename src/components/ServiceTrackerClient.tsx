@@ -1,17 +1,18 @@
-import React from "react";
-import { cn } from "@/lib/utils";
-import { Separator } from "./ui/separator";
-import { useTranslation } from "react-i18next";
+import { cn } from "@/lib/utils"
+import React from "react"
+import { useTranslation } from "react-i18next"
+
+import { Separator } from "./ui/separator"
 
 interface ServiceTrackerProps {
   days: Array<{
-    completed: boolean;
-    date?: Date;
-  }>;
-  className?: string;
-  title?: string;
-  uptime?: number;
-  avgDelay?: number;
+    completed: boolean
+    date?: Date
+  }>
+  className?: string
+  title?: string
+  uptime?: number
+  avgDelay?: number
 }
 
 export const ServiceTrackerClient: React.FC<ServiceTrackerProps> = ({
@@ -21,7 +22,7 @@ export const ServiceTrackerClient: React.FC<ServiceTrackerProps> = ({
   uptime = 100,
   avgDelay = 0,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
   return (
     <div
       className={cn(
@@ -55,9 +56,7 @@ export const ServiceTrackerClient: React.FC<ServiceTrackerProps> = ({
               "flex-1 h-6 rounded-[5px] transition-colors",
               day.completed ? "bg-green-600" : "bg-red-500/60",
             )}
-            title={
-              day.date ? day.date.toLocaleDateString() : `Day ${index + 1}`
-            }
+            title={day.date ? day.date.toLocaleDateString() : `Day ${index + 1}`}
           />
         ))}
       </div>
@@ -67,7 +66,7 @@ export const ServiceTrackerClient: React.FC<ServiceTrackerProps> = ({
         <span>{t("serviceTracker.today")}</span>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ServiceTrackerClient;
+export default ServiceTrackerClient

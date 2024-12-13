@@ -1,13 +1,13 @@
-import useTooltip from "@/hooks/use-tooltip";
-import { AnimatePresence, m } from "framer-motion";
-import { memo } from "react";
-import { useTranslation } from "react-i18next";
+import useTooltip from "@/hooks/use-tooltip"
+import { AnimatePresence, m } from "framer-motion"
+import { memo } from "react"
+import { useTranslation } from "react-i18next"
 
 const MapTooltip = memo(function MapTooltip() {
-  const { t } = useTranslation();
-  const { tooltipData } = useTooltip();
+  const { t } = useTranslation()
+  const { tooltipData } = useTooltip()
 
-  if (!tooltipData) return null;
+  if (!tooltipData) return null
 
   return (
     <AnimatePresence mode="wait">
@@ -23,14 +23,12 @@ const MapTooltip = memo(function MapTooltip() {
           transform: "translate(20%, -50%)",
         }}
         onMouseEnter={(e) => {
-          e.stopPropagation();
+          e.stopPropagation()
         }}
       >
         <div>
           <p className="font-medium">
-            {tooltipData.country === "China"
-              ? "Mainland China"
-              : tooltipData.country}
+            {tooltipData.country === "China" ? "Mainland China" : tooltipData.country}
           </p>
           <p className="text-neutral-600 dark:text-neutral-400 mb-1">
             {tooltipData.count} {t("map.Servers")}
@@ -56,7 +54,7 @@ const MapTooltip = memo(function MapTooltip() {
         </div>
       </m.div>
     </AnimatePresence>
-  );
-});
+  )
+})
 
-export default MapTooltip;
+export default MapTooltip

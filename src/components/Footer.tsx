@@ -1,17 +1,17 @@
-import { fetchSetting } from "@/lib/nezha-api";
-import { useQuery } from "@tanstack/react-query";
-import React from "react";
-import { useTranslation } from "react-i18next";
+import { fetchSetting } from "@/lib/nezha-api"
+import { useQuery } from "@tanstack/react-query"
+import React from "react"
+import { useTranslation } from "react-i18next"
 
 const Footer: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   const { data: settingData } = useQuery({
     queryKey: ["setting"],
     queryFn: () => fetchSetting(),
     refetchOnMount: true,
     refetchOnWindowFocus: true,
-  });
+  })
 
   return (
     <footer className="mx-auto w-full max-w-5xl px-4 lg:px-0 pb-4">
@@ -26,10 +26,7 @@ const Footer: React.FC = () => {
           </div>
           <p>
             {t("footer.themeBy")}
-            <a
-              href={"https://github.com/hamster1963/nezha-dash"}
-              target="_blank"
-            >
+            <a href={"https://github.com/hamster1963/nezha-dash"} target="_blank">
               nezha-dash
             </a>
             {import.meta.env.VITE_GIT_HASH && (
@@ -39,7 +36,7 @@ const Footer: React.FC = () => {
         </section>
       </section>
     </footer>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer

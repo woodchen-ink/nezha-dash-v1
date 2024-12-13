@@ -1,28 +1,34 @@
-import React from "react";
-import { cn } from "@/lib/utils";
-import { formatBytes } from "@/lib/format";
-import AnimatedCircularProgressBar from "./ui/animated-circular-progress-bar";
-import { CircleStackIcon } from "@heroicons/react/24/outline";
-import { useTranslation } from "react-i18next";
+import { formatBytes } from "@/lib/format"
+import { cn } from "@/lib/utils"
+import { CircleStackIcon } from "@heroicons/react/24/outline"
+import React from "react"
+import { useTranslation } from "react-i18next"
+
+import AnimatedCircularProgressBar from "./ui/animated-circular-progress-bar"
 
 interface CycleTransferStatsClientProps {
-  name: string;
-  from: string;
-  to: string;
-  max: number;
+  name: string
+  from: string
+  to: string
+  max: number
   serverStats: Array<{
-    serverId: string;
-    serverName: string;
-    transfer: number;
-    nextUpdate: string;
-  }>;
-  className?: string;
+    serverId: string
+    serverName: string
+    transfer: number
+    nextUpdate: string
+  }>
+  className?: string
 }
 
-export const CycleTransferStatsClient: React.FC<
-  CycleTransferStatsClientProps
-> = ({ name, from, to, max, serverStats, className }) => {
-  const { t } = useTranslation();
+export const CycleTransferStatsClient: React.FC<CycleTransferStatsClientProps> = ({
+  name,
+  from,
+  to,
+  max,
+  serverStats,
+  className,
+}) => {
+  const { t } = useTranslation()
   return (
     <div
       className={cn(
@@ -31,7 +37,7 @@ export const CycleTransferStatsClient: React.FC<
       )}
     >
       {serverStats.map(({ serverId, serverName, transfer, nextUpdate }) => {
-        const progress = (transfer / max) * 100;
+        const progress = (transfer / max) * 100
 
         return (
           <div key={serverId}>
@@ -40,8 +46,7 @@ export const CycleTransferStatsClient: React.FC<
                 {name}
               </div>
               <span className="text-stone-600 dark:text-stone-400 text-xs">
-                {new Date(from).toLocaleDateString()} -{" "}
-                {new Date(to).toLocaleDateString()}
+                {new Date(from).toLocaleDateString()} - {new Date(to).toLocaleDateString()}
               </span>
             </section>
 
@@ -51,9 +56,7 @@ export const CycleTransferStatsClient: React.FC<
                 <span className="text-sm font-semibold">{serverName}</span>
               </div>
               <div className="flex items-center gap-1">
-                <p className="text-xs text-end w-10 font-medium">
-                  {progress.toFixed(0)}%
-                </p>
+                <p className="text-xs text-end w-10 font-medium">{progress.toFixed(0)}%</p>
                 <AnimatedCircularProgressBar
                   className="size-4 text-[0px]"
                   max={100}
@@ -82,15 +85,14 @@ export const CycleTransferStatsClient: React.FC<
 
             <section className="flex justify-between items-center mt-2">
               <div className="text-xs text-stone-500 dark:text-stone-400">
-                {t("cycleTransfer.nextUpdate")}:{" "}
-                {new Date(nextUpdate).toLocaleString()}
+                {t("cycleTransfer.nextUpdate")}: {new Date(nextUpdate).toLocaleString()}
               </div>
             </section>
           </div>
-        );
+        )
       })}
     </div>
-  );
-};
+  )
+}
 
-export default CycleTransferStatsClient;
+export default CycleTransferStatsClient

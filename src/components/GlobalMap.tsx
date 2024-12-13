@@ -1,41 +1,35 @@
-import { geoJsonString } from "@/lib/geo-json-string";
-import { NezhaServer } from "@/types/nezha-api";
-import { useTranslation } from "react-i18next";
-import { geoEquirectangular, geoPath } from "d3-geo";
-import { countryCoordinates } from "@/lib/geo-limit";
-import MapTooltip from "./MapTooltip";
-import useTooltip from "@/hooks/use-tooltip";
-import { formatNezhaInfo } from "@/lib/utils";
+import useTooltip from "@/hooks/use-tooltip"
+import { geoJsonString } from "@/lib/geo-json-string"
+import { countryCoordinates } from "@/lib/geo-limit"
+import { formatNezhaInfo } from "@/lib/utils"
+import { NezhaServer } from "@/types/nezha-api"
+import { geoEquirectangular, geoPath } from "d3-geo"
+import { useTranslation } from "react-i18next"
 
-export default function GlobalMap({
-  serverList,
-  now,
-}: {
-  serverList: NezhaServer[];
-  now: number;
-}) {
-  const { t } = useTranslation();
-  const countryList: string[] = [];
-  const serverCounts: { [key: string]: number } = {};
+import MapTooltip from "./MapTooltip"
+
+export default function GlobalMap({ serverList, now }: { serverList: NezhaServer[]; now: number }) {
+  const { t } = useTranslation()
+  const countryList: string[] = []
+  const serverCounts: { [key: string]: number } = {}
 
   serverList.forEach((server) => {
     if (server.country_code) {
-      const countryCode = server.country_code.toUpperCase();
+      const countryCode = server.country_code.toUpperCase()
       if (!countryList.includes(countryCode)) {
-        countryList.push(countryCode);
+        countryList.push(countryCode)
       }
-      serverCounts[countryCode] = (serverCounts[countryCode] || 0) + 1;
+      serverCounts[countryCode] = (serverCounts[countryCode] || 0) + 1
     }
-  });
+  })
 
-  const width = 900;
-  const height = 500;
+  const width = 900
+  const height = 500
 
-  const geoJson = JSON.parse(geoJsonString);
+  const geoJson = JSON.parse(geoJsonString)
   const filteredFeatures = geoJson.features.filter(
-    (feature: { properties: { iso_a3_eh: string } }) =>
-      feature.properties.iso_a3_eh !== "",
-  );
+    (feature: { properties: { iso_a3_eh: string } }) => feature.properties.iso_a3_eh !== "",
+  )
 
   return (
     <section className="flex flex-col gap-4 mt-8">
@@ -54,24 +48,24 @@ export default function GlobalMap({
         />
       </div>
     </section>
-  );
+  )
 }
 
 interface InteractiveMapProps {
-  countries: string[];
-  serverCounts: { [key: string]: number };
-  width: number;
-  height: number;
+  countries: string[]
+  serverCounts: { [key: string]: number }
+  width: number
+  height: number
   filteredFeatures: {
-    type: "Feature";
+    type: "Feature"
     properties: {
-      iso_a2_eh: string;
-      [key: string]: string;
-    };
-    geometry: never;
-  }[];
-  nezhaServerList: NezhaServer[];
-  now: number;
+      iso_a2_eh: string
+      [key: string]: string
+    }
+    geometry: never
+  }[]
+  nezhaServerList: NezhaServer[]
+  now: number
 }
 
 export function InteractiveMap({
@@ -83,20 +77,17 @@ export function InteractiveMap({
   nezhaServerList,
   now,
 }: InteractiveMapProps) {
-  const { setTooltipData } = useTooltip();
+  const { setTooltipData } = useTooltip()
 
   const projection = geoEquirectangular()
     .scale(140)
     .translate([width / 2, height / 2])
-    .rotate([-12, 0, 0]);
+    .rotate([-12, 0, 0])
 
-  const path = geoPath().projection(projection);
+  const path = geoPath().projection(projection)
 
   return (
-    <div
-      className="relative w-full aspect-[2/1]"
-      onMouseLeave={() => setTooltipData(null)}
-    >
+    <div className="relative w-full aspect-[2/1]" onMouseLeave={() => setTooltipData(null)}>
       <svg
         width={width}
         height={height}
@@ -120,11 +111,9 @@ export function InteractiveMap({
             onMouseEnter={() => setTooltipData(null)}
           />
           {filteredFeatures.map((feature, index) => {
-            const isHighlighted = countries.includes(
-              feature.properties.iso_a2_eh,
-            );
+            const isHighlighted = countries.includes(feature.properties.iso_a2_eh)
 
-            const serverCount = serverCounts[feature.properties.iso_a2_eh] || 0;
+            const serverCount = serverCounts[feature.properties.iso_a2_eh] || 0
 
             return (
               <path
@@ -137,30 +126,29 @@ export function InteractiveMap({
                 }
                 onMouseEnter={() => {
                   if (!isHighlighted) {
-                    setTooltipData(null);
-                    return;
+                    setTooltipData(null)
+                    return
                   }
                   if (path.centroid(feature)) {
-                    const countryCode = feature.properties.iso_a2_eh;
+                    const countryCode = feature.properties.iso_a2_eh
                     const countryServers = nezhaServerList
                       .filter(
-                        (server: NezhaServer) =>
-                          server.country_code?.toUpperCase() === countryCode,
+                        (server: NezhaServer) => server.country_code?.toUpperCase() === countryCode,
                       )
                       .map((server: NezhaServer) => ({
                         name: server.name,
                         status: formatNezhaInfo(now, server).online,
-                      }));
+                      }))
                     setTooltipData({
                       centroid: path.centroid(feature),
                       country: feature.properties.name,
                       count: serverCount,
                       servers: countryServers,
-                    });
+                    })
                   }
                 }}
               />
-            );
+            )
           })}
 
           {/* 渲染不在 filteredFeatures 中的国家标记点 */}
@@ -168,18 +156,18 @@ export function InteractiveMap({
             // 检查该国家是否已经在 filteredFeatures 中
             const isInFilteredFeatures = filteredFeatures.some(
               (feature) => feature.properties.iso_a2_eh === countryCode,
-            );
+            )
 
             // 如果已经在 filteredFeatures 中，跳过
-            if (isInFilteredFeatures) return null;
+            if (isInFilteredFeatures) return null
 
             // 获取国家的经纬度
-            const coords = countryCoordinates[countryCode];
-            if (!coords) return null;
+            const coords = countryCoordinates[countryCode]
+            if (!coords) return null
 
             // 使用投影函数将经纬度转换为 SVG 坐标
-            const [x, y] = projection([coords.lng, coords.lat]) || [0, 0];
-            const serverCount = serverCounts[countryCode] || 0;
+            const [x, y] = projection([coords.lng, coords.lat]) || [0, 0]
+            const serverCount = serverCounts[countryCode] || 0
 
             return (
               <g
@@ -188,19 +176,18 @@ export function InteractiveMap({
                   const countryServers = nezhaServerList
                     .filter(
                       (server: NezhaServer) =>
-                        server.country_code?.toUpperCase() ===
-                        countryCode.toUpperCase(),
+                        server.country_code?.toUpperCase() === countryCode.toUpperCase(),
                     )
                     .map((server: NezhaServer) => ({
                       name: server.name,
                       status: formatNezhaInfo(now, server).online,
-                    }));
+                    }))
                   setTooltipData({
                     centroid: [x, y],
                     country: coords.name,
                     count: serverCount,
                     servers: countryServers,
-                  });
+                  })
                 }}
                 className="cursor-pointer"
               >
@@ -211,11 +198,11 @@ export function InteractiveMap({
                   className="fill-sky-700 stroke-white hover:fill-sky-600 dark:fill-sky-900 dark:hover:fill-sky-700 transition-all"
                 />
               </g>
-            );
+            )
           })}
         </g>
       </svg>
       <MapTooltip />
     </div>
-  );
+  )
 }

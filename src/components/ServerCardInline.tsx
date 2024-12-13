@@ -1,33 +1,24 @@
-import ServerFlag from "@/components/ServerFlag";
-import ServerUsageBar from "@/components/ServerUsageBar";
+import ServerFlag from "@/components/ServerFlag"
+import ServerUsageBar from "@/components/ServerUsageBar"
+import { formatBytes } from "@/lib/format"
+import { GetFontLogoClass, GetOsName, MageMicrosoftWindows } from "@/lib/logo-class"
+import { cn, formatNezhaInfo, getDaysBetweenDates, parsePublicNote } from "@/lib/utils"
+import { NezhaServer } from "@/types/nezha-api"
+import { useTranslation } from "react-i18next"
+import { useNavigate } from "react-router-dom"
 
-import {
-  cn,
-  formatNezhaInfo,
-  getDaysBetweenDates,
-  parsePublicNote,
-} from "@/lib/utils";
-import { NezhaServer } from "@/types/nezha-api";
-import { Card } from "./ui/card";
-import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import {
-  GetFontLogoClass,
-  GetOsName,
-  MageMicrosoftWindows,
-} from "@/lib/logo-class";
-import { formatBytes } from "@/lib/format";
-import { Separator } from "./ui/separator";
+import { Card } from "./ui/card"
+import { Separator } from "./ui/separator"
 
 export default function ServerCardInline({
   now,
   serverInfo,
 }: {
-  now: number;
-  serverInfo: NezhaServer;
+  now: number
+  serverInfo: NezhaServer
 }) {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
+  const { t } = useTranslation()
+  const navigate = useNavigate()
   const {
     name,
     country_code,
@@ -42,23 +33,20 @@ export default function ServerCardInline({
     net_in_transfer,
     net_out_transfer,
     public_note,
-  } = formatNezhaInfo(now, serverInfo);
+  } = formatNezhaInfo(now, serverInfo)
 
-  const showFlag = true;
+  const showFlag = true
 
-  const parsedData = parsePublicNote(public_note);
+  const parsedData = parsePublicNote(public_note)
 
-  let daysLeft = 0;
-  let isNeverExpire = false;
+  let daysLeft = 0
+  let isNeverExpire = false
 
   if (parsedData?.billingDataMod?.endDate) {
     if (parsedData.billingDataMod.endDate.startsWith("0000-00-00")) {
-      isNeverExpire = true;
+      isNeverExpire = true
     } else {
-      daysLeft = getDaysBetweenDates(
-        parsedData.billingDataMod.endDate,
-        new Date(now).toISOString(),
-      );
+      daysLeft = getDaysBetweenDates(parsedData.billingDataMod.endDate, new Date(now).toISOString())
     }
   }
 
@@ -102,11 +90,7 @@ export default function ServerCardInline({
                   剩余时间: {isNeverExpire ? "永久" : daysLeft + "天"}
                 </p>
               ) : (
-                <p
-                  className={cn(
-                    "text-[10px] text-muted-foreground text-red-600",
-                  )}
-                >
+                <p className={cn("text-[10px] text-muted-foreground text-red-600")}>
                   已过期: {daysLeft * -1} 天
                 </p>
               ))}
@@ -115,9 +99,7 @@ export default function ServerCardInline({
         <Separator orientation="vertical" className="h-8 mx-0 ml-2" />
         <div className="flex flex-col gap-2">
           <section className={cn("grid grid-cols-9 items-center gap-3 flex-1")}>
-            <div
-              className={"items-center flex flex-row gap-2 whitespace-nowrap"}
-            >
+            <div className={"items-center flex flex-row gap-2 whitespace-nowrap"}>
               <div className="text-xs font-semibold">
                 {platform.includes("Windows") ? (
                   <MageMicrosoftWindows className="size-[10px]" />
@@ -126,81 +108,53 @@ export default function ServerCardInline({
                 )}
               </div>
               <div className={"flex w-14 flex-col"}>
-                <p className="text-xs text-muted-foreground">
-                  {t("serverCard.system")}
-                </p>
+                <p className="text-xs text-muted-foreground">{t("serverCard.system")}</p>
                 <div className="flex items-center text-[10.5px] font-semibold">
-                  {platform.includes("Windows")
-                    ? "Windows"
-                    : GetOsName(platform)}
+                  {platform.includes("Windows") ? "Windows" : GetOsName(platform)}
                 </div>
               </div>
             </div>
             <div className={"flex w-20 flex-col"}>
-              <p className="text-xs text-muted-foreground">
-                {t("serverCard.uptime")}
-              </p>
+              <p className="text-xs text-muted-foreground">{t("serverCard.uptime")}</p>
               <div className="flex items-center text-xs font-semibold">
                 {(uptime / 86400).toFixed(0)} {t("serverCard.days")}
               </div>
             </div>
             <div className={"flex w-14 flex-col"}>
               <p className="text-xs text-muted-foreground">{"CPU"}</p>
-              <div className="flex items-center text-xs font-semibold">
-                {cpu.toFixed(2)}%
-              </div>
+              <div className="flex items-center text-xs font-semibold">{cpu.toFixed(2)}%</div>
               <ServerUsageBar value={cpu} />
             </div>
             <div className={"flex w-14 flex-col"}>
-              <p className="text-xs text-muted-foreground">
-                {t("serverCard.mem")}
-              </p>
-              <div className="flex items-center text-xs font-semibold">
-                {mem.toFixed(2)}%
-              </div>
+              <p className="text-xs text-muted-foreground">{t("serverCard.mem")}</p>
+              <div className="flex items-center text-xs font-semibold">{mem.toFixed(2)}%</div>
               <ServerUsageBar value={mem} />
             </div>
             <div className={"flex w-14 flex-col"}>
-              <p className="text-xs text-muted-foreground">
-                {t("serverCard.stg")}
-              </p>
-              <div className="flex items-center text-xs font-semibold">
-                {stg.toFixed(2)}%
-              </div>
+              <p className="text-xs text-muted-foreground">{t("serverCard.stg")}</p>
+              <div className="flex items-center text-xs font-semibold">{stg.toFixed(2)}%</div>
               <ServerUsageBar value={stg} />
             </div>
             <div className={"flex w-16 flex-col"}>
-              <p className="text-xs text-muted-foreground">
-                {t("serverCard.upload")}
-              </p>
+              <p className="text-xs text-muted-foreground">{t("serverCard.upload")}</p>
               <div className="flex items-center text-xs font-semibold">
-                {up >= 1024
-                  ? `${(up / 1024).toFixed(2)}G/s`
-                  : `${up.toFixed(2)}M/s`}
+                {up >= 1024 ? `${(up / 1024).toFixed(2)}G/s` : `${up.toFixed(2)}M/s`}
               </div>
             </div>
             <div className={"flex w-16 flex-col"}>
-              <p className="text-xs text-muted-foreground">
-                {t("serverCard.download")}
-              </p>
+              <p className="text-xs text-muted-foreground">{t("serverCard.download")}</p>
               <div className="flex items-center text-xs font-semibold">
-                {down >= 1024
-                  ? `${(down / 1024).toFixed(2)}G/s`
-                  : `${down.toFixed(2)}M/s`}
+                {down >= 1024 ? `${(down / 1024).toFixed(2)}G/s` : `${down.toFixed(2)}M/s`}
               </div>
             </div>
             <div className={"flex w-20 flex-col"}>
-              <p className="text-xs text-muted-foreground">
-                {t("serverCard.totalUpload")}
-              </p>
+              <p className="text-xs text-muted-foreground">{t("serverCard.totalUpload")}</p>
               <div className="flex items-center text-xs font-semibold">
                 {formatBytes(net_out_transfer)}
               </div>
             </div>
             <div className={"flex w-20 flex-col"}>
-              <p className="text-xs text-muted-foreground">
-                {t("serverCard.totalDownload")}
-              </p>
+              <p className="text-xs text-muted-foreground">{t("serverCard.totalDownload")}</p>
               <div className="flex items-center text-xs font-semibold">
                 {formatBytes(net_in_transfer)}
               </div>
@@ -222,10 +176,7 @@ export default function ServerCardInline({
       >
         <span className="h-2 w-2 shrink-0 rounded-full bg-red-500 self-center"></span>
         <div
-          className={cn(
-            "flex items-center justify-center",
-            showFlag ? "min-w-[17px]" : "min-w-0",
-          )}
+          className={cn("flex items-center justify-center", showFlag ? "min-w-[17px]" : "min-w-0")}
         >
           {showFlag ? <ServerFlag country_code={country_code} /> : null}
         </div>
@@ -241,5 +192,5 @@ export default function ServerCardInline({
         </div>
       </section>
     </Card>
-  );
+  )
 }

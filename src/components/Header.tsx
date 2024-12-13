@@ -1,72 +1,71 @@
-import { ModeToggle } from "@/components/ThemeSwitcher";
-import { Separator } from "@/components/ui/separator";
-import { Skeleton } from "@/components/ui/skeleton";
-import { fetchLoginUser, fetchSetting } from "@/lib/nezha-api";
-import { useQuery } from "@tanstack/react-query";
-import { DateTime } from "luxon";
-import { useEffect, useRef, useState, useCallback } from "react";
-import { LanguageSwitcher } from "./LanguageSwitcher";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { ModeToggle } from "@/components/ThemeSwitcher"
+import { Separator } from "@/components/ui/separator"
+import { Skeleton } from "@/components/ui/skeleton"
+import { fetchLoginUser, fetchSetting } from "@/lib/nezha-api"
+import { useQuery } from "@tanstack/react-query"
+import { DateTime } from "luxon"
+import { useCallback, useEffect, useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
+import { useNavigate } from "react-router-dom"
+
+import { LanguageSwitcher } from "./LanguageSwitcher"
 
 function Header() {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
+  const { t } = useTranslation()
+  const navigate = useNavigate()
 
   const { data: settingData, isLoading } = useQuery({
     queryKey: ["setting"],
     queryFn: () => fetchSetting(),
     refetchOnMount: true,
     refetchOnWindowFocus: true,
-  });
+  })
 
-  const siteName = settingData?.data?.site_name;
+  const siteName = settingData?.data?.site_name
 
   const InjectContext = useCallback((content: string) => {
-    const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = content;
+    const tempDiv = document.createElement("div")
+    tempDiv.innerHTML = content
 
     const handlers: { [key: string]: (element: HTMLElement) => void } = {
       SCRIPT: (element) => {
-        const script = document.createElement("script");
+        const script = document.createElement("script")
         if ((element as HTMLScriptElement).src) {
-          script.src = (element as HTMLScriptElement).src;
+          script.src = (element as HTMLScriptElement).src
         } else {
-          script.textContent = element.textContent;
+          script.textContent = element.textContent
         }
-        document.body.appendChild(script);
+        document.body.appendChild(script)
       },
       STYLE: (element) => {
-        const style = document.createElement("style");
-        style.textContent = element.textContent;
-        document.head.appendChild(style);
+        const style = document.createElement("style")
+        style.textContent = element.textContent
+        document.head.appendChild(style)
       },
       DEFAULT: (element) => {
-        document.body.appendChild(element);
+        document.body.appendChild(element)
       },
-    };
+    }
 
     Array.from(tempDiv.childNodes).forEach((node) => {
       if (node.nodeType === Node.ELEMENT_NODE) {
-        const element = node as HTMLElement;
-        (handlers[element.tagName] || handlers.DEFAULT)(element);
+        const element = node as HTMLElement
+        ;(handlers[element.tagName] || handlers.DEFAULT)(element)
       } else if (node.nodeType === Node.TEXT_NODE) {
-        document.body.appendChild(
-          document.createTextNode(node.textContent || ""),
-        );
+        document.body.appendChild(document.createTextNode(node.textContent || ""))
       }
-    });
-  }, []);
+    })
+  }, [])
 
   useEffect(() => {
-    document.title = siteName || "NEZHA";
-  }, [siteName]);
+    document.title = siteName || "NEZHA"
+  }, [siteName])
 
   useEffect(() => {
     if (settingData?.data?.custom_code) {
-      InjectContext(settingData?.data?.custom_code);
+      InjectContext(settingData?.data?.custom_code)
     }
-  }, [settingData?.data?.custom_code]);
+  }, [settingData?.data?.custom_code])
 
   return (
     <div className="mx-auto w-full max-w-5xl">
@@ -89,13 +88,8 @@ function Header() {
           ) : (
             siteName || "NEZHA"
           )}
-          <Separator
-            orientation="vertical"
-            className="mx-2 hidden h-4 w-[1px] md:block"
-          />
-          <p className="hidden text-sm font-medium opacity-40 md:block">
-            {t("nezha")}
-          </p>
+          <Separator orientation="vertical" className="mx-2 hidden h-4 w-[1px] md:block" />
+          <p className="hidden text-sm font-medium opacity-40 md:block">{t("nezha")}</p>
         </section>
         <section className="flex items-center gap-2">
           <DashboardLink />
@@ -105,17 +99,17 @@ function Header() {
       </section>
       <Overview />
     </div>
-  );
+  )
 }
 
 function DashboardLink() {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
   const { data: userData } = useQuery({
     queryKey: ["login-user"],
     queryFn: () => fetchLoginUser(),
     refetchOnMount: true,
     refetchOnWindowFocus: true,
-  });
+  })
 
   return (
     <div className="flex items-center gap-2">
@@ -129,37 +123,37 @@ function DashboardLink() {
         {userData?.data?.id && t("dashboard")}
       </a>
     </div>
-  );
+  )
 }
 
 // https://github.com/streamich/react-use/blob/master/src/useInterval.ts
 const useInterval = (callback: () => void, delay: number | null) => {
-  const savedCallback = useRef<() => void>(() => {});
+  const savedCallback = useRef<() => void>(() => {})
   useEffect(() => {
-    savedCallback.current = callback;
-  });
+    savedCallback.current = callback
+  })
   useEffect(() => {
     if (delay !== null) {
-      const interval = setInterval(() => savedCallback.current(), delay || 0);
-      return () => clearInterval(interval);
+      const interval = setInterval(() => savedCallback.current(), delay || 0)
+      return () => clearInterval(interval)
     }
-    return undefined;
-  }, [delay]);
-};
+    return undefined
+  }, [delay])
+}
 function Overview() {
-  const { t } = useTranslation();
-  const [mouted, setMounted] = useState(false);
+  const { t } = useTranslation()
+  const [mouted, setMounted] = useState(false)
   useEffect(() => {
-    setMounted(true);
-  }, []);
-  const timeOption = DateTime.TIME_SIMPLE;
-  timeOption.hour12 = true;
+    setMounted(true)
+  }, [])
+  const timeOption = DateTime.TIME_SIMPLE
+  timeOption.hour12 = true
   const [timeString, setTimeString] = useState(
     DateTime.now().setLocale("en-US").toLocaleString(timeOption),
-  );
+  )
   useInterval(() => {
-    setTimeString(DateTime.now().setLocale("en-US").toLocaleString(timeOption));
-  }, 1000);
+    setTimeString(DateTime.now().setLocale("en-US").toLocaleString(timeOption))
+  }, 1000)
   return (
     <section className={"mt-10 flex flex-col md:mt-16"}>
       <p className="text-base font-semibold">👋 {t("overview")}</p>
@@ -172,6 +166,6 @@ function Overview() {
         )}
       </div>
     </section>
-  );
+  )
 }
-export default Header;
+export default Header

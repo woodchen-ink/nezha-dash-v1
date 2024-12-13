@@ -1,23 +1,20 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
-import { useTranslation } from "react-i18next";
-import { formatBytes } from "@/lib/format";
-import {
-  ArrowDownCircleIcon,
-  ArrowUpCircleIcon,
-} from "@heroicons/react/20/solid";
-import { useStatus } from "@/hooks/use-status";
-import useFilter from "@/hooks/use-filter";
+import { Card, CardContent } from "@/components/ui/card"
+import useFilter from "@/hooks/use-filter"
+import { useStatus } from "@/hooks/use-status"
+import { formatBytes } from "@/lib/format"
+import { cn } from "@/lib/utils"
+import { ArrowDownCircleIcon, ArrowUpCircleIcon } from "@heroicons/react/20/solid"
+import { useTranslation } from "react-i18next"
 
 type ServerOverviewProps = {
-  online: number;
-  offline: number;
-  total: number;
-  up: number;
-  down: number;
-  upSpeed: number;
-  downSpeed: number;
-};
+  online: number
+  offline: number
+  total: number
+  up: number
+  down: number
+  upSpeed: number
+  downSpeed: number
+}
 
 export default function ServerOverview({
   online,
@@ -28,25 +25,23 @@ export default function ServerOverview({
   upSpeed,
   downSpeed,
 }: ServerOverviewProps) {
-  const { t } = useTranslation();
-  const { status, setStatus } = useStatus();
-  const { filter, setFilter } = useFilter();
+  const { t } = useTranslation()
+  const { status, setStatus } = useStatus()
+  const { filter, setFilter } = useFilter()
 
   return (
     <>
       <section className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <Card
           onClick={() => {
-            setFilter(false);
-            setStatus("all");
+            setFilter(false)
+            setStatus("all")
           }}
           className={cn("hover:border-blue-500 cursor-pointer transition-all")}
         >
           <CardContent className="flex h-full items-center px-6 py-3">
             <section className="flex flex-col gap-1">
-              <p className="text-sm font-medium md:text-base">
-                {t("serverOverview.totalServers")}
-              </p>
+              <p className="text-sm font-medium md:text-base">{t("serverOverview.totalServers")}</p>
               <div className="flex items-center gap-2">
                 <span className="relative flex h-2 w-2">
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-blue-500"></span>
@@ -58,8 +53,8 @@ export default function ServerOverview({
         </Card>
         <Card
           onClick={() => {
-            setFilter(false);
-            setStatus("online");
+            setFilter(false)
+            setStatus("online")
           }}
           className={cn(
             "cursor-pointer hover:ring-green-500 ring-1 ring-transparent transition-all",
@@ -86,8 +81,8 @@ export default function ServerOverview({
         </Card>
         <Card
           onClick={() => {
-            setFilter(false);
-            setStatus("offline");
+            setFilter(false)
+            setStatus("offline")
           }}
           className={cn(
             "cursor-pointer hover:ring-red-500 ring-1 ring-transparent transition-all",
@@ -113,8 +108,8 @@ export default function ServerOverview({
         </Card>
         <Card
           onClick={() => {
-            setStatus("all");
-            setFilter(true);
+            setStatus("all")
+            setFilter(true)
           }}
           className={cn(
             "cursor-pointer hover:ring-purple-500 ring-1 ring-transparent transition-all",
@@ -126,9 +121,7 @@ export default function ServerOverview({
           <CardContent className="flex h-full items-center relative px-6 py-3">
             <section className="flex flex-col gap-1 w-full">
               <div className="flex items-center w-full justify-between">
-                <p className="text-sm font-medium md:text-base">
-                  {t("serverOverview.network")}
-                </p>
+                <p className="text-sm font-medium md:text-base">{t("serverOverview.network")}</p>
               </div>
               <section className="flex items-start flex-row z-[999] pr-2 sm:pr-0 gap-1">
                 <p className="sm:text-[12px] text-[10px] text-blue-800 dark:text-blue-400   text-nowrap font-medium">
@@ -153,5 +146,5 @@ export default function ServerOverview({
         </Card>
       </section>
     </>
-  );
+  )
 }

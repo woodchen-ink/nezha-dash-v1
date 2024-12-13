@@ -1,28 +1,17 @@
-import ServerFlag from "@/components/ServerFlag";
-import ServerUsageBar from "@/components/ServerUsageBar";
+import ServerFlag from "@/components/ServerFlag"
+import ServerUsageBar from "@/components/ServerUsageBar"
+import { formatBytes } from "@/lib/format"
+import { cn, formatNezhaInfo, getDaysBetweenDates, parsePublicNote } from "@/lib/utils"
+import { NezhaServer } from "@/types/nezha-api"
+import { useTranslation } from "react-i18next"
+import { useNavigate } from "react-router-dom"
 
-import {
-  cn,
-  formatNezhaInfo,
-  parsePublicNote,
-  getDaysBetweenDates,
-} from "@/lib/utils";
-import { NezhaServer } from "@/types/nezha-api";
-import { Card } from "./ui/card";
-import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import { Badge } from "./ui/badge";
-import { formatBytes } from "@/lib/format";
+import { Badge } from "./ui/badge"
+import { Card } from "./ui/card"
 
-export default function ServerCard({
-  now,
-  serverInfo,
-}: {
-  now: number;
-  serverInfo: NezhaServer;
-}) {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
+export default function ServerCard({ now, serverInfo }: { now: number; serverInfo: NezhaServer }) {
+  const { t } = useTranslation()
+  const navigate = useNavigate()
   const {
     name,
     country_code,
@@ -35,23 +24,20 @@ export default function ServerCard({
     net_in_transfer,
     net_out_transfer,
     public_note,
-  } = formatNezhaInfo(now, serverInfo);
+  } = formatNezhaInfo(now, serverInfo)
 
-  const showFlag = true;
+  const showFlag = true
 
-  const parsedData = parsePublicNote(public_note);
+  const parsedData = parsePublicNote(public_note)
 
-  let daysLeft = 0;
-  let isNeverExpire = false;
+  let daysLeft = 0
+  let isNeverExpire = false
 
   if (parsedData?.billingDataMod?.endDate) {
     if (parsedData.billingDataMod.endDate.startsWith("0000-00-00")) {
-      isNeverExpire = true;
+      isNeverExpire = true
     } else {
-      daysLeft = getDaysBetweenDates(
-        parsedData.billingDataMod.endDate,
-        new Date(now).toISOString(),
-      );
+      daysLeft = getDaysBetweenDates(parsedData.billingDataMod.endDate, new Date(now).toISOString())
     }
   }
 
@@ -91,11 +77,7 @@ export default function ServerCard({
                   剩余时间: {isNeverExpire ? "永久" : daysLeft + "天"}
                 </p>
               ) : (
-                <p
-                  className={cn(
-                    "text-[10px] text-muted-foreground text-red-600",
-                  )}
-                >
+                <p className={cn("text-[10px] text-muted-foreground text-red-600")}>
                   已过期: {daysLeft * -1} 天
                 </p>
               ))}
@@ -105,47 +87,29 @@ export default function ServerCard({
           <section className={cn("grid grid-cols-5 items-center gap-3")}>
             <div className={"flex w-14 flex-col"}>
               <p className="text-xs text-muted-foreground">{"CPU"}</p>
-              <div className="flex items-center text-xs font-semibold">
-                {cpu.toFixed(2)}%
-              </div>
+              <div className="flex items-center text-xs font-semibold">{cpu.toFixed(2)}%</div>
               <ServerUsageBar value={cpu} />
             </div>
             <div className={"flex w-14 flex-col"}>
-              <p className="text-xs text-muted-foreground">
-                {t("serverCard.mem")}
-              </p>
-              <div className="flex items-center text-xs font-semibold">
-                {mem.toFixed(2)}%
-              </div>
+              <p className="text-xs text-muted-foreground">{t("serverCard.mem")}</p>
+              <div className="flex items-center text-xs font-semibold">{mem.toFixed(2)}%</div>
               <ServerUsageBar value={mem} />
             </div>
             <div className={"flex w-14 flex-col"}>
-              <p className="text-xs text-muted-foreground">
-                {t("serverCard.stg")}
-              </p>
-              <div className="flex items-center text-xs font-semibold">
-                {stg.toFixed(2)}%
-              </div>
+              <p className="text-xs text-muted-foreground">{t("serverCard.stg")}</p>
+              <div className="flex items-center text-xs font-semibold">{stg.toFixed(2)}%</div>
               <ServerUsageBar value={stg} />
             </div>
             <div className={"flex w-14 flex-col"}>
-              <p className="text-xs text-muted-foreground">
-                {t("serverCard.upload")}
-              </p>
+              <p className="text-xs text-muted-foreground">{t("serverCard.upload")}</p>
               <div className="flex items-center text-xs font-semibold">
-                {up >= 1024
-                  ? `${(up / 1024).toFixed(2)}G/s`
-                  : `${up.toFixed(2)}M/s`}
+                {up >= 1024 ? `${(up / 1024).toFixed(2)}G/s` : `${up.toFixed(2)}M/s`}
               </div>
             </div>
             <div className={"flex w-14 flex-col"}>
-              <p className="text-xs text-muted-foreground">
-                {t("serverCard.download")}
-              </p>
+              <p className="text-xs text-muted-foreground">{t("serverCard.download")}</p>
               <div className="flex items-center text-xs font-semibold">
-                {down >= 1024
-                  ? `${(down / 1024).toFixed(2)}G/s`
-                  : `${down.toFixed(2)}M/s`}
+                {down >= 1024 ? `${(down / 1024).toFixed(2)}G/s` : `${down.toFixed(2)}M/s`}
               </div>
             </div>
           </section>
@@ -179,24 +143,16 @@ export default function ServerCard({
       >
         <span className="h-2 w-2 shrink-0 rounded-full bg-red-500 self-center"></span>
         <div
-          className={cn(
-            "flex items-center justify-center",
-            showFlag ? "min-w-[17px]" : "min-w-0",
-          )}
+          className={cn("flex items-center justify-center", showFlag ? "min-w-[17px]" : "min-w-0")}
         >
           {showFlag ? <ServerFlag country_code={country_code} /> : null}
         </div>
         <div className="relative">
-          <p
-            className={cn(
-              "break-all font-bold tracking-tight",
-              showFlag ? "text-xs" : "text-sm",
-            )}
-          >
+          <p className={cn("break-all font-bold tracking-tight", showFlag ? "text-xs" : "text-sm")}>
             {name}
           </p>
         </div>
       </section>
     </Card>
-  );
+  )
 }

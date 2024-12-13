@@ -1,12 +1,12 @@
-import { useContext } from "react";
-import { TooltipContext } from "@/context/tooltip-context";
+import { TooltipContext } from "@/context/tooltip-context"
+import { useContext } from "react"
 
 export const useTooltip = () => {
-  const context = useContext(TooltipContext);
+  const context = useContext(TooltipContext)
   if (context === undefined) {
-    throw new Error("useTooltip must be used within a TooltipProvider");
+    throw new Error("useTooltip must be used within a TooltipProvider")
   }
-  return context;
-};
+  return context
+}
 
-export default useTooltip;
+export default useTooltip

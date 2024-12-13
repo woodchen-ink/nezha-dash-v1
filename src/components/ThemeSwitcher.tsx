@@ -1,25 +1,26 @@
-import { Button } from "@/components/ui/button";
+import { Theme } from "@/components/ThemeProvider"
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
-import { Moon, Sun } from "lucide-react";
-import { Theme } from "@/components/ThemeProvider";
-import { useTheme } from "../hooks/use-theme";
-import { CheckCircleIcon } from "@heroicons/react/20/solid";
-import { useTranslation } from "react-i18next";
+} from "@/components/ui/dropdown-menu"
+import { cn } from "@/lib/utils"
+import { CheckCircleIcon } from "@heroicons/react/20/solid"
+import { Moon, Sun } from "lucide-react"
+import { useTranslation } from "react-i18next"
+
+import { useTheme } from "../hooks/use-theme"
 
 export function ModeToggle() {
-  const { t } = useTranslation();
-  const { setTheme, theme } = useTheme();
+  const { t } = useTranslation()
+  const { setTheme, theme } = useTheme()
 
   const handleSelect = (e: Event, newTheme: Theme) => {
-    e.preventDefault();
-    setTheme(newTheme);
-  };
+    e.preventDefault()
+    setTheme(newTheme)
+  }
 
   return (
     <DropdownMenu>
@@ -58,5 +59,5 @@ export function ModeToggle() {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
+  )
 }

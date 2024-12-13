@@ -1,14 +1,14 @@
-import { cn } from "@/lib/utils";
-import { m } from "framer-motion";
+import { cn } from "@/lib/utils"
+import { m } from "framer-motion"
 
 export default function GroupSwitch({
   tabs,
   currentTab,
   setCurrentTab,
 }: {
-  tabs: string[];
-  currentTab: string;
-  setCurrentTab: (tab: string) => void;
+  tabs: string[]
+  currentTab: string
+  setCurrentTab: (tab: string) => void
 }) {
   return (
     <div className="scrollbar-hidden z-50 flex flex-col items-start overflow-x-scroll rounded-[50px]">
@@ -41,5 +41,5 @@ export default function GroupSwitch({
         ))}
       </div>
     </div>
-  );
+  )
 }

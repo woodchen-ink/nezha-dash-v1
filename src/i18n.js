@@ -1,9 +1,9 @@
-import i18n from "i18next";
-import { initReactI18next } from "react-i18next";
+import i18n from "i18next"
+import { initReactI18next } from "react-i18next"
 
-import enTranslation from "./locales/en/translation.json";
-import zhCNTranslation from "./locales/zh-CN/translation.json";
-import zhTWTranslation from "./locales/zh-TW/translation.json";
+import enTranslation from "./locales/en/translation.json"
+import zhCNTranslation from "./locales/zh-CN/translation.json"
+import zhTWTranslation from "./locales/zh-TW/translation.json"
 
 const resources = {
   en: {
@@ -15,11 +15,11 @@ const resources = {
   "zh-TW": {
     translation: zhTWTranslation,
   },
-};
+}
 
 const getStoredLanguage = () => {
-  return localStorage.getItem("language") || "zh-CN";
-};
+  return localStorage.getItem("language") || "zh-CN"
+}
 
 i18n.use(initReactI18next).init({
   resources,
@@ -28,11 +28,11 @@ i18n.use(initReactI18next).init({
   interpolation: {
     escapeValue: false, // react已经安全地转义
   },
-});
+})
 
 // 添加语言改变时的处理函数
 i18n.on("languageChanged", (lng) => {
-  localStorage.setItem("language", lng);
-});
+  localStorage.setItem("language", lng)
+})
 
-export default i18n;
+export default i18n

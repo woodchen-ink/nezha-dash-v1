@@ -4,16 +4,14 @@
     <script>
       // 在页面渲染前就执行主题初始化
       try {
-        const storageKey = "vite-ui-theme";
-        let theme = localStorage.getItem(storageKey);
+        const storageKey = "vite-ui-theme"
+        let theme = localStorage.getItem(storageKey)
         if (theme === "system" || !theme) {
-          theme = window.matchMedia("(prefers-color-scheme: dark)").matches
-            ? "dark"
-            : "light";
+          theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
         }
-        document.documentElement.classList.add(theme);
+        document.documentElement.classList.add(theme)
       } catch (e) {
-        document.documentElement.classList.add("light");
+        document.documentElement.classList.add("light")
       }
     </script>
     <style>
@@ -65,53 +63,48 @@
       }
     </style>
     <script>
-      (function () {
-        const storageKey = "vite-ui-theme";
-        const theme = localStorage.getItem(storageKey) || "system";
-        const root = document.documentElement;
+      ;(function () {
+        const storageKey = "vite-ui-theme"
+        const theme = localStorage.getItem(storageKey) || "system"
+        const root = document.documentElement
 
         function updateThemeColor(isDark) {
-          const themeColor = isDark ? "#242424" : "#fafafa";
-          document
-            .querySelector('meta[name="theme-color"]')
-            ?.setAttribute("content", themeColor);
+          const themeColor = isDark ? "#242424" : "#fafafa"
+          document.querySelector('meta[name="theme-color"]')?.setAttribute("content", themeColor)
         }
 
         function setTheme(newTheme) {
-          root.classList.remove("light", "dark");
-          root.classList.add(newTheme);
-          updateThemeColor(newTheme === "dark");
+          root.classList.remove("light", "dark")
+          root.classList.add(newTheme)
+          updateThemeColor(newTheme === "dark")
         }
 
         if (theme === "system") {
-          const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
-            .matches
+          const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
             ? "dark"
-            : "light";
-          setTheme(systemTheme);
+            : "light"
+          setTheme(systemTheme)
 
-          window
-            .matchMedia("(prefers-color-scheme: dark)")
-            .addEventListener("change", (e) => {
-              setTheme(e.matches ? "dark" : "light");
-            });
+          window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+            setTheme(e.matches ? "dark" : "light")
+          })
         } else {
-          setTheme(theme);
+          setTheme(theme)
         }
 
         // Add loaded class after React has mounted
         window.addEventListener("load", () => {
-          const root = document.getElementById("root");
+          const root = document.getElementById("root")
           if (root) {
             // 使用 RAF 确保在下一帧渲染
             requestAnimationFrame(() => {
               requestAnimationFrame(() => {
-                root.classList.add("loaded");
-              });
-            });
+                root.classList.add("loaded")
+              })
+            })
           }
-        });
-      })();
+        })
+      })()
     </script>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/apple-touch-icon.png" />
