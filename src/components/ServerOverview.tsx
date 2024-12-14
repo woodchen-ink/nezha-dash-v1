@@ -123,7 +123,7 @@ export default function ServerOverview({
               <div className="flex items-center w-full justify-between">
                 <p className="text-sm font-medium md:text-base">{t("serverOverview.network")}</p>
               </div>
-              <section className="flex items-start flex-row z-[999] pr-2 sm:pr-0 gap-1">
+              <section className="flex items-start flex-row z-[999] pr-0 gap-1">
                 <p className="sm:text-[12px] text-[10px] text-blue-800 dark:text-blue-400   text-nowrap font-medium">
                   ↑{formatBytes(up)}
                 </p>
