@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next"
 export function LanguageSwitcher() {
   const { t, i18n } = useTranslation()
 
-  const locale = i18n.language
+  const locale = i18n.languages[0]
 
   const handleSelect = (e: Event, newLocale: string) => {
     e.preventDefault() // 阻止默认的关闭行为
