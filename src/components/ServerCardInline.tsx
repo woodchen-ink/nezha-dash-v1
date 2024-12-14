@@ -117,7 +117,9 @@ export default function ServerCardInline({
             <div className={"flex w-20 flex-col"}>
               <p className="text-xs text-muted-foreground">{t("serverCard.uptime")}</p>
               <div className="flex items-center text-xs font-semibold">
-                {(uptime / 86400).toFixed(0)} {t("serverCard.days")}
+                {uptime / 86400 >= 1
+                  ? `${(uptime / 86400).toFixed(0)} ${t("serverCard.days")}`
+                  : `${(uptime / 3600).toFixed(0)} ${t("serverCard.hours")}`}
               </div>
             </div>
             <div className={"flex w-14 flex-col"}>

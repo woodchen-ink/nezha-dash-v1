@@ -27,6 +27,7 @@
     "mem": "MEM",
     "stg": "STG",
     "days": "Days",
+    "hours": "Hours",
     "upload": "Upload",
     "download": "Download",
     "system": "System",
