@@ -142,6 +142,11 @@ export default function ServerOverview({
                 </p>
               </section>
             </section>
+            <img
+              className="absolute right-3 top-[-85px] z-10 w-20 scale-90 group-hover:opacity-50 md:scale-100 transition-all"
+              alt={"animated-man"}
+              src={"/animated-man.webp"}
+            />
           </CardContent>
         </Card>
       </section>
