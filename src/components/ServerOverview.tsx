@@ -29,6 +29,9 @@ export default function ServerOverview({
   const { status, setStatus } = useStatus()
   const { filter, setFilter } = useFilter()
 
+  // @ts-expect-error DisableAnimatedMan is a global variable
+  const disableAnimatedMan = window.DisableAnimatedMan === "true"
+
   return (
     <>
       <section className="grid grid-cols-2 gap-4 lg:grid-cols-4">
@@ -142,11 +145,14 @@ export default function ServerOverview({
                 </p>
               </section>
             </section>
-            <img
-              className="absolute right-3 top-[-85px] z-10 w-20 scale-90 group-hover:opacity-50 md:scale-100 transition-all"
-              alt={"animated-man"}
-              src={"/animated-man.webp"}
-            />
+            {!disableAnimatedMan && (
+              <img
+                className="absolute right-3 top-[-85px] z-10 w-20 scale-90 group-hover:opacity-50 md:scale-100 transition-all"
+                alt={"animated-man"}
+                src={"/animated-man.webp"}
+                loading="eager"
+              />
+            )}
           </CardContent>
         </Card>
       </section>

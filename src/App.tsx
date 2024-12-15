@@ -1,14 +1,71 @@
-import React from "react"
+import { useQuery } from "@tanstack/react-query"
+import React, { useCallback, useEffect } from "react"
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom"
 
 import Footer from "./components/Footer"
 import Header from "./components/Header"
+import { fetchSetting } from "./lib/nezha-api"
 import ErrorPage from "./pages/ErrorPage"
 import NotFound from "./pages/NotFound"
 import Server from "./pages/Server"
 import ServerDetail from "./pages/ServerDetail"
 
 const App: React.FC = () => {
+  const { data: settingData, error } = useQuery({
+    queryKey: ["setting"],
+    queryFn: () => fetchSetting(),
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+  })
+
+  const InjectContext = useCallback((content: string) => {
+    const tempDiv = document.createElement("div")
+    tempDiv.innerHTML = content
+
+    const handlers: { [key: string]: (element: HTMLElement) => void } = {
+      SCRIPT: (element) => {
+        const script = document.createElement("script")
+        if ((element as HTMLScriptElement).src) {
+          script.src = (element as HTMLScriptElement).src
+        } else {
+          script.textContent = element.textContent
+        }
+        document.body.appendChild(script)
+      },
+      STYLE: (element) => {
+        const style = document.createElement("style")
+        style.textContent = element.textContent
+        document.head.appendChild(style)
+      },
+      DEFAULT: (element) => {
+        document.body.appendChild(element)
+      },
+    }
+
+    Array.from(tempDiv.childNodes).forEach((node) => {
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        const element = node as HTMLElement
+        ;(handlers[element.tagName] || handlers.DEFAULT)(element)
+      } else if (node.nodeType === Node.TEXT_NODE) {
+        document.body.appendChild(document.createTextNode(node.textContent || ""))
+      }
+    })
+  }, [])
+
+  useEffect(() => {
+    if (settingData?.data?.custom_code) {
+      InjectContext(settingData?.data?.custom_code)
+    }
+  }, [settingData?.data?.custom_code])
+
+  if (error) {
+    return <ErrorPage code={500} message={error.message} />
+  }
+
+  if (!settingData) {
+    return null
+  }
+
   return (
     <Router basename={import.meta.env.BASE_URL}>
       <div className="flex min-h-screen w-full flex-col">

@@ -28,7 +28,7 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
 
   const showFlag = true
   // @ts-expect-error ShowNetTransfer is a global variable
-  const disableShowNetTransfer = window.ShowNetTransfer === "false"
+  const showNetTransfer = window.ShowNetTransfer === "true"
 
   const parsedData = parsePublicNote(public_note)
 
@@ -123,7 +123,7 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
               </div>
             </div>
           </section>
-          {!disableShowNetTransfer && (
+          {showNetTransfer && (
             <section className={"flex items-center justify-between gap-1"}>
               <Badge
                 variant="secondary"
@@ -146,7 +146,7 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
     <Card
       className={cn(
         "flex flex-col items-center justify-start gap-3 p-3 md:px-5 lg:flex-row cursor-pointer hover:bg-accent/50 transition-colors",
-        !disableShowNetTransfer ? "lg:min-h-[91px] min-h-[123px]" : "lg:min-h-[61px] min-h-[93px]",
+        showNetTransfer ? "lg:min-h-[91px] min-h-[123px]" : "lg:min-h-[61px] min-h-[93px]",
       )}
       onClick={() => navigate(`/server/${serverInfo.id}`, { replace: true })}
     >
