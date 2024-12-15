@@ -7,6 +7,8 @@ import { ServiceTracker } from "@/components/ServiceTracker"
 import { Loader } from "@/components/loading/Loader"
 import { Label } from "@/components/ui/label"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { forEachSortType, SORT_ORDERS, SORT_TYPES } from "@/context/sort-context"
+import { useSort } from "@/hooks/use-sort"
 import { useStatus } from "@/hooks/use-status"
 import { useWebSocketContext } from "@/hooks/use-websocket-context"
 import { fetchServerGroup } from "@/lib/nezha-api"
@@ -21,6 +23,7 @@ import { toast } from "sonner"
 
 export default function Servers() {
   const { t } = useTranslation()
+  const { sortType,sortOrder,setSortOrder,setSortType } = useSort()
   const { data: groupData } = useQuery({
     queryKey: ["server-group"],
     queryFn: () => fetchServerGroup(),
@@ -211,41 +214,39 @@ export default function Servers() {
               <section className="flex flex-col gap-1">
                 <Label className=" text-stone-500  text-xs">Sort by</Label>
                 <section className="flex items-center gap-1 flex-wrap">
-                  <button className="rounded-[5px] text-[11px] w-fit px-1 py-0.5 cursor-pointer [text-shadow:_0_1px_0_rgb(0_0_0_/_20%)] bg-black  dark:bg-stone-600 text-white transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ">
-                    Default
-                  </button>
-                  <button className="rounded-[5px] text-xs w-fit px-1 py-0.5 cursor-pointer bg-transparent border transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ">
-                    CPU
-                  </button>
-                  <button className="rounded-[5px] text-xs w-fit px-1 py-0.5 cursor-pointer bg-transparent border transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ">
-                    Mem
-                  </button>
-                  <button className="rounded-[5px] text-xs w-fit px-1 py-0.5 cursor-pointer bg-transparent border transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ">
-                    Stg
-                  </button>
-                  <button className="rounded-[5px] text-xs w-fit px-1 py-0.5 cursor-pointer bg-transparent border transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ">
-                    Up
-                  </button>
-                  <button className="rounded-[5px] text-xs w-fit px-1 py-0.5 cursor-pointer bg-transparent border transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ">
-                    Down
-                  </button>
-                  <button className="rounded-[5px] text-xs w-fit px-1 py-0.5 cursor-pointer bg-transparent border transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ">
-                    Up Total
-                  </button>
-                  <button className="rounded-[5px] text-xs w-fit px-1 py-0.5 cursor-pointer bg-transparent border transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ">
-                    Down Total
-                  </button>
+                  {SORT_TYPES.map((type) => (
+                    <button
+                      key={type}
+                      onClick={() => setSortType(type)}
+                      className={cn(
+                        "rounded-[5px] text-[11px] w-fit px-1 py-0.5 cursor-pointer bg-transparent border transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ",
+                        {
+                          "bg-black text-white": sortType === type,
+                        },
+                      )}
+                    >
+                      {type}
+                    </button>
+                  ))}
                 </section>
               </section>
               <section className="flex flex-col gap-1">
                 <Label className=" text-stone-500  text-xs">Sort order</Label>
                 <section className="flex items-center gap-1">
-                  <button className="rounded-[5px] text-[11px] w-fit px-1 py-0.5 cursor-pointer [text-shadow:_0_1px_0_rgb(0_0_0_/_20%)] bg-black  dark:bg-stone-600 text-white transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ">
-                    Asc
-                  </button>
-                  <button className="rounded-[5px] text-xs w-fit px-1 py-0.5 cursor-pointer bg-transparent border transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ">
-                    Desc
-                  </button>
+                  {SORT_ORDERS.map((order) => (
+                    <button
+                      key={order}
+                      onClick={() => setSortOrder(order)}
+                      className={cn(
+                        "rounded-[5px] text-[11px] w-fit px-1 py-0.5 cursor-pointer bg-transparent border transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ",
+                        {
+                          "bg-black text-white": sortOrder === order,
+                        },
+                      )}
+                    >
+                      {order}
+                    </button>
+                  ))}
                 </section>
               </section>
             </div>
