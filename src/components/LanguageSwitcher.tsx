@@ -23,7 +23,7 @@ export function LanguageSwitcher() {
   const localeItems = [
     { name: t("language.zh-CN"), code: "zh-CN" },
     { name: t("language.zh-TW"), code: "zh-TW" },
-    { name: t("language.en"), code: "en" },
+    { name: t("language.en-US"), code: "en-US" },
   ]
 
   return (
