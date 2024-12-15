@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query"
-import React, { useCallback, useEffect } from "react"
+import React, { useCallback } from "react"
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom"
 
 import Footer from "./components/Footer"
 import Header from "./components/Header"
 import { fetchSetting } from "./lib/nezha-api"
+import { cn } from "./lib/utils"
 import ErrorPage from "./pages/ErrorPage"
 import NotFound from "./pages/NotFound"
 import Server from "./pages/Server"
@@ -52,12 +53,6 @@ const App: React.FC = () => {
     })
   }, [])
 
-  useEffect(() => {
-    if (settingData?.data?.custom_code) {
-      InjectContext(settingData?.data?.custom_code)
-    }
-  }, [settingData?.data?.custom_code])
-
   if (error) {
     return <ErrorPage code={500} message={error.message} />
   }
@@ -66,10 +61,28 @@ const App: React.FC = () => {
     return null
   }
 
+  if (settingData?.data?.custom_code) {
+    InjectContext(settingData?.data?.custom_code)
+  }
+
+  const customBackgroundImage =
+    // @ts-expect-error ShowNetTransfer is a global variable
+    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+
   return (
     <Router basename={import.meta.env.BASE_URL}>
-      <div className="flex min-h-screen w-full flex-col">
-        <main className="flex min-h-[calc(100vh-calc(var(--spacing)*16))] flex-1 flex-col gap-4 bg-background p-4 md:p-10 md:pt-8">
+      <div
+        className={cn("flex min-h-screen w-full flex-col", {
+          " bg-background": !customBackgroundImage,
+        })}
+        style={{
+          backgroundImage: customBackgroundImage ? "url(" + customBackgroundImage + ")" : undefined,
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+        }}
+      >
+        <main className="flex min-h-[calc(100vh-calc(var(--spacing)*16))] flex-1 flex-col gap-4 p-4 md:p-10 md:pt-8">
           <Header />
           <Routes>
             <Route path="/" element={<Server />} />
