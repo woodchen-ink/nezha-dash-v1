@@ -274,9 +274,10 @@ export default function Servers() {
                       key={type}
                       onClick={() => setSortType(type)}
                       className={cn(
-                        "rounded-[5px] text-[11px] w-fit px-1 py-0.5 cursor-pointer bg-transparent border transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ",
+                        "rounded-[5px] text-[11px] w-fit px-1 py-0.5 cursor-pointer bg-transparent border transition-all dark:shadow-none  ",
                         {
-                          "bg-black text-white": sortType === type,
+                          "bg-black text-white dark:bg-white dark:text-black shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]":
+                            sortType === type,
                         },
                       )}
                     >
@@ -294,9 +295,10 @@ export default function Servers() {
                       key={order}
                       onClick={() => setSortOrder(order)}
                       className={cn(
-                        "rounded-[5px] text-[11px] w-fit px-1 py-0.5 cursor-pointer bg-transparent border transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ",
+                        "rounded-[5px] text-[11px] w-fit px-1 py-0.5 cursor-pointer bg-transparent border transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  dark:shadow-none",
                         {
-                          "bg-black text-white": sortOrder === order && sortType !== "default",
+                          "bg-black text-white dark:bg-white dark:text-black":
+                            sortOrder === order && sortType !== "default",
                         },
                       )}
                     >
