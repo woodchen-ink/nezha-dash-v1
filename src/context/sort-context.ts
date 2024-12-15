@@ -1,11 +1,12 @@
 import { createContext } from "react"
 
-export type SortType = "default" | "cpu" | "mem" | "up" | "down" | "up total" | "down total"
+export type SortType = "default" | "cpu" | "mem" | "stg" | "up" | "down" | "up total" | "down total"
 
 export const SORT_TYPES: SortType[] = [
   "default",
   "cpu",
   "mem",
+  "stg",
   "up",
   "down",
   "up total",
@@ -14,8 +15,7 @@ export const SORT_TYPES: SortType[] = [
 
 export type SortOrder = "asc" | "desc"
 
-export const SORT_ORDERS: SortOrder[] = [ "desc","asc"]
-
+export const SORT_ORDERS: SortOrder[] = ["desc", "asc"]
 
 export interface SortContextType {
   sortType: SortType

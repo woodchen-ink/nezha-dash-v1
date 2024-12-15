@@ -7,7 +7,7 @@ import { ServiceTracker } from "@/components/ServiceTracker"
 import { Loader } from "@/components/loading/Loader"
 import { Label } from "@/components/ui/label"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { forEachSortType, SORT_ORDERS, SORT_TYPES } from "@/context/sort-context"
+import { SORT_ORDERS, SORT_TYPES } from "@/context/sort-context"
 import { useSort } from "@/hooks/use-sort"
 import { useStatus } from "@/hooks/use-status"
 import { useWebSocketContext } from "@/hooks/use-websocket-context"
@@ -23,7 +23,7 @@ import { toast } from "sonner"
 
 export default function Servers() {
   const { t } = useTranslation()
-  const { sortType,sortOrder,setSortOrder,setSortType } = useSort()
+  const { sortType, sortOrder, setSortOrder, setSortType } = useSort()
   const { data: groupData } = useQuery({
     queryKey: ["server-group"],
     queryFn: () => fetchServerGroup(),
@@ -140,6 +140,45 @@ export default function Servers() {
           [status].includes(formatNezhaInfo(nezhaWsData.now, server).online ? "online" : "offline"),
         )
 
+  filteredServers = filteredServers.sort((a, b) => {
+    const serverAInfo = formatNezhaInfo(nezhaWsData.now, a)
+    const serverBInfo = formatNezhaInfo(nezhaWsData.now, b)
+
+    if (!serverAInfo.online && serverBInfo.online) return 1
+    if (serverAInfo.online && !serverBInfo.online) return -1
+    if (!serverAInfo.online && !serverBInfo.online) return 0
+
+    let comparison = 0
+
+    switch (sortType) {
+      case "cpu":
+        comparison = (a.state?.cpu ?? 0) - (b.state?.cpu ?? 0)
+        break
+      case "mem":
+        comparison = (a.state?.mem_used ?? 0) - (b.state?.mem_used ?? 0)
+        break
+      case "stg":
+        comparison = (a.state?.disk_used ?? 0) - (b.state?.disk_used ?? 0)
+        break
+      case "up":
+        comparison = (a.state?.net_out_speed ?? 0) - (b.state?.net_out_speed ?? 0)
+        break
+      case "down":
+        comparison = (a.state?.net_in_speed ?? 0) - (b.state?.net_in_speed ?? 0)
+        break
+      case "up total":
+        comparison = (a.state?.net_out_transfer ?? 0) - (b.state?.net_out_transfer ?? 0)
+        break
+      case "down total":
+        comparison = (a.state?.net_in_transfer ?? 0) - (b.state?.net_in_transfer ?? 0)
+        break
+      default:
+        comparison = 0
+    }
+
+    return sortOrder === "asc" ? comparison : -comparison
+  })
+
   return (
     <div className="mx-auto w-full max-w-5xl px-0">
       <ServerOverview
@@ -235,12 +274,13 @@ export default function Servers() {
                 <section className="flex items-center gap-1">
                   {SORT_ORDERS.map((order) => (
                     <button
+                      disabled={sortType === "default"}
                       key={order}
                       onClick={() => setSortOrder(order)}
                       className={cn(
                         "rounded-[5px] text-[11px] w-fit px-1 py-0.5 cursor-pointer bg-transparent border transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ",
                         {
-                          "bg-black text-white": sortOrder === order,
+                          "bg-black text-white": sortOrder === order && sortType !== "default",
                         },
                       )}
                     >
