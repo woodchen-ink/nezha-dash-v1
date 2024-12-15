@@ -138,7 +138,7 @@ function GpuChart({ now, gpuStat, gpuName }: { now: number; gpuStat: number; gpu
               {gpuName && <p className="text-xs mt-1 mb-1.5">GPU: {gpuName}</p>}
             </section>
             <section className="flex items-center gap-2">
-              <p className="text-xs text-end w-10 font-medium">{gpuStat.toFixed(0)}%</p>
+              <p className="text-xs text-end w-10 font-medium">{gpuStat.toFixed(2)}%</p>
               <AnimatedCircularProgressBar
                 className="size-3 text-[0px]"
                 max={100}
@@ -229,7 +229,7 @@ function CpuChart({ now, data }: { now: number; data: NezhaServer }) {
           <div className="flex items-center justify-between">
             <p className="text-md font-medium">CPU</p>
             <section className="flex items-center gap-2">
-              <p className="text-xs text-end w-10 font-medium">{cpu.toFixed(0)}%</p>
+              <p className="text-xs text-end w-10 font-medium">{cpu.toFixed(2)}%</p>
               <AnimatedCircularProgressBar
                 className="size-3 text-[0px]"
                 max={100}
@@ -411,7 +411,7 @@ function MemChart({ now, data }: { now: number; data: NezhaServer }) {
                     value={mem}
                     primaryColor="hsl(var(--chart-8))"
                   />
-                  <p className="text-xs font-medium">{mem.toFixed(0)}%</p>
+                  <p className="text-xs font-medium">{mem.toFixed(2)}%</p>
                 </div>
               </div>
               <div className="flex flex-col">
@@ -424,7 +424,7 @@ function MemChart({ now, data }: { now: number; data: NezhaServer }) {
                     value={swap}
                     primaryColor="hsl(var(--chart-10))"
                   />
-                  <p className="text-xs font-medium">{swap.toFixed(0)}%</p>
+                  <p className="text-xs font-medium">{swap.toFixed(2)}%</p>
                 </div>
               </div>
             </section>
@@ -642,14 +642,26 @@ function NetworkChart({ now, data }: { now: number; data: NezhaServer }) {
                 <p className="text-xs text-muted-foreground">{t("serverDetailChart.upload")}</p>
                 <div className="flex items-center gap-1">
                   <span className="relative inline-flex  size-1.5 rounded-full bg-[hsl(var(--chart-1))]"></span>
-                  <p className="text-xs font-medium">{up.toFixed(2)} M/s</p>
+                  <p className="text-xs font-medium">
+                    {up >= 1024
+                      ? `${(up / 1024).toFixed(2)}G/s`
+                      : up >= 1
+                        ? `${up.toFixed(2)}M/s`
+                        : `${(up * 1024).toFixed(2)}K/s`}
+                  </p>
                 </div>
               </div>
               <div className="flex flex-col w-20">
                 <p className=" text-xs text-muted-foreground">{t("serverDetailChart.download")}</p>
                 <div className="flex items-center gap-1">
                   <span className="relative inline-flex  size-1.5 rounded-full bg-[hsl(var(--chart-4))]"></span>
-                  <p className="text-xs font-medium">{down.toFixed(2)} M/s</p>
+                  <p className="text-xs font-medium">
+                    {down >= 1024
+                      ? `${(down / 1024).toFixed(2)}G/s`
+                      : down >= 1
+                        ? `${down.toFixed(2)}M/s`
+                        : `${(down * 1024).toFixed(2)}K/s`}
+                  </p>
                 </div>
               </div>
             </section>

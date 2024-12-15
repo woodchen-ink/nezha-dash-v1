@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import React, { useCallback } from "react"
+import { useTranslation } from "react-i18next"
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom"
 
 import Footer from "./components/Footer"
@@ -10,7 +11,6 @@ import ErrorPage from "./pages/ErrorPage"
 import NotFound from "./pages/NotFound"
 import Server from "./pages/Server"
 import ServerDetail from "./pages/ServerDetail"
-import { useTranslation } from "react-i18next"
 
 const App: React.FC = () => {
   const { data: settingData, error } = useQuery({
@@ -48,7 +48,7 @@ const App: React.FC = () => {
     Array.from(tempDiv.childNodes).forEach((node) => {
       if (node.nodeType === Node.ELEMENT_NODE) {
         const element = node as HTMLElement
-          ; (handlers[element.tagName] || handlers.DEFAULT)(element)
+        ;(handlers[element.tagName] || handlers.DEFAULT)(element)
       } else if (node.nodeType === Node.TEXT_NODE) {
         document.body.appendChild(document.createTextNode(node.textContent || ""))
       }
