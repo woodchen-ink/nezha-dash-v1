@@ -411,7 +411,7 @@ function MemChart({ now, data }: { now: number; data: NezhaServer }) {
                     value={mem}
                     primaryColor="hsl(var(--chart-8))"
                   />
-                  <p className="text-xs font-medium">{mem.toFixed(2)}%</p>
+                  <p className="text-xs font-medium">{mem.toFixed(0)}%</p>
                 </div>
               </div>
               <div className="flex flex-col">
@@ -424,7 +424,7 @@ function MemChart({ now, data }: { now: number; data: NezhaServer }) {
                     value={swap}
                     primaryColor="hsl(var(--chart-10))"
                   />
-                  <p className="text-xs font-medium">{swap.toFixed(2)}%</p>
+                  <p className="text-xs font-medium">{swap.toFixed(0)}%</p>
                 </div>
               </div>
             </section>
