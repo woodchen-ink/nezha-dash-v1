@@ -10,6 +10,7 @@ import ErrorPage from "./pages/ErrorPage"
 import NotFound from "./pages/NotFound"
 import Server from "./pages/Server"
 import ServerDetail from "./pages/ServerDetail"
+import { useTranslation } from "react-i18next"
 
 const App: React.FC = () => {
   const { data: settingData, error } = useQuery({
@@ -18,6 +19,7 @@ const App: React.FC = () => {
     refetchOnMount: true,
     refetchOnWindowFocus: true,
   })
+  const { i18n } = useTranslation()
 
   const InjectContext = useCallback((content: string) => {
     const tempDiv = document.createElement("div")
@@ -46,7 +48,7 @@ const App: React.FC = () => {
     Array.from(tempDiv.childNodes).forEach((node) => {
       if (node.nodeType === Node.ELEMENT_NODE) {
         const element = node as HTMLElement
-        ;(handlers[element.tagName] || handlers.DEFAULT)(element)
+          ; (handlers[element.tagName] || handlers.DEFAULT)(element)
       } else if (node.nodeType === Node.TEXT_NODE) {
         document.body.appendChild(document.createTextNode(node.textContent || ""))
       }
@@ -59,6 +61,10 @@ const App: React.FC = () => {
 
   if (!settingData) {
     return null
+  }
+
+  if (settingData?.data?.language && !localStorage.getItem("language")) {
+    i18n.changeLanguage(settingData?.data?.language)
   }
 
   if (settingData?.data?.custom_code) {

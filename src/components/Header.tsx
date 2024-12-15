@@ -24,7 +24,7 @@ function Header() {
   const siteName = settingData?.data?.site_name
 
   useEffect(() => {
-    document.title = siteName || "NEZHA"
+    document.title = siteName || "哪吒监控 Nezha Monitoring"
   }, [siteName])
 
   return (
