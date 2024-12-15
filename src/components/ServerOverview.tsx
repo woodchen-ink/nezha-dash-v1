@@ -104,11 +104,7 @@ export default function ServerOverview({
             </section>
           </CardContent>
         </Card>
-        <Card
-          className={cn(
-            "hover:ring-purple-500 ring-1 ring-transparent transition-all",
-          )}
-        >
+        <Card className={cn("hover:ring-purple-500 ring-1 ring-transparent transition-all")}>
           <CardContent className="flex h-full items-center relative px-6 py-3">
             <section className="flex flex-col gap-1 w-full">
               <div className="flex items-center w-full justify-between">

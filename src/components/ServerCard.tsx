@@ -110,7 +110,7 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
             <div className="flex items-center text-xs font-semibold">
               {down >= 1024
                 ? `${(down / 1024).toFixed(2)}G/s`
-                : up >= 1
+                : down >= 1
                   ? `${down.toFixed(2)}M/s`
                   : `${(down * 1024).toFixed(2)}K/s`}
             </div>
