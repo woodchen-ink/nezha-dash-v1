@@ -15,7 +15,14 @@ import { fetchServerGroup } from "@/lib/nezha-api"
 import { cn, formatNezhaInfo } from "@/lib/utils"
 import { NezhaWebsocketResponse } from "@/types/nezha-api"
 import { ServerGroup } from "@/types/nezha-api"
-import { ChartBarSquareIcon, CogIcon, MapIcon, ViewColumnsIcon } from "@heroicons/react/20/solid"
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  ArrowsUpDownIcon,
+  ChartBarSquareIcon,
+  MapIcon,
+  ViewColumnsIcon,
+} from "@heroicons/react/20/solid"
 import { useQuery } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -137,8 +144,8 @@ export default function Servers() {
     status === "all"
       ? filteredServers
       : filteredServers.filter((server) =>
-        [status].includes(formatNezhaInfo(nezhaWsData.now, server).online ? "online" : "offline"),
-      )
+          [status].includes(formatNezhaInfo(nezhaWsData.now, server).online ? "online" : "offline"),
+        )
 
   filteredServers = filteredServers.sort((a, b) => {
     const serverAInfo = formatNezhaInfo(nezhaWsData.now, a)
@@ -239,13 +246,22 @@ export default function Servers() {
           <PopoverTrigger asChild>
             <button
               className={cn(
-                "rounded-[50px] text-white cursor-pointer [text-shadow:_0_1px_0_rgb(0_0_0_/_20%)] bg-stone-800 p-[10px] transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ",
+                "rounded-[50px] flex items-center gap-1 text-white cursor-pointer [text-shadow:_0_1px_0_rgb(0_0_0_/_20%)] bg-stone-800 p-[10px] transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ",
                 {
                   "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] bg-stone-700": settingsOpen,
                 },
               )}
             >
-              <CogIcon className="size-[13px]" />
+              <p className="text-[10px] font-semibold whitespace-nowrap">
+                {sortType === "default" ? "Sort" : sortType.toUpperCase()}
+              </p>
+              {sortOrder === "asc" && sortType !== "default" ? (
+                <ArrowUpIcon className="size-[13px]" />
+              ) : sortOrder === "desc" && sortType !== "default" ? (
+                <ArrowDownIcon className="size-[13px]" />
+              ) : (
+                <ArrowsUpDownIcon className="size-[13px]" />
+              )}
             </button>
           </PopoverTrigger>
           <PopoverContent className="py-2 px-2 w-fit max-w-60 rounded-[8px]">
