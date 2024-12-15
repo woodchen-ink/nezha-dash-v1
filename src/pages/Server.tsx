@@ -137,8 +137,8 @@ export default function Servers() {
     status === "all"
       ? filteredServers
       : filteredServers.filter((server) =>
-          [status].includes(formatNezhaInfo(nezhaWsData.now, server).online ? "online" : "offline"),
-        )
+        [status].includes(formatNezhaInfo(nezhaWsData.now, server).online ? "online" : "offline"),
+      )
 
   filteredServers = filteredServers.sort((a, b) => {
     const serverAInfo = formatNezhaInfo(nezhaWsData.now, a)
@@ -248,7 +248,7 @@ export default function Servers() {
               <CogIcon className="size-[13px]" />
             </button>
           </PopoverTrigger>
-          <PopoverContent className="py-2 px-2 w-fit max-w-56 rounded-[8px]">
+          <PopoverContent className="py-2 px-2 w-fit max-w-60 rounded-[8px]">
             <div className="flex flex-col gap-2">
               <section className="flex flex-col gap-1">
                 <Label className=" text-stone-500  text-xs">Sort by</Label>
