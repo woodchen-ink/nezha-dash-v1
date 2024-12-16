@@ -262,13 +262,14 @@ export default function Servers() {
           <PopoverTrigger asChild>
             <button
               className={cn(
-                "rounded-[50px] flex items-center gap-1 text-white cursor-pointer [text-shadow:_0_1px_0_rgb(0_0_0_/_20%)] bg-stone-800 p-[10px] transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ",
+                "rounded-[50px] flex items-center gap-1 dark:text-white border dark:border-none text-black cursor-pointer dark:[text-shadow:_0_1px_0_rgb(0_0_0_/_20%)] dark:bg-stone-800 bg-stone-100  p-[10px] transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ",
                 {
-                  "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] bg-stone-700": settingsOpen,
+                  "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] dark:bg-stone-700 bg-stone-200":
+                    settingsOpen,
                 },
               )}
             >
-              <p className="text-[10px] font-semibold whitespace-nowrap">
+              <p className="text-[10px] font-bold whitespace-nowrap">
                 {sortType === "default" ? "Sort" : sortType.toUpperCase()}
               </p>
               {sortOrder === "asc" && sortType !== "default" ? (
