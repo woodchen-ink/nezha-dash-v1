@@ -23,6 +23,23 @@ function Header() {
 
   const siteName = settingData?.data?.site_name
 
+  // @ts-expect-error CustomLogo is a global variable
+  const customLogo = window.CustomLogo || "/apple-touch-icon.png"
+
+  // @ts-expect-error CustomDesc is a global variable
+  const customDesc = window.CustomDesc || t("nezha")
+
+  useEffect(() => {
+    const link = document.querySelector("link[rel*='icon']") || document.createElement("link")
+    // @ts-expect-error set link.type
+    link.type = "image/x-icon"
+    // @ts-expect-error set link.rel
+    link.rel = "shortcut icon"
+    // @ts-expect-error set link.href
+    link.href = customLogo
+    document.getElementsByTagName("head")[0].appendChild(link)
+  }, [customLogo])
+
   useEffect(() => {
     document.title = siteName || "哪吒监控 Nezha Monitoring"
   }, [siteName])
@@ -39,7 +56,7 @@ function Header() {
               width={40}
               height={40}
               alt="apple-touch-icon"
-              src={"/apple-touch-icon.png"}
+              src={customLogo}
               className="relative m-0! border-2 border-transparent h-6 w-6 object-cover object-top p-0!"
             />
           </div>
@@ -49,7 +66,7 @@ function Header() {
             siteName || "NEZHA"
           )}
           <Separator orientation="vertical" className="mx-2 hidden h-4 w-[1px] md:block" />
-          <p className="hidden text-sm font-medium opacity-40 md:block">{t("nezha")}</p>
+          <p className="hidden text-sm font-medium opacity-40 md:block">{customDesc}</p>
         </section>
         <section className="flex items-center gap-2">
           <DashboardLink />
