@@ -1,9 +1,23 @@
 import { createContext } from "react"
 
-export type SortType = "default" | "cpu" | "mem" | "stg" | "up" | "down" | "up total" | "down total"
+export type SortType =
+  | "default"
+  | "name"
+  | "uptime"
+  | "system"
+  | "cpu"
+  | "mem"
+  | "stg"
+  | "up"
+  | "down"
+  | "up total"
+  | "down total"
 
 export const SORT_TYPES: SortType[] = [
   "default",
+  "name",
+  "uptime",
+  "system",
   "cpu",
   "mem",
   "stg",

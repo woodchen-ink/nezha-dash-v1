@@ -151,13 +151,29 @@ export default function Servers() {
     const serverAInfo = formatNezhaInfo(nezhaWsData.now, a)
     const serverBInfo = formatNezhaInfo(nezhaWsData.now, b)
 
-    if (!serverAInfo.online && serverBInfo.online) return 1
-    if (serverAInfo.online && !serverBInfo.online) return -1
-    if (!serverAInfo.online && !serverBInfo.online) return 0
+    if (sortType !== "name" && sortType !== "system") {
+      // 仅在非 "name" 排序时，先按在线状态排序
+      if (!serverAInfo.online && serverBInfo.online) return 1
+      if (serverAInfo.online && !serverBInfo.online) return -1
+      if (!serverAInfo.online && !serverBInfo.online) {
+        // 如果两者都离线，可以继续按照其他条件排序，或者保持原序
+        // 这里选择保持原序
+        return 0
+      }
+    }
 
     let comparison = 0
 
     switch (sortType) {
+      case "name":
+        comparison = a.name.localeCompare(b.name)
+        break
+      case "uptime":
+        comparison = (a.state?.uptime ?? 0) - (b.state?.uptime ?? 0)
+        break
+      case "system":
+        comparison = a.host.platform.localeCompare(b.host.platform)
+        break
       case "cpu":
         comparison = (a.state?.cpu ?? 0) - (b.state?.cpu ?? 0)
         break
