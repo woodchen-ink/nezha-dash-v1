@@ -1,8 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
-import React, { use, useCallback,useEffect } from "react"
+import React, {  useCallback,useEffect } from "react"
 import { useTranslation } from "react-i18next"
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom"
-
 import Footer from "./components/Footer"
 import Header from "./components/Header"
 import { fetchSetting } from "./lib/nezha-api"
