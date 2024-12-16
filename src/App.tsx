@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import React, { useCallback } from "react"
+import React, { useCallback, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom"
 
@@ -55,6 +55,12 @@ const App: React.FC = () => {
     })
   }, [])
 
+  useEffect(() => {
+    if (settingData?.data?.custom_code) {
+      InjectContext(settingData?.data?.custom_code)
+    }
+  }, [settingData?.data?.custom_code])
+
   if (error) {
     return <ErrorPage code={500} message={error.message} />
   }
@@ -65,10 +71,6 @@ const App: React.FC = () => {
 
   if (settingData?.data?.language && !localStorage.getItem("language")) {
     i18n.changeLanguage(settingData?.data?.language)
-  }
-
-  if (settingData?.data?.custom_code) {
-    InjectContext(settingData?.data?.custom_code)
   }
 
   const customBackgroundImage =
