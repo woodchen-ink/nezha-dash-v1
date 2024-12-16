@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query"
-import React, {  useCallback,useEffect } from "react"
+import React, { useCallback, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom"
+
 import Footer from "./components/Footer"
 import Header from "./components/Header"
 import { fetchSetting } from "./lib/nezha-api"
@@ -55,10 +56,10 @@ const App: React.FC = () => {
   }, [])
 
   useEffect(() => {
-  if (settingData?.data?.custom_code) {
-    InjectContext(settingData?.data?.custom_code)
-  }
-  },[settingData?.data?.custom_code])
+    if (settingData?.data?.custom_code) {
+      InjectContext(settingData?.data?.custom_code)
+    }
+  }, [settingData?.data?.custom_code])
 
   if (error) {
     return <ErrorPage code={500} message={error.message} />
@@ -71,8 +72,6 @@ const App: React.FC = () => {
   if (settingData?.data?.language && !localStorage.getItem("language")) {
     i18n.changeLanguage(settingData?.data?.language)
   }
-
- 
 
   const customBackgroundImage =
     // @ts-expect-error ShowNetTransfer is a global variable
