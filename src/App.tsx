@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query"
-import React, {  useEffect } from "react"
+import React, { useEffect } from "react"
 import { useTranslation } from "react-i18next"
-import {InjectContext} from "./lib/inject"
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom"
 
 import Footer from "./components/Footer"
 import Header from "./components/Header"
+import { InjectContext } from "./lib/inject"
 import { fetchSetting } from "./lib/nezha-api"
 import { cn } from "./lib/utils"
 import ErrorPage from "./pages/ErrorPage"
@@ -21,7 +21,6 @@ const App: React.FC = () => {
     refetchOnWindowFocus: true,
   })
   const { i18n } = useTranslation()
-
 
   useEffect(() => {
     if (settingData?.data?.custom_code) {
