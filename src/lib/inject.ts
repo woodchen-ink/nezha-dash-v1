@@ -78,14 +78,13 @@ export const InjectContext = (content: string) => {
   cleanInjectedResources()
 
   const externalScriptQueue: Promise<void>[] = []
-  const inlineScripts: HTMLScriptElement[] = []
 
   Array.from(tempDiv.childNodes).forEach((node) => {
     if (node.nodeType === Node.ELEMENT_NODE) {
       const element = node as HTMLElement
       if (element.tagName === "SCRIPT" && !(element as HTMLScriptElement).src) {
-        // 收集内联脚本，稍后执行
-        inlineScripts.push(element as HTMLScriptElement)
+        // 直接执行内联脚本
+        executeInlineScript(element as HTMLScriptElement)
       } else {
         const handler = handlers[element.tagName] || handlers.DEFAULT
         externalScriptQueue.push(handler(element))
@@ -95,11 +94,7 @@ export const InjectContext = (content: string) => {
     }
   })
 
-  // 等待外部脚本加载完成后再执行内联脚本
   return Promise.all(externalScriptQueue)
-    .then(() => {
-      inlineScripts.forEach((script) => executeInlineScript(script))
-    })
     .then(() => {
       console.log("All resources have been injected successfully.")
     })
