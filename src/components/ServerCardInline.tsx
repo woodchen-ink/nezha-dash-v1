@@ -80,20 +80,56 @@ export default function ServerCardInline({
             >
               {name}
             </p>
-            {parsedData &&
+            {parsedData?.billingDataMod &&
               (daysLeft >= 0 ? (
-                <p
-                  className={cn("text-[10px] text-muted-foreground", {
-                    "text-orange-600": daysLeft <= 7 && !isNeverExpire,
-                  })}
-                >
-                  剩余时间: {isNeverExpire ? "永久" : daysLeft + "天"}
-                </p>
+                <>
+                  <p className={cn("text-[10px] text-muted-foreground")}>
+                    剩余时间: {isNeverExpire ? "永久" : daysLeft + "天"}
+                  </p>
+                  {parsedData.billingDataMod.amount !== "0" ? (
+                    <p className={cn("text-[10px] text-muted-foreground")}>
+                      价格: {parsedData.billingDataMod.amount}/{parsedData.billingDataMod.cycle}
+                    </p>
+                  ) : (
+                    <p className={cn("text-[10px] text-green-600")}>免费</p>
+                  )}
+                </>
               ) : (
-                <p className={cn("text-[10px] text-muted-foreground text-red-600")}>
-                  已过期: {daysLeft * -1} 天
-                </p>
+                <>
+                  <p className={cn("text-[10px] text-muted-foreground text-red-600")}>
+                    已过期: {daysLeft * -1} 天
+                  </p>
+                  {parsedData.billingDataMod.amount !== "0" ? (
+                    <p className={cn("text-[10px] text-muted-foreground ")}>
+                      价格: {parsedData.billingDataMod.amount}/{parsedData.billingDataMod.cycle}
+                    </p>
+                  ) : (
+                    <p className={cn("text-[10px] text-green-600 ")}>免费</p>
+                  )}
+                </>
               ))}
+            {parsedData?.planDataMod && (
+              <section className="flex gap-1 items-center flex-wrap mt-0.5">
+                {parsedData.planDataMod.bandwidth !== "" && (
+                  <p
+                    className={cn(
+                      "text-[9px] bg-purple-600 dark:bg-purple-800 text-purple-200 dark:text-purple-300  w-fit rounded-[5px] px-[3px] py-[1.5px]",
+                    )}
+                  >
+                    {parsedData.planDataMod.bandwidth}
+                  </p>
+                )}
+                {parsedData.planDataMod.trafficVol !== "" && (
+                  <p
+                    className={cn(
+                      "text-[9px] bg-green-600 text-green-200 dark:bg-green-800 dark:text-green-300  w-fit rounded-[5px] px-[3px] py-[1.5px]",
+                    )}
+                  >
+                    {parsedData.planDataMod.trafficVol}
+                  </p>
+                )}
+              </section>
+            )}
           </div>
         </section>
         <Separator orientation="vertical" className="h-8 mx-0 ml-2" />
@@ -190,7 +226,7 @@ export default function ServerCardInline({
         >
           {showFlag ? <ServerFlag country_code={country_code} /> : null}
         </div>
-        <div className="relative">
+        <div className="relative flex flex-col">
           <p
             className={cn(
               "break-all font-bold w-28 tracking-tight",
@@ -199,6 +235,56 @@ export default function ServerCardInline({
           >
             {name}
           </p>
+          {parsedData?.billingDataMod &&
+            (daysLeft >= 0 ? (
+              <>
+                <p className={cn("text-[10px] text-muted-foreground")}>
+                  剩余时间: {isNeverExpire ? "永久" : daysLeft + "天"}
+                </p>
+                {parsedData.billingDataMod.amount !== "0" ? (
+                  <p className={cn("text-[10px] text-muted-foreground")}>
+                    价格: {parsedData.billingDataMod.amount}/{parsedData.billingDataMod.cycle}
+                  </p>
+                ) : (
+                  <p className={cn("text-[10px] text-green-600")}>免费</p>
+                )}
+              </>
+            ) : (
+              <>
+                <p className={cn("text-[10px] text-muted-foreground text-red-600")}>
+                  已过期: {daysLeft * -1} 天
+                </p>
+                {parsedData.billingDataMod.amount !== "0" ? (
+                  <p className={cn("text-[10px] text-muted-foreground ")}>
+                    价格: {parsedData.billingDataMod.amount}/{parsedData.billingDataMod.cycle}
+                  </p>
+                ) : (
+                  <p className={cn("text-[10px] text-green-600 ")}>免费</p>
+                )}
+              </>
+            ))}
+          {parsedData?.planDataMod && (
+            <section className="flex gap-1 items-center flex-wrap mt-0.5">
+              {parsedData.planDataMod.bandwidth !== "" && (
+                <p
+                  className={cn(
+                    "text-[9px] bg-purple-600 dark:bg-purple-800 text-purple-200 dark:text-purple-300  w-fit rounded-[5px] px-[3px] py-[1.5px]",
+                  )}
+                >
+                  {parsedData.planDataMod.bandwidth}
+                </p>
+              )}
+              {parsedData.planDataMod.trafficVol !== "" && (
+                <p
+                  className={cn(
+                    "text-[9px] bg-green-600 text-green-200 dark:bg-green-800 dark:text-green-300  w-fit rounded-[5px] px-[3px] py-[1.5px]",
+                  )}
+                >
+                  {parsedData.planDataMod.trafficVol}
+                </p>
+              )}
+            </section>
+          )}
         </div>
       </section>
     </Card>

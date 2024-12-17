@@ -127,19 +127,19 @@ interface BillingData {
   amount: string
 }
 
-// interface PlanData {
-//   bandwidth: string;
-//   trafficVol: string;
-//   trafficType: string;
-//   IPv4: string;
-//   IPv6: string;
-//   networkRoute: string;
-//   extra: string;
-// }
+interface PlanData {
+  bandwidth: string
+  trafficVol: string
+  trafficType: string
+  IPv4: string
+  IPv6: string
+  networkRoute: string
+  extra: string
+}
 
 interface PublicNoteData {
   billingDataMod: BillingData
-  // planDataMod: PlanData;
+  planDataMod: PlanData
 }
 
 export function parsePublicNote(publicNote: string): PublicNoteData | null {
@@ -156,15 +156,15 @@ export function parsePublicNote(publicNote: string): PublicNoteData | null {
         cycle: data.billingDataMod.cycle || "",
         amount: data.billingDataMod.amount || "",
       },
-      // planDataMod: {
-      //   bandwidth: data.planDataMod.bandwidth || "",
-      //   trafficVol: data.planDataMod.trafficVol || "",
-      //   trafficType: data.planDataMod.trafficType || "",
-      //   IPv4: data.planDataMod.IPv4 || "",
-      //   IPv6: data.planDataMod.IPv6 || "",
-      //   networkRoute: data.planDataMod.networkRoute || "",
-      //   extra: data.planDataMod.extra || "",
-      // },
+      planDataMod: {
+        bandwidth: data.planDataMod.bandwidth || "",
+        trafficVol: data.planDataMod.trafficVol || "",
+        trafficType: data.planDataMod.trafficType || "",
+        IPv4: data.planDataMod.IPv4 || "",
+        IPv6: data.planDataMod.IPv6 || "",
+        networkRoute: data.planDataMod.networkRoute || "",
+        extra: data.planDataMod.extra || "",
+      },
     }
   } catch (error) {
     console.error("Error parsing public note:", error)
