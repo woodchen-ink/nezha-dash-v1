@@ -138,8 +138,8 @@ interface PlanData {
 }
 
 interface PublicNoteData {
-  billingDataMod: BillingData
-  planDataMod: PlanData
+  billingDataMod?: BillingData
+  planDataMod?: PlanData
 }
 
 export function parsePublicNote(publicNote: string): PublicNoteData | null {
@@ -148,6 +148,34 @@ export function parsePublicNote(publicNote: string): PublicNoteData | null {
       return null
     }
     const data = JSON.parse(publicNote)
+    if (!data.billingDataMod && !data.planDataMod) {
+      return null
+    }
+    if (data.billingDataMod && !data.planDataMod) {
+      return {
+        billingDataMod: {
+          startDate: data.billingDataMod.startDate || "",
+          endDate: data.billingDataMod.endDate,
+          autoRenewal: data.billingDataMod.autoRenewal || "",
+          cycle: data.billingDataMod.cycle || "",
+          amount: data.billingDataMod.amount || "",
+        },
+      }
+    }
+    if (!data.billingDataMod && data.planDataMod) {
+      return {
+        planDataMod: {
+          bandwidth: data.planDataMod.bandwidth || "",
+          trafficVol: data.planDataMod.trafficVol || "",
+          trafficType: data.planDataMod.trafficType || "",
+          IPv4: data.planDataMod.IPv4 || "",
+          IPv6: data.planDataMod.IPv6 || "",
+          networkRoute: data.planDataMod.networkRoute || "",
+          extra: data.planDataMod.extra || "",
+        },
+      }
+    }
+
     return {
       billingDataMod: {
         startDate: data.billingDataMod.startDate || "",
