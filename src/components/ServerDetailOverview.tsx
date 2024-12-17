@@ -59,7 +59,7 @@ export default function ServerDetailOverview({ server_id }: { server_id: string 
     <div>
       <div
         onClick={() => navigate("/")}
-        className="flex flex-none cursor-pointer font-semibold leading-none items-center break-all tracking-tight gap-0.5 text-xl"
+        className="flex flex-none cursor-pointer font-semibold leading-none items-center break-all tracking-tight gap-1 text-xl"
       >
         <BackIcon />
         {name}
