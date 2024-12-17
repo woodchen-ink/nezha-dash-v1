@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import React, { useEffect } from "react"
 import { useTranslation } from "react-i18next"
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom"
+
 import Footer from "./components/Footer"
 import Header from "./components/Header"
 import { InjectContext } from "./lib/inject"
