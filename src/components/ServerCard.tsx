@@ -72,12 +72,15 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
                 <p className={cn("text-[10px] text-muted-foreground")}>
                   剩余时间: {isNeverExpire ? "永久" : daysLeft + "天"}
                 </p>
-                {parsedData.billingDataMod.amount !== "0" ? (
-                  <p className={cn("text-[10px] text-muted-foreground")}>
+                {parsedData.billingDataMod.amount !== "0" &&
+                parsedData.billingDataMod.amount !== "-1" ? (
+                  <p className={cn("text-[10px] text-muted-foreground ")}>
                     价格: {parsedData.billingDataMod.amount}/{parsedData.billingDataMod.cycle}
                   </p>
+                ) : parsedData.billingDataMod.amount === "0" ? (
+                  <p className={cn("text-[10px] text-green-600 ")}>免费</p>
                 ) : (
-                  <p className={cn("text-[10px] text-green-600")}>免费</p>
+                  <p className={cn("text-[10px] text-pink-600 ")}>按量收费</p>
                 )}
               </>
             ) : (
@@ -85,12 +88,15 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
                 <p className={cn("text-[10px] text-muted-foreground text-red-600")}>
                   已过期: {daysLeft * -1} 天
                 </p>
-                {parsedData.billingDataMod.amount !== "0" ? (
+                {parsedData.billingDataMod.amount !== "0" &&
+                parsedData.billingDataMod.amount !== "-1" ? (
                   <p className={cn("text-[10px] text-muted-foreground ")}>
                     价格: {parsedData.billingDataMod.amount}/{parsedData.billingDataMod.cycle}
                   </p>
-                ) : (
+                ) : parsedData.billingDataMod.amount === "0" ? (
                   <p className={cn("text-[10px] text-green-600 ")}>免费</p>
+                ) : (
+                  <p className={cn("text-[10px] text-pink-600 ")}>按量收费</p>
                 )}
               </>
             ))}
@@ -202,12 +208,15 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
                 <p className={cn("text-[10px] text-muted-foreground")}>
                   剩余时间: {isNeverExpire ? "永久" : daysLeft + "天"}
                 </p>
-                {parsedData.billingDataMod.amount !== "0" ? (
-                  <p className={cn("text-[10px] text-muted-foreground")}>
+                {parsedData.billingDataMod.amount !== "0" &&
+                parsedData.billingDataMod.amount !== "-1" ? (
+                  <p className={cn("text-[10px] text-muted-foreground ")}>
                     价格: {parsedData.billingDataMod.amount}/{parsedData.billingDataMod.cycle}
                   </p>
+                ) : parsedData.billingDataMod.amount === "0" ? (
+                  <p className={cn("text-[10px] text-green-600 ")}>免费</p>
                 ) : (
-                  <p className={cn("text-[10px] text-green-600")}>免费</p>
+                  <p className={cn("text-[10px] text-pink-600 ")}>按量收费</p>
                 )}
               </>
             ) : (
@@ -215,12 +224,15 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
                 <p className={cn("text-[10px] text-muted-foreground text-red-600")}>
                   已过期: {daysLeft * -1} 天
                 </p>
-                {parsedData.billingDataMod.amount !== "0" ? (
+                {parsedData.billingDataMod.amount !== "0" &&
+                parsedData.billingDataMod.amount !== "-1" ? (
                   <p className={cn("text-[10px] text-muted-foreground ")}>
                     价格: {parsedData.billingDataMod.amount}/{parsedData.billingDataMod.cycle}
                   </p>
-                ) : (
+                ) : parsedData.billingDataMod.amount === "0" ? (
                   <p className={cn("text-[10px] text-green-600 ")}>免费</p>
+                ) : (
+                  <p className={cn("text-[10px] text-pink-600 ")}>按量收费</p>
                 )}
               </>
             ))}
