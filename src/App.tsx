@@ -80,14 +80,14 @@ const App: React.FC = () => {
   return (
     <Router basename={import.meta.env.BASE_URL}>
       <div
-        className={cn("flex min-h-screen w-full flex-col", {
-          " bg-background": !customBackgroundImage,
-        })}
+        className={cn(
+          "flex min-h-screen w-full flex-col bg-cover bg-no-repeat bg-center bg-fixed",
+          {
+            "bg-background": !customBackgroundImage,
+          },
+        )}
         style={{
-          backgroundImage: customBackgroundImage ? "url(" + customBackgroundImage + ")" : undefined,
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
+          backgroundImage: customBackgroundImage ? `url(${customBackgroundImage})` : undefined,
         }}
       >
         <main className="flex min-h-[calc(100vh-calc(var(--spacing)*16))] flex-1 flex-col gap-4 p-4 md:p-10 md:pt-8">
