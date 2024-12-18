@@ -28,7 +28,7 @@ export default function ServerOverview({
   const { status, setStatus } = useStatus()
 
   // @ts-expect-error DisableAnimatedMan is a global variable
-  const disableAnimatedMan = window.DisableAnimatedMan === "true"
+  const disableAnimatedMan = window.DisableAnimatedMan as boolean
 
   // @ts-expect-error CustomIllustration is a global variable
   const customIllustration = window.CustomIllustration || "/animated-man.webp"

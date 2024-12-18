@@ -28,7 +28,7 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
 
   const showFlag = true
   // @ts-expect-error ShowNetTransfer is a global variable
-  const showNetTransfer = window.ShowNetTransfer === "true"
+  const showNetTransfer = window.ShowNetTransfer as boolean
 
   const parsedData = parsePublicNote(public_note)
 
