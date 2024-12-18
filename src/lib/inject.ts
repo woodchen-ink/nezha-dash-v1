@@ -21,11 +21,14 @@ export const InjectContext = (content: string) => {
     })
   }
 
-  const executeInlineScript = (scriptElement: HTMLScriptElement): void => {
-    const script = document.createElement("script")
-    script.textContent = scriptElement.textContent
-    script.setAttribute(INJECTION_MARK, "true") // 添加标识
-    document.body.appendChild(script)
+  const executeInlineScript = (scriptContent: string): Promise<void> => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script")
+      script.textContent = scriptContent
+      script.setAttribute(INJECTION_MARK, "true") // 添加标识
+      document.body.appendChild(script)
+      resolve()
+    })
   }
 
   const loadStyle = (styleElement: HTMLStyleElement): Promise<void> => {
@@ -56,8 +59,8 @@ export const InjectContext = (content: string) => {
         // 加载外部脚本
         return loadExternalScript(scriptElement)
       } else {
-        // 推迟执行内联脚本，后续手动执行
-        return Promise.resolve()
+        // 执行内联脚本
+        return executeInlineScript(scriptElement.textContent || "")
       }
     },
     STYLE: (element) => loadStyle(element as HTMLStyleElement),
@@ -77,28 +80,20 @@ export const InjectContext = (content: string) => {
   // 开始注入前清理已有资源
   cleanInjectedResources()
 
-  const externalScriptQueue: Promise<void>[] = []
-
-  Array.from(tempDiv.childNodes).forEach((node) => {
-    if (node.nodeType === Node.ELEMENT_NODE) {
-      const element = node as HTMLElement
-      if (element.tagName === "SCRIPT" && !(element as HTMLScriptElement).src) {
-        // 直接执行内联脚本
-        executeInlineScript(element as HTMLScriptElement)
-      } else {
+  const executeSequentially = async () => {
+    for (const node of Array.from(tempDiv.childNodes)) {
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        const element = node as HTMLElement
         const handler = handlers[element.tagName] || handlers.DEFAULT
-        externalScriptQueue.push(handler(element))
+        await handler(element) // 按顺序等待当前脚本或资源完成处理
+      } else if (node.nodeType === Node.TEXT_NODE) {
+        document.body.appendChild(document.createTextNode(node.textContent || ""))
       }
-    } else if (node.nodeType === Node.TEXT_NODE) {
-      document.body.appendChild(document.createTextNode(node.textContent || ""))
     }
-  })
+    console.log("All resources have been injected and executed in sequence.")
+  }
 
-  return Promise.all(externalScriptQueue)
-    .then(() => {
-      console.log("All resources have been injected successfully.")
-    })
-    .catch((error) => {
-      console.error("Error during resource injection:", error)
-    })
+  return executeSequentially().catch((error) => {
+    console.error("Error during resource injection:", error)
+  })
 }
