@@ -30,6 +30,9 @@ export default function ServerOverview({
   // @ts-expect-error DisableAnimatedMan is a global variable
   const disableAnimatedMan = window.DisableAnimatedMan === "true"
 
+  // @ts-expect-error CustomIllustration is a global variable
+  const customIllustration = window.CustomIllustration || "/animated-man.webp"
+
   return (
     <>
       <section className="grid grid-cols-2 gap-4 lg:grid-cols-4">
@@ -133,7 +136,7 @@ export default function ServerOverview({
               <img
                 className="absolute right-3 top-[-85px] z-50 w-20 scale-90 group-hover:opacity-50 md:scale-100 transition-all"
                 alt={"animated-man"}
-                src={"/animated-man.webp"}
+                src={customIllustration}
                 loading="eager"
               />
             )}
