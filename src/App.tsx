@@ -46,18 +46,19 @@ const App: React.FC = () => {
 
   return (
     <Router basename={import.meta.env.BASE_URL}>
+      {/* 固定定位的背景层 */}
+      {customBackgroundImage && (
+        <div
+          className="fixed inset-0 z-0 bg-cover min-h-lvh bg-no-repeat bg-center"
+          style={{ backgroundImage: `url(${customBackgroundImage})` }}
+        />
+      )}
       <div
-        className={cn(
-          "flex min-h-screen w-full flex-col bg-cover bg-no-repeat bg-center bg-fixed",
-          {
-            "bg-background": !customBackgroundImage,
-          },
-        )}
-        style={{
-          backgroundImage: customBackgroundImage ? `url(${customBackgroundImage})` : undefined,
-        }}
+        className={cn("flex min-h-screen w-full flex-col", {
+          "bg-background": !customBackgroundImage,
+        })}
       >
-        <main className="flex min-h-[calc(100vh-calc(var(--spacing)*16))] flex-1 flex-col gap-4 p-4 md:p-10 md:pt-8">
+        <main className="flex z-20 min-h-[calc(100vh-calc(var(--spacing)*16))] flex-1 flex-col gap-4 p-4 md:p-10 md:pt-8">
           <Header />
           <Routes>
             <Route path="/" element={<Server />} />
