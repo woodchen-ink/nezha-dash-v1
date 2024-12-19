@@ -10,9 +10,19 @@ export default function GroupSwitch({
   currentTab: string
   setCurrentTab: (tab: string) => void
 }) {
+  const customBackgroundImage =
+    // @ts-expect-error ShowNetTransfer is a global variable
+    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
   return (
     <div className="scrollbar-hidden z-50 flex flex-col items-start overflow-x-scroll rounded-[50px]">
-      <div className="flex items-center gap-1 rounded-[50px] bg-stone-100 p-[3px] dark:bg-stone-800">
+      <div
+        className={cn(
+          "flex items-center gap-1 rounded-[50px] bg-stone-100 p-[3px] dark:bg-stone-800",
+          {
+            "bg-stone-100/50 dark:bg-stone-800/50": customBackgroundImage,
+          },
+        )}
+      >
         {tabs.map((tab: string) => (
           <div
             key={tab}

@@ -33,6 +33,10 @@ export default function ServerOverview({
   // @ts-expect-error CustomIllustration is a global variable
   const customIllustration = window.CustomIllustration || "/animated-man.webp"
 
+  const customBackgroundImage =
+    // @ts-expect-error ShowNetTransfer is a global variable
+    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+
   return (
     <>
       <section className="grid grid-cols-2 gap-4 lg:grid-cols-4">
@@ -40,7 +44,9 @@ export default function ServerOverview({
           onClick={() => {
             setStatus("all")
           }}
-          className={cn("hover:border-blue-500 cursor-pointer transition-all")}
+          className={cn("hover:border-blue-500 cursor-pointer transition-all", {
+            "bg-card/50": customBackgroundImage,
+          })}
         >
           <CardContent className="flex h-full items-center px-6 py-3">
             <section className="flex flex-col gap-1">
@@ -60,6 +66,9 @@ export default function ServerOverview({
           }}
           className={cn(
             "cursor-pointer hover:ring-green-500 ring-1 ring-transparent transition-all",
+            {
+              "bg-card/50": customBackgroundImage,
+            },
             {
               "ring-green-500 ring-2 border-transparent": status === "online",
             },
@@ -88,6 +97,9 @@ export default function ServerOverview({
           className={cn(
             "cursor-pointer hover:ring-red-500 ring-1 ring-transparent transition-all",
             {
+              "bg-card/50": customBackgroundImage,
+            },
+            {
               "ring-red-500 ring-2 border-transparent": status === "offline",
             },
           )}
@@ -107,7 +119,11 @@ export default function ServerOverview({
             </section>
           </CardContent>
         </Card>
-        <Card className={cn("hover:ring-purple-500 ring-1 ring-transparent transition-all")}>
+        <Card
+          className={cn("hover:ring-purple-500 ring-1 ring-transparent transition-all", {
+            "bg-card/50": customBackgroundImage,
+          })}
+        >
           <CardContent className="flex h-full items-center relative px-6 py-3">
             <section className="flex flex-col gap-1 w-full">
               <div className="flex items-center w-full justify-between">

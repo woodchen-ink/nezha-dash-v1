@@ -27,6 +27,11 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
   } = formatNezhaInfo(now, serverInfo)
 
   const showFlag = true
+
+  const customBackgroundImage =
+    // @ts-expect-error ShowNetTransfer is a global variable
+    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+
   // @ts-expect-error ShowNetTransfer is a global variable
   const showNetTransfer = window.ShowNetTransfer as boolean
 
@@ -47,6 +52,9 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
     <Card
       className={cn(
         "flex flex-col items-center justify-start gap-3 p-3 md:px-5 lg:flex-row cursor-pointer hover:bg-accent/50 transition-colors",
+        {
+          "bg-card/50": customBackgroundImage,
+        },
       )}
       onClick={() => navigate(`/server/${serverInfo.id}`)}
     >
@@ -187,6 +195,9 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
       className={cn(
         "flex flex-col items-center justify-start gap-3 p-3 md:px-5 lg:flex-row cursor-pointer hover:bg-accent/50 transition-colors",
         showNetTransfer ? "lg:min-h-[91px] min-h-[123px]" : "lg:min-h-[61px] min-h-[93px]",
+        {
+          "bg-card/50": customBackgroundImage,
+        },
       )}
       onClick={() => navigate(`/server/${serverInfo.id}`, { replace: true })}
     >

@@ -29,11 +29,17 @@ export const CycleTransferStatsClient: React.FC<CycleTransferStatsClientProps> =
   className,
 }) => {
   const { t } = useTranslation()
+  const customBackgroundImage =
+    // @ts-expect-error ShowNetTransfer is a global variable
+    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
   return (
     <div
       className={cn(
-        "w-full bg-white px-4 py-3 dark:bg-black rounded-lg border bg-card text-card-foreground shadow-lg shadow-neutral-200/40 dark:shadow-none space-y-2",
+        "w-full bg-white px-4 py-3 rounded-lg border bg-card text-card-foreground shadow-lg shadow-neutral-200/40 dark:shadow-none space-y-2",
         className,
+        {
+          "bg-card/50": customBackgroundImage,
+        },
       )}
     >
       {serverStats.map(({ serverId, serverName, transfer, nextUpdate }) => {

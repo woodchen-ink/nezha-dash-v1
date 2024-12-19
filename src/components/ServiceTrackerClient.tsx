@@ -23,11 +23,17 @@ export const ServiceTrackerClient: React.FC<ServiceTrackerProps> = ({
   avgDelay = 0,
 }) => {
   const { t } = useTranslation()
+  const customBackgroundImage =
+    // @ts-expect-error ShowNetTransfer is a global variable
+    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
   return (
     <div
       className={cn(
-        "w-full space-y-3 bg-white px-4 py-4 dark:bg-black  rounded-lg border bg-card text-card-foreground shadow-lg shadow-neutral-200/40 dark:shadow-none",
+        "w-full space-y-3 bg-white px-4 py-4  rounded-lg border bg-card text-card-foreground shadow-lg shadow-neutral-200/40 dark:shadow-none",
         className,
+        {
+          "bg-card/50": customBackgroundImage,
+        },
       )}
     >
       <div className="flex justify-between items-center">

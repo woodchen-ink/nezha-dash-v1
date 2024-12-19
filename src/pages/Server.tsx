@@ -43,6 +43,10 @@ export default function Servers() {
   const [settingsOpen, setSettingsOpen] = useState<boolean>(false)
   const [currentGroup, setCurrentGroup] = useState<string>("All")
 
+  const customBackgroundImage =
+    // @ts-expect-error ShowNetTransfer is a global variable
+    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+
   useEffect(() => {
     const showServicesState = localStorage.getItem("showServices")
     if (showServicesState !== null) {
@@ -224,6 +228,9 @@ export default function Servers() {
               {
                 "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] bg-blue-500": showMap === "1",
               },
+              {
+                "bg-opacity-50": customBackgroundImage,
+              },
             )}
           >
             <MapIcon className="size-[13px]" />
@@ -237,6 +244,9 @@ export default function Servers() {
               "rounded-[50px] text-white cursor-pointer [text-shadow:_0_1px_0_rgb(0_0_0_/_20%)] bg-blue-600  p-[10px] transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ",
               {
                 "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] bg-blue-500": showServices === "1",
+              },
+              {
+                "bg-opacity-50": customBackgroundImage,
               },
             )}
           >
@@ -252,6 +262,9 @@ export default function Servers() {
               {
                 "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] bg-blue-500": inline === "1",
               },
+              {
+                "bg-opacity-50": customBackgroundImage,
+              },
             )}
           >
             <ViewColumnsIcon className="size-[13px]" />
@@ -266,6 +279,9 @@ export default function Servers() {
                 {
                   "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] dark:bg-stone-700 bg-stone-200":
                     settingsOpen,
+                },
+                {
+                  "dark:bg-stone-800/50 bg-stone-100/50 ": customBackgroundImage,
                 },
               )}
             >

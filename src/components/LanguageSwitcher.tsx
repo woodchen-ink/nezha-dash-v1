@@ -7,11 +7,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { cn } from "@/lib/utils"
 import { CheckCircleIcon } from "@heroicons/react/20/solid"
 import { useTranslation } from "react-i18next"
 
 export function LanguageSwitcher() {
   const { t, i18n } = useTranslation()
+
+  const customBackgroundImage =
+    // @ts-expect-error ShowNetTransfer is a global variable
+    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
 
   const locale = i18n.languages[0]
 
@@ -32,7 +37,9 @@ export function LanguageSwitcher() {
         <Button
           variant="outline"
           size="sm"
-          className="rounded-full px-[9px] bg-white dark:bg-black"
+          className={cn("rounded-full px-[9px] bg-white dark:bg-black", {
+            "bg-white/50 dark:bg-black/50": customBackgroundImage,
+          })}
         >
           {localeItems.find((item) => item.code === locale)?.name}
           <span className="sr-only">Change language</span>
