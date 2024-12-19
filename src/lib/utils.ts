@@ -109,20 +109,23 @@ export function getDaysBetweenDatesWithAutoRenewal({
     }
   }
 
+  if (nowTime < endTime) {
+    return {
+      days: getDaysBetweenDates(endDate, new Date(nowTime).toISOString()),
+      cycleLabel: cycleLabel,
+      remainingPercentage:
+        getDaysBetweenDates(endDate, new Date(nowTime).toISOString()) /
+        (30 * months) >
+        1
+          ? 1
+          : getDaysBetweenDates(endDate, new Date(nowTime).toISOString()) /
+          (30 * months),
+    }
+  }
+
   const nextTime = getNextCycleTime(endTime, months, nowTime)
   const diff = dayjs(nextTime).diff(dayjs(), "day") + 1
   const remainingPercentage = diff / (30 * months) > 1 ? 1 : diff / (30 * months)
-
-  console.log(
-    "nextTime",
-    nextTime,
-    "diff",
-    diff,
-    "month",
-    months,
-    "remainingPercentage",
-    remainingPercentage,
-  )
 
   return {
     days: diff,
