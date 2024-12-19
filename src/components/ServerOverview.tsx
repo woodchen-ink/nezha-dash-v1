@@ -15,15 +15,7 @@ type ServerOverviewProps = {
   downSpeed: number
 }
 
-export default function ServerOverview({
-  online,
-  offline,
-  total,
-  up,
-  down,
-  upSpeed,
-  downSpeed,
-}: ServerOverviewProps) {
+export default function ServerOverview({ online, offline, total, up, down, upSpeed, downSpeed }: ServerOverviewProps) {
   const { t } = useTranslation()
   const { status, setStatus } = useStatus()
 
@@ -34,7 +26,7 @@ export default function ServerOverview({
   const customIllustration = window.CustomIllustration || "/animated-man.webp"
 
   const customBackgroundImage =
-    // @ts-expect-error ShowNetTransfer is a global variable
+    // @ts-expect-error CustomBackgroundImage is a global variable
     (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
 
   return (
@@ -76,9 +68,7 @@ export default function ServerOverview({
         >
           <CardContent className="flex h-full items-center px-6 py-3">
             <section className="flex flex-col gap-1">
-              <p className="text-sm font-medium md:text-base">
-                {t("serverOverview.onlineServers")}
-              </p>
+              <p className="text-sm font-medium md:text-base">{t("serverOverview.onlineServers")}</p>
               <div className="flex items-center gap-2">
                 <span className="relative flex h-2 w-2">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-75"></span>
@@ -106,9 +96,7 @@ export default function ServerOverview({
         >
           <CardContent className="flex h-full items-center px-6 py-3">
             <section className="flex flex-col gap-1">
-              <p className="text-sm font-medium md:text-base">
-                {t("serverOverview.offlineServers")}
-              </p>
+              <p className="text-sm font-medium md:text-base">{t("serverOverview.offlineServers")}</p>
               <div className="flex items-center gap-2">
                 <span className="relative flex h-2 w-2">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75"></span>
@@ -130,12 +118,8 @@ export default function ServerOverview({
                 <p className="text-sm font-medium md:text-base">{t("serverOverview.network")}</p>
               </div>
               <section className="flex items-start flex-row z-10 pr-0 gap-1">
-                <p className="sm:text-[12px] text-[10px] text-blue-800 dark:text-blue-400   text-nowrap font-medium">
-                  ↑{formatBytes(up)}
-                </p>
-                <p className="sm:text-[12px] text-[10px]  text-purple-800 dark:text-purple-400  text-nowrap font-medium">
-                  ↓{formatBytes(down)}
-                </p>
+                <p className="sm:text-[12px] text-[10px] text-blue-800 dark:text-blue-400   text-nowrap font-medium">↑{formatBytes(up)}</p>
+                <p className="sm:text-[12px] text-[10px]  text-purple-800 dark:text-purple-400  text-nowrap font-medium">↓{formatBytes(down)}</p>
               </section>
               <section className="flex flex-col sm:flex-row -mr-1 sm:items-center items-start gap-1">
                 <p className="text-[11px] flex items-center text-nowrap font-semibold">

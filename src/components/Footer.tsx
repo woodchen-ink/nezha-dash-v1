@@ -29,9 +29,7 @@ const Footer: React.FC = () => {
             <a href={"https://github.com/hamster1963/nezha-dash"} target="_blank">
               nezha-dash
             </a>
-            {import.meta.env.VITE_GIT_HASH && (
-              <span className="ml-1">({import.meta.env.VITE_GIT_HASH})</span>
-            )}
+            {import.meta.env.VITE_GIT_HASH && <span className="ml-1">({import.meta.env.VITE_GIT_HASH})</span>}
           </p>
         </section>
       </section>

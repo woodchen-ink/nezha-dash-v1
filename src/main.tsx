@@ -30,8 +30,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                     duration={1000}
                     toastOptions={{
                       classNames: {
-                        default:
-                          "w-fit rounded-full px-2.5 py-1.5 bg-neutral-100 border border-neutral-200 backdrop-blur-xl shadow-none",
+                        default: "w-fit rounded-full px-2.5 py-1.5 bg-neutral-100 border border-neutral-200 backdrop-blur-xl shadow-none",
                       },
                     }}
                     position="top-center"

@@ -24,12 +24,8 @@ export default function BillingInfo({ parsedData }: { parsedData: PublicNoteData
 
   return daysLeftObject.days >= 0 ? (
     <>
-      <div className={cn("text-[10px] text-muted-foreground")}>
-        剩余时间: {isNeverExpire ? "永久" : daysLeftObject.days + "天"}
-      </div>
-      {parsedData.billingDataMod.amount &&
-      parsedData.billingDataMod.amount !== "0" &&
-      parsedData.billingDataMod.amount !== "-1" ? (
+      <div className={cn("text-[10px] text-muted-foreground")}>剩余时间: {isNeverExpire ? "永久" : daysLeftObject.days + "天"}</div>
+      {parsedData.billingDataMod.amount && parsedData.billingDataMod.amount !== "0" && parsedData.billingDataMod.amount !== "-1" ? (
         <p className={cn("text-[10px] text-muted-foreground ")}>
           价格: {parsedData.billingDataMod.amount}/{parsedData.billingDataMod.cycle}
         </p>
@@ -42,12 +38,8 @@ export default function BillingInfo({ parsedData }: { parsedData: PublicNoteData
     </>
   ) : (
     <>
-      <p className={cn("text-[10px] text-muted-foreground text-red-600")}>
-        已过期: {daysLeftObject.days * -1} 天
-      </p>
-      {parsedData.billingDataMod.amount &&
-      parsedData.billingDataMod.amount !== "0" &&
-      parsedData.billingDataMod.amount !== "-1" ? (
+      <p className={cn("text-[10px] text-muted-foreground text-red-600")}>已过期: {daysLeftObject.days * -1} 天</p>
+      {parsedData.billingDataMod.amount && parsedData.billingDataMod.amount !== "0" && parsedData.billingDataMod.amount !== "-1" ? (
         <p className={cn("text-[10px] text-muted-foreground ")}>
           价格: {parsedData.billingDataMod.amount}/{parsedData.billingDataMod.cycle}
         </p>

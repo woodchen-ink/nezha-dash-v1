@@ -27,9 +27,7 @@ const MapTooltip = memo(function MapTooltip() {
         }}
       >
         <div>
-          <p className="font-medium">
-            {tooltipData.country === "China" ? "Mainland China" : tooltipData.country}
-          </p>
+          <p className="font-medium">{tooltipData.country === "China" ? "Mainland China" : tooltipData.country}</p>
           <p className="text-neutral-600 dark:text-neutral-400 mb-1">
             {tooltipData.count} {t("map.Servers")}
           </p>
@@ -43,11 +41,7 @@ const MapTooltip = memo(function MapTooltip() {
         >
           {tooltipData.servers.map((server, index: number) => (
             <div key={index} className="flex items-center gap-1.5 py-0.5">
-              <span
-                className={`w-1.5 h-1.5 shrink-0 rounded-full ${
-                  server.status ? "bg-green-500" : "bg-red-500"
-                }`}
-              ></span>
+              <span className={`w-1.5 h-1.5 shrink-0 rounded-full ${server.status ? "bg-green-500" : "bg-red-500"}`}></span>
               <span className="text-xs">{server.name}</span>
             </div>
           ))}

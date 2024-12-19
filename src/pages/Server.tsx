@@ -15,14 +15,7 @@ import { fetchServerGroup } from "@/lib/nezha-api"
 import { cn, formatNezhaInfo } from "@/lib/utils"
 import { NezhaWebsocketResponse } from "@/types/nezha-api"
 import { ServerGroup } from "@/types/nezha-api"
-import {
-  ArrowDownIcon,
-  ArrowUpIcon,
-  ArrowsUpDownIcon,
-  ChartBarSquareIcon,
-  MapIcon,
-  ViewColumnsIcon,
-} from "@heroicons/react/20/solid"
+import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon, ChartBarSquareIcon, MapIcon, ViewColumnsIcon } from "@heroicons/react/20/solid"
 import { useQuery } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -44,7 +37,7 @@ export default function Servers() {
   const [currentGroup, setCurrentGroup] = useState<string>("All")
 
   const customBackgroundImage =
-    // @ts-expect-error ShowNetTransfer is a global variable
+    // @ts-expect-error CustomBackgroundImage is a global variable
     (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
 
   useEffect(() => {
@@ -96,60 +89,40 @@ export default function Servers() {
     nezhaWsData?.servers?.filter((server) => {
       if (currentGroup === "All") return true
       const group = groupData?.data?.find(
-        (g: ServerGroup) =>
-          g.group.name === currentGroup &&
-          Array.isArray(g.servers) &&
-          g.servers.includes(server.id),
+        (g: ServerGroup) => g.group.name === currentGroup && Array.isArray(g.servers) && g.servers.includes(server.id),
       )
       return !!group
     }) || []
 
   const totalServers = filteredServers.length || 0
-  const onlineServers =
-    filteredServers.filter((server) => formatNezhaInfo(nezhaWsData.now, server).online)?.length || 0
-  const offlineServers =
-    filteredServers.filter((server) => !formatNezhaInfo(nezhaWsData.now, server).online)?.length ||
-    0
+  const onlineServers = filteredServers.filter((server) => formatNezhaInfo(nezhaWsData.now, server).online)?.length || 0
+  const offlineServers = filteredServers.filter((server) => !formatNezhaInfo(nezhaWsData.now, server).online)?.length || 0
   const up =
     filteredServers.reduce(
-      (total, server) =>
-        formatNezhaInfo(nezhaWsData.now, server).online
-          ? total + (server.state?.net_out_transfer ?? 0)
-          : total,
+      (total, server) => (formatNezhaInfo(nezhaWsData.now, server).online ? total + (server.state?.net_out_transfer ?? 0) : total),
       0,
     ) || 0
   const down =
     filteredServers.reduce(
-      (total, server) =>
-        formatNezhaInfo(nezhaWsData.now, server).online
-          ? total + (server.state?.net_in_transfer ?? 0)
-          : total,
+      (total, server) => (formatNezhaInfo(nezhaWsData.now, server).online ? total + (server.state?.net_in_transfer ?? 0) : total),
       0,
     ) || 0
 
   const upSpeed =
     filteredServers.reduce(
-      (total, server) =>
-        formatNezhaInfo(nezhaWsData.now, server).online
-          ? total + (server.state?.net_out_speed ?? 0)
-          : total,
+      (total, server) => (formatNezhaInfo(nezhaWsData.now, server).online ? total + (server.state?.net_out_speed ?? 0) : total),
       0,
     ) || 0
   const downSpeed =
     filteredServers.reduce(
-      (total, server) =>
-        formatNezhaInfo(nezhaWsData.now, server).online
-          ? total + (server.state?.net_in_speed ?? 0)
-          : total,
+      (total, server) => (formatNezhaInfo(nezhaWsData.now, server).online ? total + (server.state?.net_in_speed ?? 0) : total),
       0,
     ) || 0
 
   filteredServers =
     status === "all"
       ? filteredServers
-      : filteredServers.filter((server) =>
-          [status].includes(formatNezhaInfo(nezhaWsData.now, server).online ? "online" : "offline"),
-        )
+      : filteredServers.filter((server) => [status].includes(formatNezhaInfo(nezhaWsData.now, server).online ? "online" : "offline"))
 
   filteredServers = filteredServers.sort((a, b) => {
     const serverAInfo = formatNezhaInfo(nezhaWsData.now, a)
@@ -277,17 +250,14 @@ export default function Servers() {
               className={cn(
                 "rounded-[50px] flex items-center gap-1 dark:text-white border dark:border-none text-black cursor-pointer dark:[text-shadow:_0_1px_0_rgb(0_0_0_/_20%)] dark:bg-stone-800 bg-stone-100  p-[10px] transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ",
                 {
-                  "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] dark:bg-stone-700 bg-stone-200":
-                    settingsOpen,
+                  "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] dark:bg-stone-700 bg-stone-200": settingsOpen,
                 },
                 {
                   "dark:bg-stone-800/50 bg-stone-100/50 ": customBackgroundImage,
                 },
               )}
             >
-              <p className="text-[10px] font-bold whitespace-nowrap">
-                {sortType === "default" ? "Sort" : sortType.toUpperCase()}
-              </p>
+              <p className="text-[10px] font-bold whitespace-nowrap">{sortType === "default" ? "Sort" : sortType.toUpperCase()}</p>
               {sortOrder === "asc" && sortType !== "default" ? (
                 <ArrowUpIcon className="size-[13px]" />
               ) : sortOrder === "desc" && sortType !== "default" ? (
@@ -309,8 +279,7 @@ export default function Servers() {
                       className={cn(
                         "rounded-[5px] text-[11px] w-fit px-1 py-0.5 cursor-pointer bg-transparent border transition-all dark:shadow-none  ",
                         {
-                          "bg-black text-white dark:bg-white dark:text-black shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]":
-                            sortType === type,
+                          "bg-black text-white dark:bg-white dark:text-black shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]": sortType === type,
                         },
                       )}
                     >
@@ -330,8 +299,7 @@ export default function Servers() {
                       className={cn(
                         "rounded-[5px] text-[11px] w-fit px-1 py-0.5 cursor-pointer bg-transparent border transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  dark:shadow-none",
                         {
-                          "bg-black text-white dark:bg-white dark:text-black":
-                            sortOrder === order && sortType !== "default",
+                          "bg-black text-white dark:bg-white dark:text-black": sortOrder === order && sortType !== "default",
                         },
                       )}
                     >
@@ -344,9 +312,7 @@ export default function Servers() {
           </PopoverContent>
         </Popover>
       </div>
-      {showMap === "1" && (
-        <GlobalMap now={nezhaWsData.now} serverList={nezhaWsData?.servers || []} />
-      )}
+      {showMap === "1" && <GlobalMap now={nezhaWsData.now} serverList={nezhaWsData?.servers || []} />}
       {showServices === "1" && <ServiceTracker />}
       {inline === "1" && (
         <section className="flex flex-col gap-2 overflow-x-scroll scrollbar-hidden mt-6">

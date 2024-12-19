@@ -8,9 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatNezhaInfo(now: number, serverInfo: NezhaServer) {
-  const lastActiveTime = serverInfo.last_active.startsWith("000")
-    ? 0
-    : parseISOTimestamp(serverInfo.last_active)
+  const lastActiveTime = serverInfo.last_active.startsWith("000") ? 0 : parseISOTimestamp(serverInfo.last_active)
   return {
     ...serverInfo,
     cpu: serverInfo.state.cpu || 0,
@@ -47,12 +45,11 @@ export function formatNezhaInfo(now: number, serverInfo: NezhaServer) {
   }
 }
 
-export function getDaysBetweenDatesWithAutoRenewal({
-  autoRenewal,
-  cycle,
-  startDate,
-  endDate,
-}: BillingData): { days: number; cycleLabel: string; remainingPercentage: number } {
+export function getDaysBetweenDatesWithAutoRenewal({ autoRenewal, cycle, startDate, endDate }: BillingData): {
+  days: number
+  cycleLabel: string
+  remainingPercentage: number
+} {
   let months = 1
   // 套餐资费
   let cycleLabel = cycle
@@ -100,12 +97,9 @@ export function getDaysBetweenDatesWithAutoRenewal({
       days: getDaysBetweenDates(endDate, new Date(nowTime).toISOString()),
       cycleLabel: cycleLabel,
       remainingPercentage:
-        getDaysBetweenDates(endDate, new Date(nowTime).toISOString()) /
-          dayjs(endDate).diff(startDate, "day") >
-        1
+        getDaysBetweenDates(endDate, new Date(nowTime).toISOString()) / dayjs(endDate).diff(startDate, "day") > 1
           ? 1
-          : getDaysBetweenDates(endDate, new Date(nowTime).toISOString()) /
-            dayjs(endDate).diff(startDate, "day"),
+          : getDaysBetweenDates(endDate, new Date(nowTime).toISOString()) / dayjs(endDate).diff(startDate, "day"),
     }
   }
 

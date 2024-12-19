@@ -1,11 +1,6 @@
 import { Theme } from "@/components/ThemeProvider"
 import { Button } from "@/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 import { CheckCircleIcon } from "@heroicons/react/20/solid"
 import { Moon, Sun } from "lucide-react"
@@ -18,7 +13,7 @@ export function ModeToggle() {
   const { setTheme, theme } = useTheme()
 
   const customBackgroundImage =
-    // @ts-expect-error ShowNetTransfer is a global variable
+    // @ts-expect-error CustomBackgroundImage is a global variable
     (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
 
   const handleSelect = (e: Event, newTheme: Theme) => {
@@ -42,24 +37,15 @@ export function ModeToggle() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="flex flex-col gap-0.5" align="end">
-        <DropdownMenuItem
-          className={cn({ "gap-3 bg-muted": theme === "light" })}
-          onSelect={(e) => handleSelect(e, "light")}
-        >
+        <DropdownMenuItem className={cn({ "gap-3 bg-muted": theme === "light" })} onSelect={(e) => handleSelect(e, "light")}>
           {t("theme.light")}
           {theme === "light" && <CheckCircleIcon className="size-4" />}
         </DropdownMenuItem>
-        <DropdownMenuItem
-          className={cn({ "gap-3 bg-muted": theme === "dark" })}
-          onSelect={(e) => handleSelect(e, "dark")}
-        >
+        <DropdownMenuItem className={cn({ "gap-3 bg-muted": theme === "dark" })} onSelect={(e) => handleSelect(e, "dark")}>
           {t("theme.dark")}
           {theme === "dark" && <CheckCircleIcon className="size-4" />}
         </DropdownMenuItem>
-        <DropdownMenuItem
-          className={cn({ "gap-3 bg-muted": theme === "system" })}
-          onSelect={(e) => handleSelect(e, "system")}
-        >
+        <DropdownMenuItem className={cn({ "gap-3 bg-muted": theme === "system" })} onSelect={(e) => handleSelect(e, "system")}>
           {t("theme.system")}
           {theme === "system" && <CheckCircleIcon className="size-4" />}
         </DropdownMenuItem>

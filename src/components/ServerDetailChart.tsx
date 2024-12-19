@@ -81,13 +81,9 @@ export default function ServerDetailChart({ server_id }: { server_id: string }) 
     <section className="grid md:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-3">
       <CpuChart now={nezhaWsData.now} data={server} />
       {gpuStats.length >= 1 && gpuList.length === gpuStats.length ? (
-        gpuList.map((gpu, index) => (
-          <GpuChart now={nezhaWsData.now} gpuStat={gpuStats[index]} gpuName={gpu} key={index} />
-        ))
+        gpuList.map((gpu, index) => <GpuChart now={nezhaWsData.now} gpuStat={gpuStats[index]} gpuName={gpu} key={index} />)
       ) : gpuStats.length > 0 ? (
-        gpuStats.map((gpu, index) => (
-          <GpuChart now={nezhaWsData.now} gpuStat={gpu} gpuName={`#${index + 1}`} key={index} />
-        ))
+        gpuStats.map((gpu, index) => <GpuChart now={nezhaWsData.now} gpuStat={gpu} gpuName={`#${index + 1}`} key={index} />)
       ) : (
         <></>
       )}
@@ -139,13 +135,7 @@ function GpuChart({ now, gpuStat, gpuName }: { now: number; gpuStat: number; gpu
             </section>
             <section className="flex items-center gap-2">
               <p className="text-xs text-end w-10 font-medium">{gpuStat.toFixed(2)}%</p>
-              <AnimatedCircularProgressBar
-                className="size-3 text-[0px]"
-                max={100}
-                min={0}
-                value={gpuStat}
-                primaryColor="hsl(var(--chart-3))"
-              />
+              <AnimatedCircularProgressBar className="size-3 text-[0px]" max={100} min={0} value={gpuStat} primaryColor="hsl(var(--chart-3))" />
             </section>
           </div>
           <ChartContainer config={chartConfig} className="aspect-auto h-[130px] w-full">
@@ -168,22 +158,8 @@ function GpuChart({ now, gpuStat, gpuName }: { now: number; gpuStat: number; gpu
                 interval="preserveStartEnd"
                 tickFormatter={(value) => formatRelativeTime(value)}
               />
-              <YAxis
-                tickLine={false}
-                axisLine={false}
-                mirror={true}
-                tickMargin={-15}
-                domain={[0, 100]}
-                tickFormatter={(value) => `${value}%`}
-              />
-              <Area
-                isAnimationActive={false}
-                dataKey="gpu"
-                type="step"
-                fill="hsl(var(--chart-3))"
-                fillOpacity={0.3}
-                stroke="hsl(var(--chart-3))"
-              />
+              <YAxis tickLine={false} axisLine={false} mirror={true} tickMargin={-15} domain={[0, 100]} tickFormatter={(value) => `${value}%`} />
+              <Area isAnimationActive={false} dataKey="gpu" type="step" fill="hsl(var(--chart-3))" fillOpacity={0.3} stroke="hsl(var(--chart-3))" />
             </AreaChart>
           </ChartContainer>
         </section>
@@ -230,13 +206,7 @@ function CpuChart({ now, data }: { now: number; data: NezhaServer }) {
             <p className="text-md font-medium">CPU</p>
             <section className="flex items-center gap-2">
               <p className="text-xs text-end w-10 font-medium">{cpu.toFixed(2)}%</p>
-              <AnimatedCircularProgressBar
-                className="size-3 text-[0px]"
-                max={100}
-                min={0}
-                value={cpu}
-                primaryColor="hsl(var(--chart-1))"
-              />
+              <AnimatedCircularProgressBar className="size-3 text-[0px]" max={100} min={0} value={cpu} primaryColor="hsl(var(--chart-1))" />
             </section>
           </div>
           <ChartContainer config={chartConfig} className="aspect-auto h-[130px] w-full">
@@ -259,22 +229,8 @@ function CpuChart({ now, data }: { now: number; data: NezhaServer }) {
                 interval="preserveStartEnd"
                 tickFormatter={(value) => formatRelativeTime(value)}
               />
-              <YAxis
-                tickLine={false}
-                axisLine={false}
-                mirror={true}
-                tickMargin={-15}
-                domain={[0, 100]}
-                tickFormatter={(value) => `${value}%`}
-              />
-              <Area
-                isAnimationActive={false}
-                dataKey="cpu"
-                type="step"
-                fill="hsl(var(--chart-1))"
-                fillOpacity={0.3}
-                stroke="hsl(var(--chart-1))"
-              />
+              <YAxis tickLine={false} axisLine={false} mirror={true} tickMargin={-15} domain={[0, 100]} tickFormatter={(value) => `${value}%`} />
+              <Area isAnimationActive={false} dataKey="cpu" type="step" fill="hsl(var(--chart-1))" fillOpacity={0.3} stroke="hsl(var(--chart-1))" />
             </AreaChart>
           </ChartContainer>
         </section>
@@ -404,26 +360,14 @@ function MemChart({ now, data }: { now: number; data: NezhaServer }) {
               <div className="flex flex-col">
                 <p className=" text-xs text-muted-foreground">{t("serverDetailChart.mem")}</p>
                 <div className="flex items-center gap-2">
-                  <AnimatedCircularProgressBar
-                    className="size-3 text-[0px]"
-                    max={100}
-                    min={0}
-                    value={mem}
-                    primaryColor="hsl(var(--chart-8))"
-                  />
+                  <AnimatedCircularProgressBar className="size-3 text-[0px]" max={100} min={0} value={mem} primaryColor="hsl(var(--chart-8))" />
                   <p className="text-xs font-medium">{mem.toFixed(0)}%</p>
                 </div>
               </div>
               <div className="flex flex-col">
                 <p className=" text-xs text-muted-foreground">{t("serverDetailChart.swap")}</p>
                 <div className="flex items-center gap-2">
-                  <AnimatedCircularProgressBar
-                    className="size-3 text-[0px]"
-                    max={100}
-                    min={0}
-                    value={swap}
-                    primaryColor="hsl(var(--chart-10))"
-                  />
+                  <AnimatedCircularProgressBar className="size-3 text-[0px]" max={100} min={0} value={swap} primaryColor="hsl(var(--chart-10))" />
                   <p className="text-xs font-medium">{swap.toFixed(0)}%</p>
                 </div>
               </div>
@@ -463,22 +407,8 @@ function MemChart({ now, data }: { now: number; data: NezhaServer }) {
                 interval="preserveStartEnd"
                 tickFormatter={(value) => formatRelativeTime(value)}
               />
-              <YAxis
-                tickLine={false}
-                axisLine={false}
-                mirror={true}
-                tickMargin={-15}
-                domain={[0, 100]}
-                tickFormatter={(value) => `${value}%`}
-              />
-              <Area
-                isAnimationActive={false}
-                dataKey="mem"
-                type="step"
-                fill="hsl(var(--chart-8))"
-                fillOpacity={0.3}
-                stroke="hsl(var(--chart-8))"
-              />
+              <YAxis tickLine={false} axisLine={false} mirror={true} tickMargin={-15} domain={[0, 100]} tickFormatter={(value) => `${value}%`} />
+              <Area isAnimationActive={false} dataKey="mem" type="step" fill="hsl(var(--chart-8))" fillOpacity={0.3} stroke="hsl(var(--chart-8))" />
               <Area
                 isAnimationActive={false}
                 dataKey="swap"
@@ -535,13 +465,7 @@ function DiskChart({ now, data }: { now: number; data: NezhaServer }) {
             <section className="flex flex-col items-end gap-0.5">
               <section className="flex items-center gap-2">
                 <p className="text-xs text-end w-10 font-medium">{disk.toFixed(0)}%</p>
-                <AnimatedCircularProgressBar
-                  className="size-3 text-[0px]"
-                  max={100}
-                  min={0}
-                  value={disk}
-                  primaryColor="hsl(var(--chart-5))"
-                />
+                <AnimatedCircularProgressBar className="size-3 text-[0px]" max={100} min={0} value={disk} primaryColor="hsl(var(--chart-5))" />
               </section>
               <div className="flex text-[11px] font-medium items-center gap-2">
                 {formatBytes(data.state.disk_used)} / {formatBytes(data.host.disk_total)}
@@ -568,22 +492,8 @@ function DiskChart({ now, data }: { now: number; data: NezhaServer }) {
                 interval="preserveStartEnd"
                 tickFormatter={(value) => formatRelativeTime(value)}
               />
-              <YAxis
-                tickLine={false}
-                axisLine={false}
-                mirror={true}
-                tickMargin={-15}
-                domain={[0, 100]}
-                tickFormatter={(value) => `${value}%`}
-              />
-              <Area
-                isAnimationActive={false}
-                dataKey="disk"
-                type="step"
-                fill="hsl(var(--chart-5))"
-                fillOpacity={0.3}
-                stroke="hsl(var(--chart-5))"
-              />
+              <YAxis tickLine={false} axisLine={false} mirror={true} tickMargin={-15} domain={[0, 100]} tickFormatter={(value) => `${value}%`} />
+              <Area isAnimationActive={false} dataKey="disk" type="step" fill="hsl(var(--chart-5))" fillOpacity={0.3} stroke="hsl(var(--chart-5))" />
             </AreaChart>
           </ChartContainer>
         </section>
@@ -643,11 +553,7 @@ function NetworkChart({ now, data }: { now: number; data: NezhaServer }) {
                 <div className="flex items-center gap-1">
                   <span className="relative inline-flex  size-1.5 rounded-full bg-[hsl(var(--chart-1))]"></span>
                   <p className="text-xs font-medium">
-                    {up >= 1024
-                      ? `${(up / 1024).toFixed(2)}G/s`
-                      : up >= 1
-                        ? `${up.toFixed(2)}M/s`
-                        : `${(up * 1024).toFixed(2)}K/s`}
+                    {up >= 1024 ? `${(up / 1024).toFixed(2)}G/s` : up >= 1 ? `${up.toFixed(2)}M/s` : `${(up * 1024).toFixed(2)}K/s`}
                   </p>
                 </div>
               </div>
@@ -656,11 +562,7 @@ function NetworkChart({ now, data }: { now: number; data: NezhaServer }) {
                 <div className="flex items-center gap-1">
                   <span className="relative inline-flex  size-1.5 rounded-full bg-[hsl(var(--chart-4))]"></span>
                   <p className="text-xs font-medium">
-                    {down >= 1024
-                      ? `${(down / 1024).toFixed(2)}G/s`
-                      : down >= 1
-                        ? `${down.toFixed(2)}M/s`
-                        : `${(down * 1024).toFixed(2)}K/s`}
+                    {down >= 1024 ? `${(down / 1024).toFixed(2)}G/s` : down >= 1 ? `${down.toFixed(2)}M/s` : `${(down * 1024).toFixed(2)}K/s`}
                   </p>
                 </div>
               </div>
@@ -697,22 +599,8 @@ function NetworkChart({ now, data }: { now: number; data: NezhaServer }) {
                 domain={[1, maxDownload]}
                 tickFormatter={(value) => `${value.toFixed(0)}M/s`}
               />
-              <Line
-                isAnimationActive={false}
-                dataKey="upload"
-                type="linear"
-                stroke="hsl(var(--chart-1))"
-                strokeWidth={1}
-                dot={false}
-              />
-              <Line
-                isAnimationActive={false}
-                dataKey="download"
-                type="linear"
-                stroke="hsl(var(--chart-4))"
-                strokeWidth={1}
-                dot={false}
-              />
+              <Line isAnimationActive={false} dataKey="upload" type="linear" stroke="hsl(var(--chart-1))" strokeWidth={1} dot={false} />
+              <Line isAnimationActive={false} dataKey="download" type="linear" stroke="hsl(var(--chart-4))" strokeWidth={1} dot={false} />
             </LineChart>
           </ChartContainer>
         </section>
@@ -796,30 +684,9 @@ function ConnectChart({ now, data }: { now: number; data: NezhaServer }) {
                 interval="preserveStartEnd"
                 tickFormatter={(value) => formatRelativeTime(value)}
               />
-              <YAxis
-                tickLine={false}
-                axisLine={false}
-                mirror={true}
-                tickMargin={-15}
-                type="number"
-                interval="preserveStartEnd"
-              />
-              <Line
-                isAnimationActive={false}
-                dataKey="tcp"
-                type="linear"
-                stroke="hsl(var(--chart-1))"
-                strokeWidth={1}
-                dot={false}
-              />
-              <Line
-                isAnimationActive={false}
-                dataKey="udp"
-                type="linear"
-                stroke="hsl(var(--chart-4))"
-                strokeWidth={1}
-                dot={false}
-              />
+              <YAxis tickLine={false} axisLine={false} mirror={true} tickMargin={-15} type="number" interval="preserveStartEnd" />
+              <Line isAnimationActive={false} dataKey="tcp" type="linear" stroke="hsl(var(--chart-1))" strokeWidth={1} dot={false} />
+              <Line isAnimationActive={false} dataKey="udp" type="linear" stroke="hsl(var(--chart-4))" strokeWidth={1} dot={false} />
             </LineChart>
           </ChartContainer>
         </section>

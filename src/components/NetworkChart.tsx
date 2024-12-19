@@ -1,14 +1,7 @@
 "use client"
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart"
+import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { fetchMonitor } from "@/lib/nezha-api"
 import { formatTime } from "@/lib/utils"
 import { formatRelativeTime } from "@/lib/utils"
@@ -128,9 +121,7 @@ export const NetworkChartClient = React.memo(function NetworkChart({
           onClick={() => handleButtonClick(key)}
         >
           <span className="whitespace-nowrap text-xs text-muted-foreground">{key}</span>
-          <span className="text-md font-bold leading-none sm:text-lg">
-            {chartData[key][chartData[key].length - 1].avg_delay.toFixed(2)}ms
-          </span>
+          <span className="text-md font-bold leading-none sm:text-lg">{chartData[key][chartData[key].length - 1].avg_delay.toFixed(2)}ms</span>
         </button>
       )),
     [chartDataKey, activeChart, chartData, handleButtonClick],
@@ -138,16 +129,7 @@ export const NetworkChartClient = React.memo(function NetworkChart({
 
   const chartLines = useMemo(() => {
     if (activeChart !== defaultChart) {
-      return (
-        <Line
-          isAnimationActive={false}
-          strokeWidth={1}
-          type="linear"
-          dot={false}
-          dataKey="avg_delay"
-          stroke={getColorByIndex(activeChart)}
-        />
-      )
+      return <Line isAnimationActive={false} strokeWidth={1} type="linear" dot={false} dataKey="avg_delay" stroke={getColorByIndex(activeChart)} />
     }
     return chartDataKey.map((key) => (
       <Line
@@ -168,9 +150,7 @@ export const NetworkChartClient = React.memo(function NetworkChart({
       return activeChart === defaultChart ? formattedData : chartData[activeChart]
     }
 
-    const data = (
-      activeChart === defaultChart ? formattedData : chartData[activeChart]
-    ) as ResultItem[]
+    const data = (activeChart === defaultChart ? formattedData : chartData[activeChart]) as ResultItem[]
 
     const windowSize = 11 // 增加窗口大小以获取更好的统计效果
     const alpha = 0.3 // EWMA平滑因子
@@ -219,9 +199,7 @@ export const NetworkChartClient = React.memo(function NetworkChart({
 
       if (activeChart === defaultChart) {
         chartDataKey.forEach((key) => {
-          const values = window
-            .map((w) => w[key])
-            .filter((v) => v !== undefined && v !== null) as number[]
+          const values = window.map((w) => w[key]).filter((v) => v !== undefined && v !== null) as number[]
 
           if (values.length > 0) {
             const processed = processValues(values)
@@ -237,9 +215,7 @@ export const NetworkChartClient = React.memo(function NetworkChart({
           }
         })
       } else {
-        const values = window
-          .map((w) => w.avg_delay)
-          .filter((v) => v !== undefined && v !== null) as number[]
+        const values = window.map((w) => w.avg_delay).filter((v) => v !== undefined && v !== null) as number[]
 
         if (values.length > 0) {
           const processed = processValues(values)
@@ -263,9 +239,7 @@ export const NetworkChartClient = React.memo(function NetworkChart({
     <Card>
       <CardHeader className="flex flex-col items-stretch space-y-0 p-0 sm:flex-row">
         <div className="flex flex-none flex-col justify-center gap-1 border-b px-6 py-4">
-          <CardTitle className="flex flex-none items-center gap-0.5 text-md">
-            {serverName}
-          </CardTitle>
+          <CardTitle className="flex flex-none items-center gap-0.5 text-md">{serverName}</CardTitle>
           <CardDescription className="text-xs">
             {chartDataKey.length} {t("monitor.monitorCount")}
           </CardDescription>
@@ -291,13 +265,7 @@ export const NetworkChartClient = React.memo(function NetworkChart({
               interval={"preserveStartEnd"}
               tickFormatter={(value) => formatRelativeTime(value)}
             />
-            <YAxis
-              tickLine={false}
-              axisLine={false}
-              tickMargin={15}
-              minTickGap={20}
-              tickFormatter={(value) => `${value}ms`}
-            />
+            <YAxis tickLine={false} axisLine={false} tickMargin={15} minTickGap={20} tickFormatter={(value) => `${value}ms`} />
             <ChartTooltip
               isAnimationActive={false}
               content={

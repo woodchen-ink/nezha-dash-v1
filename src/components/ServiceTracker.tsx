@@ -26,14 +26,10 @@ export const ServiceTracker: React.FC = () => {
     }))
 
     const totalUp = serviceData.up.reduce((a, b) => a + b, 0)
-    const totalChecks =
-      serviceData.up.reduce((a, b) => a + b, 0) + serviceData.down.reduce((a, b) => a + b, 0)
+    const totalChecks = serviceData.up.reduce((a, b) => a + b, 0) + serviceData.down.reduce((a, b) => a + b, 0)
     const uptime = (totalUp / totalChecks) * 100
 
-    const avgDelay =
-      serviceData.delay.length > 0
-        ? serviceData.delay.reduce((a, b) => a + b, 0) / serviceData.delay.length
-        : 0
+    const avgDelay = serviceData.delay.length > 0 ? serviceData.delay.reduce((a, b) => a + b, 0) / serviceData.delay.length : 0
 
     return { days, uptime, avgDelay }
   }
@@ -67,15 +63,7 @@ export const ServiceTracker: React.FC = () => {
         <section className="grid grid-cols-1 md:grid-cols-2 mt-4 gap-2 md:gap-4">
           {Object.entries(serviceData.data.services).map(([name, data]) => {
             const { days, uptime, avgDelay } = processServiceData(data)
-            return (
-              <ServiceTrackerClient
-                key={name}
-                days={days}
-                title={data.service_name}
-                uptime={uptime}
-                avgDelay={avgDelay}
-              />
-            )
+            return <ServiceTrackerClient key={name} days={days} title={data.service_name} uptime={uptime} avgDelay={avgDelay} />
           })}
         </section>
       )}

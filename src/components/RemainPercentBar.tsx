@@ -2,13 +2,7 @@ import { cn } from "@/lib/utils"
 
 import { Progress } from "./ui/progress"
 
-export default function RemainPercentBar({
-  value,
-  className,
-}: {
-  value: number
-  className?: string
-}) {
+export default function RemainPercentBar({ value, className }: { value: number; className?: string }) {
   return (
     <Progress
       aria-label={"Server Usage Bar"}

@@ -41,16 +41,28 @@ const App: React.FC = () => {
   }
 
   const customBackgroundImage =
-    // @ts-expect-error ShowNetTransfer is a global variable
+    // @ts-expect-error CustomBackgroundImage is a global variable
     (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+
+  const customMobileBackgroundImage =
+    // @ts-expect-error CustomMobileBackgroundImage is a global variable
+    (window.CustomMobileBackgroundImage as string) !== "" ? window.CustomMobileBackgroundImage : undefined
 
   return (
     <Router basename={import.meta.env.BASE_URL}>
       {/* 固定定位的背景层 */}
       {customBackgroundImage && (
         <div
-          className="fixed inset-0 z-0 bg-cover min-h-lvh bg-no-repeat bg-center"
+          className={cn("fixed inset-0 z-0 bg-cover min-h-lvh bg-no-repeat bg-center", {
+            "hidden sm:block": customMobileBackgroundImage,
+          })}
           style={{ backgroundImage: `url(${customBackgroundImage})` }}
+        />
+      )}
+      {customMobileBackgroundImage && (
+        <div
+          className={cn("fixed inset-0 z-0 bg-cover min-h-lvh bg-no-repeat bg-center sm:hidden")}
+          style={{ backgroundImage: `url(${customMobileBackgroundImage})` }}
         />
       )}
       <div

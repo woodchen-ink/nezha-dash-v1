@@ -70,13 +70,10 @@ export default function ServerDetailOverview({ server_id }: { server_id: string 
             <section className="flex flex-col items-start gap-0.5">
               <p className="text-xs text-muted-foreground">{t("serverDetail.status")}</p>
               <Badge
-                className={cn(
-                  "text-[9px] rounded-[6px] w-fit px-1 py-0 -mt-[0.3px] dark:text-white",
-                  {
-                    " bg-green-800": online,
-                    " bg-red-600": !online,
-                  },
-                )}
+                className={cn("text-[9px] rounded-[6px] w-fit px-1 py-0 -mt-[0.3px] dark:text-white", {
+                  " bg-green-800": online,
+                  " bg-red-600": !online,
+                })}
               >
                 {online ? t("serverDetail.online") : t("serverDetail.offline")}
               </Badge>
@@ -146,9 +143,7 @@ export default function ServerDetailOverview({ server_id }: { server_id: string 
                 <p className="text-xs text-muted-foreground">{t("serverDetail.region")}</p>
                 <section className="flex items-start gap-1">
                   <div className="text-xs text-start">{country_code?.toUpperCase()}</div>
-                  {country_code && (
-                    <ServerFlag className="text-[11px] -mt-[1px]" country_code={country_code} />
-                  )}
+                  {country_code && <ServerFlag className="text-[11px] -mt-[1px]" country_code={country_code} />}
                 </section>
               </section>
             </CardContent>
@@ -235,15 +230,12 @@ export default function ServerDetailOverview({ server_id }: { server_id: string 
           <section className="flex flex-wrap gap-2 ml-1.5">
             <Accordion type="single" collapsible className="w-fit">
               <AccordionItem value="item-1" className="border-none">
-                <AccordionTrigger className="text-xs py-0 text-muted-foreground font-normal">
-                  {t("serverDetail.temperature")}
-                </AccordionTrigger>
+                <AccordionTrigger className="text-xs py-0 text-muted-foreground font-normal">{t("serverDetail.temperature")}</AccordionTrigger>
                 <AccordionContent className="pb-0">
                   <section className="flex items-start flex-wrap gap-2">
                     {server?.state.temperatures.map((item, index) => (
                       <div className="text-xs flex items-center" key={index}>
-                        <p className="font-semibold">{item.Name}</p>: {item.Temperature.toFixed(2)}{" "}
-                        °C
+                        <p className="font-semibold">{item.Name}</p>: {item.Temperature.toFixed(2)} °C
                       </div>
                     ))}
                   </section>
@@ -259,9 +251,7 @@ export default function ServerDetailOverview({ server_id }: { server_id: string 
           <CardContent className="px-1.5 py-1">
             <section className="flex flex-col items-start gap-0.5">
               <p className="text-xs text-muted-foreground">{t("serverDetail.lastActive")}</p>
-              <div className="text-xs">
-                {last_active_time_string ? last_active_time_string : "N/A"}
-              </div>
+              <div className="text-xs">{last_active_time_string ? last_active_time_string : "N/A"}</div>
             </section>
           </CardContent>
         </Card>

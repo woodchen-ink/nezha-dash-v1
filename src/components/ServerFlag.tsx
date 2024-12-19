@@ -2,13 +2,7 @@ import { cn } from "@/lib/utils"
 import getUnicodeFlagIcon from "country-flag-icons/unicode"
 import { useEffect, useState } from "react"
 
-export default function ServerFlag({
-  country_code,
-  className,
-}: {
-  country_code: string
-  className?: string
-}) {
+export default function ServerFlag({ country_code, className }: { country_code: string; className?: string }) {
   const [supportsEmojiFlags, setSupportsEmojiFlags] = useState(false)
 
   useEffect(() => {
@@ -37,11 +31,7 @@ export default function ServerFlag({
 
   return (
     <span className={cn("text-[12px] text-muted-foreground", className)}>
-      {!supportsEmojiFlags ? (
-        <span className={`fi fi-${country_code}`} />
-      ) : (
-        getUnicodeFlagIcon(country_code)
-      )}
+      {!supportsEmojiFlags ? <span className={`fi fi-${country_code}`} /> : getUnicodeFlagIcon(country_code)}
     </span>
   )
 }

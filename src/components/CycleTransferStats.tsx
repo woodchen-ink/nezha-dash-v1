@@ -8,10 +8,7 @@ interface CycleTransferStatsProps {
   className?: string
 }
 
-export const CycleTransferStatsCard: React.FC<CycleTransferStatsProps> = ({
-  cycleStats,
-  className,
-}) => {
+export const CycleTransferStatsCard: React.FC<CycleTransferStatsProps> = ({ cycleStats, className }) => {
   return (
     <section className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
       {Object.entries(cycleStats).map(([cycleId, cycleData]) => {

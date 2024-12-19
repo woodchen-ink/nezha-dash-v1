@@ -14,24 +14,12 @@ import { Card } from "./ui/card"
 export default function ServerCard({ now, serverInfo }: { now: number; serverInfo: NezhaServer }) {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const {
-    name,
-    country_code,
-    online,
-    cpu,
-    up,
-    down,
-    mem,
-    stg,
-    net_in_transfer,
-    net_out_transfer,
-    public_note,
-  } = formatNezhaInfo(now, serverInfo)
+  const { name, country_code, online, cpu, up, down, mem, stg, net_in_transfer, net_out_transfer, public_note } = formatNezhaInfo(now, serverInfo)
 
   const showFlag = true
 
   const customBackgroundImage =
-    // @ts-expect-error ShowNetTransfer is a global variable
+    // @ts-expect-error CustomBackgroundImage is a global variable
     (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
 
   // @ts-expect-error ShowNetTransfer is a global variable
@@ -41,30 +29,18 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
 
   return online ? (
     <Card
-      className={cn(
-        "flex flex-col items-center justify-start gap-3 p-3 md:px-5 lg:flex-row cursor-pointer hover:bg-accent/50 transition-colors",
-        {
-          "bg-card/50": customBackgroundImage,
-        },
-      )}
+      className={cn("flex flex-col items-center justify-start gap-3 p-3 md:px-5 lg:flex-row cursor-pointer hover:bg-accent/50 transition-colors", {
+        "bg-card/50": customBackgroundImage,
+      })}
       onClick={() => navigate(`/server/${serverInfo.id}`)}
     >
-      <section
-        className={cn("grid items-center gap-2 lg:w-40")}
-        style={{ gridTemplateColumns: "auto auto 1fr" }}
-      >
+      <section className={cn("grid items-center gap-2 lg:w-40")} style={{ gridTemplateColumns: "auto auto 1fr" }}>
         <span className="h-2 w-2 shrink-0 rounded-full bg-green-500 self-center"></span>
-        <div
-          className={cn("flex items-center justify-center", showFlag ? "min-w-[17px]" : "min-w-0")}
-        >
+        <div className={cn("flex items-center justify-center", showFlag ? "min-w-[17px]" : "min-w-0")}>
           {showFlag ? <ServerFlag country_code={country_code} /> : null}
         </div>
         <div className="relative flex flex-col">
-          <p
-            className={cn("break-all font-bold tracking-tight", showFlag ? "text-xs " : "text-sm")}
-          >
-            {name}
-          </p>
+          <p className={cn("break-all font-bold tracking-tight", showFlag ? "text-xs " : "text-sm")}>{name}</p>
           {parsedData?.billingDataMod && <BillingInfo parsedData={parsedData} />}
         </div>
       </section>
@@ -88,21 +64,13 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
           <div className={"flex w-14 flex-col"}>
             <p className="text-xs text-muted-foreground">{t("serverCard.upload")}</p>
             <div className="flex items-center text-xs font-semibold">
-              {up >= 1024
-                ? `${(up / 1024).toFixed(2)}G/s`
-                : up >= 1
-                  ? `${up.toFixed(2)}M/s`
-                  : `${(up * 1024).toFixed(2)}K/s`}
+              {up >= 1024 ? `${(up / 1024).toFixed(2)}G/s` : up >= 1 ? `${up.toFixed(2)}M/s` : `${(up * 1024).toFixed(2)}K/s`}
             </div>
           </div>
           <div className={"flex w-14 flex-col"}>
             <p className="text-xs text-muted-foreground">{t("serverCard.download")}</p>
             <div className="flex items-center text-xs font-semibold">
-              {down >= 1024
-                ? `${(down / 1024).toFixed(2)}G/s`
-                : down >= 1
-                  ? `${down.toFixed(2)}M/s`
-                  : `${(down * 1024).toFixed(2)}K/s`}
+              {down >= 1024 ? `${(down / 1024).toFixed(2)}G/s` : down >= 1 ? `${down.toFixed(2)}M/s` : `${(down * 1024).toFixed(2)}K/s`}
             </div>
           </div>
         </section>
@@ -136,25 +104,13 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
       )}
       onClick={() => navigate(`/server/${serverInfo.id}`, { replace: true })}
     >
-      <section
-        className={cn("grid items-center gap-2 lg:w-40")}
-        style={{ gridTemplateColumns: "auto auto 1fr" }}
-      >
+      <section className={cn("grid items-center gap-2 lg:w-40")} style={{ gridTemplateColumns: "auto auto 1fr" }}>
         <span className="h-2 w-2 shrink-0 rounded-full bg-red-500 self-center"></span>
-        <div
-          className={cn("flex items-center justify-center", showFlag ? "min-w-[17px]" : "min-w-0")}
-        >
+        <div className={cn("flex items-center justify-center", showFlag ? "min-w-[17px]" : "min-w-0")}>
           {showFlag ? <ServerFlag country_code={country_code} /> : null}
         </div>
         <div className="relative flex flex-col">
-          <p
-            className={cn(
-              "break-all font-bold tracking-tight max-w-[108px]",
-              showFlag ? "text-xs" : "text-sm",
-            )}
-          >
-            {name}
-          </p>
+          <p className={cn("break-all font-bold tracking-tight max-w-[108px]", showFlag ? "text-xs" : "text-sm")}>{name}</p>
           {parsedData?.billingDataMod && <BillingInfo parsedData={parsedData} />}
         </div>
       </section>

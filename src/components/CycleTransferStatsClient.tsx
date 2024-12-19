@@ -20,17 +20,10 @@ interface CycleTransferStatsClientProps {
   className?: string
 }
 
-export const CycleTransferStatsClient: React.FC<CycleTransferStatsClientProps> = ({
-  name,
-  from,
-  to,
-  max,
-  serverStats,
-  className,
-}) => {
+export const CycleTransferStatsClient: React.FC<CycleTransferStatsClientProps> = ({ name, from, to, max, serverStats, className }) => {
   const { t } = useTranslation()
   const customBackgroundImage =
-    // @ts-expect-error ShowNetTransfer is a global variable
+    // @ts-expect-error CustomBackgroundImage is a global variable
     (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
   return (
     <div
@@ -48,9 +41,7 @@ export const CycleTransferStatsClient: React.FC<CycleTransferStatsClientProps> =
         return (
           <div key={serverId}>
             <section className="flex justify-between items-center">
-              <div className="bg-green-600 w-fit text-white px-1.5 py-0.5 rounded-full text-[10px]">
-                {name}
-              </div>
+              <div className="bg-green-600 w-fit text-white px-1.5 py-0.5 rounded-full text-[10px]">{name}</div>
               <span className="text-stone-600 dark:text-stone-400 text-xs">
                 {new Date(from).toLocaleDateString()} - {new Date(to).toLocaleDateString()}
               </span>
@@ -63,21 +54,12 @@ export const CycleTransferStatsClient: React.FC<CycleTransferStatsClientProps> =
               </div>
               <div className="flex items-center gap-1">
                 <p className="text-xs text-end w-10 font-medium">{progress.toFixed(0)}%</p>
-                <AnimatedCircularProgressBar
-                  className="size-4 text-[0px]"
-                  max={100}
-                  min={0}
-                  value={progress}
-                  primaryColor="hsl(var(--chart-5))"
-                />
+                <AnimatedCircularProgressBar className="size-4 text-[0px]" max={100} min={0} value={progress} primaryColor="hsl(var(--chart-5))" />
               </div>
             </section>
 
             <div className="w-full bg-neutral-100 dark:bg-neutral-800 rounded-full overflow-hidden h-2.5 mt-2">
-              <div
-                className="bg-green-600 h-2.5 rounded-full"
-                style={{ width: `${Math.min(progress, 100)}%` }}
-              />
+              <div className="bg-green-600 h-2.5 rounded-full" style={{ width: `${Math.min(progress, 100)}%` }} />
             </div>
 
             <section className="flex justify-between items-center mt-2">

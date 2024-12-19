@@ -27,9 +27,7 @@ export default function GlobalMap({ serverList, now }: { serverList: NezhaServer
   const height = 500
 
   const geoJson = JSON.parse(geoJsonString)
-  const filteredFeatures = geoJson.features.filter(
-    (feature: { properties: { iso_a3_eh: string } }) => feature.properties.iso_a3_eh !== "",
-  )
+  const filteredFeatures = geoJson.features.filter((feature: { properties: { iso_a3_eh: string } }) => feature.properties.iso_a3_eh !== "")
 
   return (
     <section className="flex flex-col gap-4 mt-8">
@@ -68,15 +66,7 @@ interface InteractiveMapProps {
   now: number
 }
 
-export function InteractiveMap({
-  countries,
-  serverCounts,
-  width,
-  height,
-  filteredFeatures,
-  nezhaServerList,
-  now,
-}: InteractiveMapProps) {
+export function InteractiveMap({ countries, serverCounts, width, height, filteredFeatures, nezhaServerList, now }: InteractiveMapProps) {
   const { setTooltipData } = useTooltip()
 
   const projection = geoEquirectangular()
@@ -88,13 +78,7 @@ export function InteractiveMap({
 
   return (
     <div className="relative w-full aspect-[2/1]" onMouseLeave={() => setTooltipData(null)}>
-      <svg
-        width={width}
-        height={height}
-        viewBox={`0 0 ${width} ${height}`}
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-full h-auto"
-      >
+      <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
         <defs>
           <pattern id="dots" width="2" height="2" patternUnits="userSpaceOnUse">
             <circle cx="1" cy="1" r="0.5" fill="currentColor" />
@@ -102,14 +86,7 @@ export function InteractiveMap({
         </defs>
         <g>
           {/* Background rect to handle mouse events in empty areas */}
-          <rect
-            x="0"
-            y="0"
-            width={width}
-            height={height}
-            fill="transparent"
-            onMouseEnter={() => setTooltipData(null)}
-          />
+          <rect x="0" y="0" width={width} height={height} fill="transparent" onMouseEnter={() => setTooltipData(null)} />
           {filteredFeatures.map((feature, index) => {
             const isHighlighted = countries.includes(feature.properties.iso_a2_eh)
 
@@ -132,9 +109,7 @@ export function InteractiveMap({
                   if (path.centroid(feature)) {
                     const countryCode = feature.properties.iso_a2_eh
                     const countryServers = nezhaServerList
-                      .filter(
-                        (server: NezhaServer) => server.country_code?.toUpperCase() === countryCode,
-                      )
+                      .filter((server: NezhaServer) => server.country_code?.toUpperCase() === countryCode)
                       .map((server: NezhaServer) => ({
                         name: server.name,
                         status: formatNezhaInfo(now, server).online,
@@ -154,9 +129,7 @@ export function InteractiveMap({
           {/* 渲染不在 filteredFeatures 中的国家标记点 */}
           {countries.map((countryCode) => {
             // 检查该国家是否已经在 filteredFeatures 中
-            const isInFilteredFeatures = filteredFeatures.some(
-              (feature) => feature.properties.iso_a2_eh === countryCode,
-            )
+            const isInFilteredFeatures = filteredFeatures.some((feature) => feature.properties.iso_a2_eh === countryCode)
 
             // 如果已经在 filteredFeatures 中，跳过
             if (isInFilteredFeatures) return null
@@ -174,10 +147,7 @@ export function InteractiveMap({
                 key={countryCode}
                 onMouseEnter={() => {
                   const countryServers = nezhaServerList
-                    .filter(
-                      (server: NezhaServer) =>
-                        server.country_code?.toUpperCase() === countryCode.toUpperCase(),
-                    )
+                    .filter((server: NezhaServer) => server.country_code?.toUpperCase() === countryCode.toUpperCase())
                     .map((server: NezhaServer) => ({
                       name: server.name,
                       status: formatNezhaInfo(now, server).online,

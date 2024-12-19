@@ -15,16 +15,10 @@ interface ServiceTrackerProps {
   avgDelay?: number
 }
 
-export const ServiceTrackerClient: React.FC<ServiceTrackerProps> = ({
-  days,
-  className,
-  title,
-  uptime = 100,
-  avgDelay = 0,
-}) => {
+export const ServiceTrackerClient: React.FC<ServiceTrackerProps> = ({ days, className, title, uptime = 100, avgDelay = 0 }) => {
   const { t } = useTranslation()
   const customBackgroundImage =
-    // @ts-expect-error ShowNetTransfer is a global variable
+    // @ts-expect-error CustomBackgroundImage is a global variable
     (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
   return (
     <div
@@ -44,9 +38,7 @@ export const ServiceTrackerClient: React.FC<ServiceTrackerProps> = ({
           <span className="font-medium text-sm">{title}</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-stone-600 dark:text-stone-400 font-medium text-sm">
-            {avgDelay.toFixed(0)}ms
-          </span>
+          <span className="text-stone-600 dark:text-stone-400 font-medium text-sm">{avgDelay.toFixed(0)}ms</span>
           <Separator className="h-4 mx-0" orientation="vertical" />
           <span className="text-green-600 font-medium text-sm">
             {uptime.toFixed(1)}% {t("serviceTracker.uptime")}
@@ -58,10 +50,7 @@ export const ServiceTrackerClient: React.FC<ServiceTrackerProps> = ({
         {days.map((day, index) => (
           <div
             key={index}
-            className={cn(
-              "flex-1 h-6 rounded-[5px] transition-colors",
-              day.completed ? "bg-green-600" : "bg-red-500/60",
-            )}
+            className={cn("flex-1 h-6 rounded-[5px] transition-colors", day.completed ? "bg-green-600" : "bg-red-500/60")}
             title={day.date ? day.date.toLocaleDateString() : `Day ${index + 1}`}
           />
         ))}

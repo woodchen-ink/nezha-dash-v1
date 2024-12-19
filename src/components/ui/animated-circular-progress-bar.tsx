@@ -8,13 +8,7 @@ interface Props {
   primaryColor?: string
 }
 
-export default function AnimatedCircularProgressBar({
-  max = 100,
-  min = 0,
-  value = 0,
-  primaryColor,
-  className,
-}: Props) {
+export default function AnimatedCircularProgressBar({ max = 100, min = 0, value = 0, primaryColor, className }: Props) {
   const circumference = 2 * Math.PI * 45
   const percentPx = circumference / 100
   const currentPercent = ((value - min) / (max - min)) * 100
@@ -52,10 +46,8 @@ export default function AnimatedCircularProgressBar({
               {
                 "--stroke-percent": 90 - currentPercent,
                 "--offset-factor-secondary": "calc(1 - var(--offset-factor))",
-                strokeDasharray:
-                  "calc(var(--stroke-percent) * var(--percent-to-px)) var(--circumference)",
-                transform:
-                  "rotate(calc(1turn - 90deg - (var(--gap-percent) * var(--percent-to-deg) * var(--offset-factor-secondary)))) scaleY(-1)",
+                strokeDasharray: "calc(var(--stroke-percent) * var(--percent-to-px)) var(--circumference)",
+                transform: "rotate(calc(1turn - 90deg - (var(--gap-percent) * var(--percent-to-deg) * var(--offset-factor-secondary)))) scaleY(-1)",
                 transition: "all var(--transition-length) ease var(--delay)",
                 transformOrigin: "calc(var(--circle-size) / 2) calc(var(--circle-size) / 2)",
               } as React.CSSProperties
@@ -77,13 +69,10 @@ export default function AnimatedCircularProgressBar({
             {
               "--stroke-primary-color": primaryColor,
               "--stroke-percent": currentPercent,
-              strokeDasharray:
-                "calc(var(--stroke-percent) * var(--percent-to-px)) var(--circumference)",
-              transition:
-                "var(--transition-length) ease var(--delay),stroke var(--transition-length) ease var(--delay)",
+              strokeDasharray: "calc(var(--stroke-percent) * var(--percent-to-px)) var(--circumference)",
+              transition: "var(--transition-length) ease var(--delay),stroke var(--transition-length) ease var(--delay)",
               transitionProperty: "stroke-dasharray,transform",
-              transform:
-                "rotate(calc(-90deg + var(--gap-percent) * var(--offset-factor) * var(--percent-to-deg)))",
+              transform: "rotate(calc(-90deg + var(--gap-percent) * var(--offset-factor) * var(--percent-to-deg)))",
               transformOrigin: "calc(var(--circle-size) / 2) calc(var(--circle-size) / 2)",
             } as React.CSSProperties
           }

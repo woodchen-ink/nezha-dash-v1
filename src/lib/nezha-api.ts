@@ -1,10 +1,4 @@
-import {
-  LoginUserResponse,
-  MonitorResponse,
-  ServerGroupResponse,
-  ServiceResponse,
-  SettingResponse,
-} from "@/types/nezha-api"
+import { LoginUserResponse, MonitorResponse, ServerGroupResponse, ServiceResponse, SettingResponse } from "@/types/nezha-api"
 
 export const fetchServerGroup = async (): Promise<ServerGroupResponse> => {
   const response = await fetch("/api/v1/server-group")
