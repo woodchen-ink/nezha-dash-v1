@@ -114,12 +114,9 @@ export function getDaysBetweenDatesWithAutoRenewal({
       days: getDaysBetweenDates(endDate, new Date(nowTime).toISOString()),
       cycleLabel: cycleLabel,
       remainingPercentage:
-        getDaysBetweenDates(endDate, new Date(nowTime).toISOString()) /
-        (30 * months) >
-        1
+        getDaysBetweenDates(endDate, new Date(nowTime).toISOString()) / (30 * months) > 1
           ? 1
-          : getDaysBetweenDates(endDate, new Date(nowTime).toISOString()) /
-          (30 * months),
+          : getDaysBetweenDates(endDate, new Date(nowTime).toISOString()) / (30 * months),
     }
   }
 
