@@ -43,7 +43,7 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
           "lg:flex-row": !fixedTopServerName,
         },
         {
-          "bg-card/50": customBackgroundImage,
+          "bg-card/80": customBackgroundImage,
         },
       )}
       onClick={() => navigate(`/server/${serverInfo.id}`)}
@@ -141,7 +141,7 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
           "lg:flex-row": !fixedTopServerName,
         },
         {
-          "bg-card/50": customBackgroundImage,
+          "bg-card/80": customBackgroundImage,
         },
       )}
       onClick={() => navigate(`/server/${serverInfo.id}`, { replace: true })}

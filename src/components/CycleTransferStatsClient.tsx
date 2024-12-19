@@ -31,7 +31,7 @@ export const CycleTransferStatsClient: React.FC<CycleTransferStatsClientProps> =
         "w-full bg-white px-4 py-3 rounded-lg border bg-card text-card-foreground shadow-lg shadow-neutral-200/40 dark:shadow-none space-y-2",
         className,
         {
-          "bg-card/50": customBackgroundImage,
+          "bg-card/80": customBackgroundImage,
         },
       )}
     >

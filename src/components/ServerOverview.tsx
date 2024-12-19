@@ -37,7 +37,7 @@ export default function ServerOverview({ online, offline, total, up, down, upSpe
             setStatus("all")
           }}
           className={cn("hover:border-blue-500 cursor-pointer transition-all", {
-            "bg-card/50": customBackgroundImage,
+            "bg-card/80": customBackgroundImage,
           })}
         >
           <CardContent className="flex h-full items-center px-6 py-3">
@@ -59,7 +59,7 @@ export default function ServerOverview({ online, offline, total, up, down, upSpe
           className={cn(
             "cursor-pointer hover:ring-green-500 ring-1 ring-transparent transition-all",
             {
-              "bg-card/50": customBackgroundImage,
+              "bg-card/80": customBackgroundImage,
             },
             {
               "ring-green-500 ring-2 border-transparent": status === "online",
@@ -87,7 +87,7 @@ export default function ServerOverview({ online, offline, total, up, down, upSpe
           className={cn(
             "cursor-pointer hover:ring-red-500 ring-1 ring-transparent transition-all",
             {
-              "bg-card/50": customBackgroundImage,
+              "bg-card/80": customBackgroundImage,
             },
             {
               "ring-red-500 ring-2 border-transparent": status === "offline",
@@ -109,7 +109,7 @@ export default function ServerOverview({ online, offline, total, up, down, upSpe
         </Card>
         <Card
           className={cn("hover:ring-purple-500 ring-1 ring-transparent transition-all", {
-            "bg-card/50": customBackgroundImage,
+            "bg-card/80": customBackgroundImage,
           })}
         >
           <CardContent className="flex h-full items-center relative px-6 py-3">

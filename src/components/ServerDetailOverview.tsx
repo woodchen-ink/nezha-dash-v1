@@ -55,8 +55,16 @@ export default function ServerDetailOverview({ server_id }: { server_id: string 
     last_active_time_string,
   } = formatNezhaInfo(nezhaWsData.now, server)
 
+  const customBackgroundImage =
+    // @ts-expect-error CustomBackgroundImage is a global variable
+    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+
   return (
-    <div>
+    <div
+      className={cn({
+        "bg-card/80 p-4 rounded-[10px]": customBackgroundImage,
+      })}
+    >
       <div
         onClick={() => navigate("/")}
         className="flex flex-none cursor-pointer font-semibold leading-none items-center break-all tracking-tight gap-1 text-xl"

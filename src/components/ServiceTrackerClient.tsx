@@ -26,7 +26,7 @@ export const ServiceTrackerClient: React.FC<ServiceTrackerProps> = ({ days, clas
         "w-full space-y-3 bg-white px-4 py-4  rounded-lg border bg-card text-card-foreground shadow-lg shadow-neutral-200/40 dark:shadow-none",
         className,
         {
-          "bg-card/50": customBackgroundImage,
+          "bg-card/80": customBackgroundImage,
         },
       )}
     >

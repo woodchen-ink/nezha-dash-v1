@@ -202,7 +202,7 @@ export default function Servers() {
                 "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] bg-blue-500": showMap === "1",
               },
               {
-                "bg-opacity-50": customBackgroundImage,
+                "bg-opacity-80": customBackgroundImage,
               },
             )}
           >
@@ -219,7 +219,7 @@ export default function Servers() {
                 "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] bg-blue-500": showServices === "1",
               },
               {
-                "bg-opacity-50": customBackgroundImage,
+                "bg-opacity-80": customBackgroundImage,
               },
             )}
           >
@@ -236,7 +236,7 @@ export default function Servers() {
                 "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] bg-blue-500": inline === "1",
               },
               {
-                "bg-opacity-50": customBackgroundImage,
+                "bg-opacity-80": customBackgroundImage,
               },
             )}
           >
@@ -253,7 +253,7 @@ export default function Servers() {
                   "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] dark:bg-stone-700 bg-stone-200": settingsOpen,
                 },
                 {
-                  "dark:bg-stone-800/50 bg-stone-100/50 ": customBackgroundImage,
+                  "dark:bg-stone-800/80 bg-stone-100/80 ": customBackgroundImage,
                 },
               )}
             >

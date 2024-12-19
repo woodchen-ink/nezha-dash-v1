@@ -34,7 +34,7 @@ export default function ServerCardInline({ now, serverInfo }: { now: number; ser
         className={cn(
           "flex items-center lg:flex-row justify-start gap-3 p-3 md:px-5 cursor-pointer hover:bg-accent/50 transition-colors min-w-[900px] w-full",
           {
-            "bg-card/50": customBackgroundImage,
+            "bg-card/80": customBackgroundImage,
           },
         )}
         onClick={() => navigate(`/server/${serverInfo.id}`)}
@@ -118,7 +118,7 @@ export default function ServerCardInline({ now, serverInfo }: { now: number; ser
       className={cn(
         "flex  min-h-[61px] min-w-[900px] items-center justify-start p-3 md:px-5 flex-row cursor-pointer hover:bg-accent/50 transition-colors",
         {
-          "bg-card/50": customBackgroundImage,
+          "bg-card/80": customBackgroundImage,
         },
       )}
       onClick={() => navigate(`/server/${serverInfo.id}`)}
