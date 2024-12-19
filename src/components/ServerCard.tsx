@@ -1,6 +1,7 @@
 import ServerFlag from "@/components/ServerFlag"
 import ServerUsageBar from "@/components/ServerUsageBar"
 import { formatBytes } from "@/lib/format"
+import { GetFontLogoClass, GetOsName, MageMicrosoftWindows } from "@/lib/logo-class"
 import { cn, formatNezhaInfo, parsePublicNote } from "@/lib/utils"
 import { NezhaServer } from "@/types/nezha-api"
 import { useTranslation } from "react-i18next"
@@ -14,7 +15,10 @@ import { Card } from "./ui/card"
 export default function ServerCard({ now, serverInfo }: { now: number; serverInfo: NezhaServer }) {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { name, country_code, online, cpu, up, down, mem, stg, net_in_transfer, net_out_transfer, public_note } = formatNezhaInfo(now, serverInfo)
+  const { name, country_code, online, cpu, up, down, mem, stg, net_in_transfer, net_out_transfer, public_note, platform } = formatNezhaInfo(
+    now,
+    serverInfo,
+  )
 
   const showFlag = true
 
@@ -25,16 +29,31 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
   // @ts-expect-error ShowNetTransfer is a global variable
   const showNetTransfer = window.ShowNetTransfer as boolean
 
+  // @ts-expect-error FixedTopServerName is a global variable
+  const fixedTopServerName = window.FixedTopServerName as boolean
+
   const parsedData = parsePublicNote(public_note)
 
   return online ? (
     <Card
-      className={cn("flex flex-col items-center justify-start gap-3 p-3 md:px-5 lg:flex-row cursor-pointer hover:bg-accent/50 transition-colors", {
-        "bg-card/50": customBackgroundImage,
-      })}
+      className={cn(
+        "flex flex-col items-center justify-start gap-3 p-3 md:px-5 cursor-pointer hover:bg-accent/50 transition-colors",
+        {
+          "flex-col": fixedTopServerName,
+          "lg:flex-row": !fixedTopServerName,
+        },
+        {
+          "bg-card/50": customBackgroundImage,
+        },
+      )}
       onClick={() => navigate(`/server/${serverInfo.id}`)}
     >
-      <section className={cn("grid items-center gap-2 lg:w-40")} style={{ gridTemplateColumns: "auto auto 1fr" }}>
+      <section
+        className={cn("grid items-center gap-2", {
+          "lg:w-40": !fixedTopServerName,
+        })}
+        style={{ gridTemplateColumns: "auto auto 1fr" }}
+      >
         <span className="h-2 w-2 shrink-0 rounded-full bg-green-500 self-center"></span>
         <div className={cn("flex items-center justify-center", showFlag ? "min-w-[17px]" : "min-w-0")}>
           {showFlag ? <ServerFlag country_code={country_code} /> : null}
@@ -45,7 +64,26 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
         </div>
       </section>
       <div className="flex flex-col gap-2">
-        <section className={cn("grid grid-cols-5 items-center gap-3")}>
+        <section
+          className={cn("grid grid-cols-5 items-center gap-3", {
+            "lg:grid-cols-6 lg:gap-4": fixedTopServerName,
+          })}
+        >
+          {fixedTopServerName && (
+            <div className={"hidden col-span-1 items-center lg:flex lg:flex-row gap-2"}>
+              <div className="text-xs font-semibold">
+                {platform.includes("Windows") ? (
+                  <MageMicrosoftWindows className="size-[10px]" />
+                ) : (
+                  <p className={`fl-${GetFontLogoClass(platform)}`} />
+                )}
+              </div>
+              <div className={"flex w-14 flex-col"}>
+                <p className="text-xs text-muted-foreground">{t("serverCard.system")}</p>
+                <div className="flex items-center text-[10.5px] font-semibold">{platform.includes("Windows") ? "Windows" : GetOsName(platform)}</div>
+              </div>
+            </div>
+          )}
           <div className={"flex w-14 flex-col"}>
             <p className="text-xs text-muted-foreground">{"CPU"}</p>
             <div className="flex items-center text-xs font-semibold">{cpu.toFixed(2)}%</div>
@@ -96,15 +134,24 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
   ) : (
     <Card
       className={cn(
-        "flex flex-col items-center justify-start gap-3 sm:gap-0 p-3 md:px-5 lg:flex-row cursor-pointer hover:bg-accent/50 transition-colors",
+        "flex flex-col items-center justify-start gap-3 sm:gap-0 p-3 md:px-5 cursor-pointer hover:bg-accent/50 transition-colors",
         showNetTransfer ? "lg:min-h-[91px] min-h-[123px]" : "lg:min-h-[61px] min-h-[93px]",
+        {
+          "flex-col": fixedTopServerName,
+          "lg:flex-row": !fixedTopServerName,
+        },
         {
           "bg-card/50": customBackgroundImage,
         },
       )}
       onClick={() => navigate(`/server/${serverInfo.id}`, { replace: true })}
     >
-      <section className={cn("grid items-center gap-2 lg:w-40")} style={{ gridTemplateColumns: "auto auto 1fr" }}>
+      <section
+        className={cn("grid items-center gap-2", {
+          "lg:w-40": !fixedTopServerName,
+        })}
+        style={{ gridTemplateColumns: "auto auto 1fr" }}
+      >
         <span className="h-2 w-2 shrink-0 rounded-full bg-red-500 self-center"></span>
         <div className={cn("flex items-center justify-center", showFlag ? "min-w-[17px]" : "min-w-0")}>
           {showFlag ? <ServerFlag country_code={country_code} /> : null}
