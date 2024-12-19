@@ -18,7 +18,12 @@ export default function BillingInfo({ parsedData }: { parsedData: PublicNoteData
     if (parsedData.billingDataMod.endDate.startsWith("0000-00-00")) {
       isNeverExpire = true
     } else {
-      daysLeftObject = getDaysBetweenDatesWithAutoRenewal(parsedData.billingDataMod)
+      try {
+        daysLeftObject = getDaysBetweenDatesWithAutoRenewal(parsedData.billingDataMod)
+      } catch (error) {
+        console.error(error)
+        return <div className={cn("text-[10px] text-muted-foreground text-red-600")}>剩余时间: 计算出错</div>
+      }
     }
   }
 
