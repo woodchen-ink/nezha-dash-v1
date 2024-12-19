@@ -4,6 +4,9 @@ export default function PlanInfo({ parsedData }: { parsedData: PublicNoteData })
   if (!parsedData || !parsedData.planDataMod) {
     return null
   }
+
+  const extraList = parsedData.planDataMod.extra.split(",").length > 1 ? parsedData.planDataMod.extra.split(",") : parsedData.planDataMod.extra.split(",")[0] === "" ? [] : [parsedData.planDataMod.extra]
+
   return (
     <section className="flex gap-1 items-center flex-wrap mt-0.5">
       {parsedData.planDataMod.bandwidth !== "" && (
@@ -48,22 +51,26 @@ export default function PlanInfo({ parsedData }: { parsedData: PublicNoteData })
             "text-[9px] bg-blue-600 text-blue-200 dark:bg-blue-800 dark:text-blue-300  w-fit rounded-[5px] px-[3px] py-[1.5px]",
           )}
         >
-          {parsedData.planDataMod.networkRoute.split(",").map((route) => {
-            return route
+          {parsedData.planDataMod.networkRoute.split(",").map((route,index) => {
+            return route + (index === parsedData.planDataMod!.networkRoute.split(",").length - 1 ? "" : "｜")
           })}
         </p>
       )}
-      {parsedData.planDataMod.extra && (
-        <p
-          className={cn(
-            "text-[9px] bg-stone-600 text-stone-200 dark:bg-stone-800 dark:text-stone-300  w-fit rounded-[5px] px-[3px] py-[1.5px]",
-          )}
-        >
-          {parsedData.planDataMod.extra.split(",").map((extra) => {
-            return extra
-          })}
-        </p>
-      )}
+      {
+        extraList.map((extra, index) => {
+          return (
+            <p
+              key={index}
+              className={cn(
+                "text-[9px] bg-stone-600 text-stone-200 dark:bg-stone-800 dark:text-stone-300  w-fit rounded-[5px] px-[3px] py-[1.5px]",
+              )}
+            >
+              {extra}
+            </p>
+          )
+        })
+      }
+      
     </section>
   )
 }
