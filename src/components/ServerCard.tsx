@@ -1,11 +1,13 @@
 import ServerFlag from "@/components/ServerFlag"
 import ServerUsageBar from "@/components/ServerUsageBar"
 import { formatBytes } from "@/lib/format"
-import { cn, formatNezhaInfo, getDaysBetweenDates, parsePublicNote } from "@/lib/utils"
+import { cn, formatNezhaInfo, parsePublicNote } from "@/lib/utils"
 import { NezhaServer } from "@/types/nezha-api"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 
+import PlanInfo from "./PlanInfo"
+import BillingInfo from "./billingInfo"
 import { Badge } from "./ui/badge"
 import { Card } from "./ui/card"
 
@@ -37,17 +39,6 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
 
   const parsedData = parsePublicNote(public_note)
 
-  let daysLeft = 0
-  let isNeverExpire = false
-
-  if (parsedData?.billingDataMod?.endDate) {
-    if (parsedData.billingDataMod.endDate.startsWith("0000-00-00")) {
-      isNeverExpire = true
-    } else {
-      daysLeft = getDaysBetweenDates(parsedData.billingDataMod.endDate, new Date(now).toISOString())
-    }
-  }
-
   return online ? (
     <Card
       className={cn(
@@ -74,64 +65,7 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
           >
             {name}
           </p>
-          {parsedData?.billingDataMod &&
-            (daysLeft >= 0 ? (
-              <>
-                <p className={cn("text-[10px] text-muted-foreground")}>
-                  剩余时间: {isNeverExpire ? "永久" : daysLeft + "天"}
-                </p>
-                {parsedData.billingDataMod.amount &&
-                parsedData.billingDataMod.amount !== "0" &&
-                parsedData.billingDataMod.amount !== "-1" ? (
-                  <p className={cn("text-[10px] text-muted-foreground ")}>
-                    价格: {parsedData.billingDataMod.amount}/{parsedData.billingDataMod.cycle}
-                  </p>
-                ) : parsedData.billingDataMod.amount === "0" ? (
-                  <p className={cn("text-[10px] text-green-600 ")}>免费</p>
-                ) : parsedData.billingDataMod.amount === "-1" ? (
-                  <p className={cn("text-[10px] text-pink-600 ")}>按量收费</p>
-                ) : null}
-              </>
-            ) : (
-              <>
-                <p className={cn("text-[10px] text-muted-foreground text-red-600")}>
-                  已过期: {daysLeft * -1} 天
-                </p>
-                {parsedData.billingDataMod.amount &&
-                parsedData.billingDataMod.amount !== "0" &&
-                parsedData.billingDataMod.amount !== "-1" ? (
-                  <p className={cn("text-[10px] text-muted-foreground ")}>
-                    价格: {parsedData.billingDataMod.amount}/{parsedData.billingDataMod.cycle}
-                  </p>
-                ) : parsedData.billingDataMod.amount === "0" ? (
-                  <p className={cn("text-[10px] text-green-600 ")}>免费</p>
-                ) : parsedData.billingDataMod.amount === "-1" ? (
-                  <p className={cn("text-[10px] text-pink-600 ")}>按量收费</p>
-                ) : null}
-              </>
-            ))}
-          {parsedData?.planDataMod && (
-            <section className="flex gap-1 items-center flex-wrap mt-0.5">
-              {parsedData.planDataMod.bandwidth !== "" && (
-                <p
-                  className={cn(
-                    "text-[9px] bg-blue-600 dark:bg-blue-800 text-blue-200 dark:text-blue-300  w-fit rounded-[5px] px-[3px] py-[1.5px]",
-                  )}
-                >
-                  {parsedData.planDataMod.bandwidth}
-                </p>
-              )}
-              {parsedData.planDataMod.trafficVol !== "" && (
-                <p
-                  className={cn(
-                    "text-[9px] bg-green-600 text-green-200 dark:bg-green-800 dark:text-green-300  w-fit rounded-[5px] px-[3px] py-[1.5px]",
-                  )}
-                >
-                  {parsedData.planDataMod.trafficVol}
-                </p>
-              )}
-            </section>
-          )}
+          {parsedData?.billingDataMod && <BillingInfo parsedData={parsedData} />}
         </div>
       </section>
       <div className="flex flex-col gap-2">
@@ -188,12 +122,13 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
             </Badge>
           </section>
         )}
+        {parsedData?.planDataMod && <PlanInfo parsedData={parsedData} />}
       </div>
     </Card>
   ) : (
     <Card
       className={cn(
-        "flex flex-col items-center justify-start gap-3 p-3 md:px-5 lg:flex-row cursor-pointer hover:bg-accent/50 transition-colors",
+        "flex flex-col items-center justify-start gap-3 sm:gap-0 p-3 md:px-5 lg:flex-row cursor-pointer hover:bg-accent/50 transition-colors",
         showNetTransfer ? "lg:min-h-[91px] min-h-[123px]" : "lg:min-h-[61px] min-h-[93px]",
         {
           "bg-card/50": customBackgroundImage,
@@ -212,69 +147,18 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
           {showFlag ? <ServerFlag country_code={country_code} /> : null}
         </div>
         <div className="relative flex flex-col">
-          <p className={cn("break-all font-bold tracking-tight", showFlag ? "text-xs" : "text-sm")}>
+          <p
+            className={cn(
+              "break-all font-bold tracking-tight max-w-[108px]",
+              showFlag ? "text-xs" : "text-sm",
+            )}
+          >
             {name}
           </p>
-          {parsedData?.billingDataMod &&
-            (daysLeft >= 0 ? (
-              <>
-                <p className={cn("text-[10px] text-muted-foreground")}>
-                  剩余时间: {isNeverExpire ? "永久" : daysLeft + "天"}
-                </p>
-                {parsedData.billingDataMod.amount &&
-                parsedData.billingDataMod.amount !== "0" &&
-                parsedData.billingDataMod.amount !== "-1" ? (
-                  <p className={cn("text-[10px] text-muted-foreground ")}>
-                    价格: {parsedData.billingDataMod.amount}/{parsedData.billingDataMod.cycle}
-                  </p>
-                ) : parsedData.billingDataMod.amount === "0" ? (
-                  <p className={cn("text-[10px] text-green-600 ")}>免费</p>
-                ) : parsedData.billingDataMod.amount === "-1" ? (
-                  <p className={cn("text-[10px] text-pink-600 ")}>按量收费</p>
-                ) : null}
-              </>
-            ) : (
-              <>
-                <p className={cn("text-[10px] text-muted-foreground text-red-600")}>
-                  已过期: {daysLeft * -1} 天
-                </p>
-                {parsedData.billingDataMod.amount &&
-                parsedData.billingDataMod.amount !== "0" &&
-                parsedData.billingDataMod.amount !== "-1" ? (
-                  <p className={cn("text-[10px] text-muted-foreground ")}>
-                    价格: {parsedData.billingDataMod.amount}/{parsedData.billingDataMod.cycle}
-                  </p>
-                ) : parsedData.billingDataMod.amount === "0" ? (
-                  <p className={cn("text-[10px] text-green-600 ")}>免费</p>
-                ) : parsedData.billingDataMod.amount === "-1" ? (
-                  <p className={cn("text-[10px] text-pink-600 ")}>按量收费</p>
-                ) : null}
-              </>
-            ))}
-          {parsedData?.planDataMod && (
-            <section className="flex gap-1 items-center flex-wrap mt-0.5">
-              {parsedData.planDataMod.bandwidth !== "" && (
-                <p
-                  className={cn(
-                    "text-[9px] bg-blue-600 dark:bg-blue-800 text-blue-200 dark:text-blue-300  w-fit rounded-[5px] px-[3px] py-[1.5px]",
-                  )}
-                >
-                  {parsedData.planDataMod.bandwidth}
-                </p>
-              )}
-              {parsedData.planDataMod.trafficVol !== "" && (
-                <p
-                  className={cn(
-                    "text-[9px] bg-green-600 text-green-200 dark:bg-green-800 dark:text-green-300  w-fit rounded-[5px] px-[3px] py-[1.5px]",
-                  )}
-                >
-                  {parsedData.planDataMod.trafficVol}
-                </p>
-              )}
-            </section>
-          )}
+          {parsedData?.billingDataMod && <BillingInfo parsedData={parsedData} />}
         </div>
       </section>
+      {parsedData?.planDataMod && <PlanInfo parsedData={parsedData} />}
     </Card>
   )
 }

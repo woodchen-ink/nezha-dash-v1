@@ -1,5 +1,6 @@
 import { NezhaServer } from "@/types/nezha-api"
 import { type ClassValue, clsx } from "clsx"
+import dayjs from "dayjs"
 import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
@@ -44,6 +45,112 @@ export function formatNezhaInfo(now: number, serverInfo: NezhaServer) {
     load_15: serverInfo.state.load_15?.toFixed(2) || 0.0,
     public_note: handlePublicNote(serverInfo.id, serverInfo.public_note || ""),
   }
+}
+
+export function getDaysBetweenDatesWithAutoRenewal({
+  autoRenewal,
+  cycle,
+  startDate,
+  endDate,
+}: BillingData): { days: number; cycleLabel: string; remainingPercentage: number } {
+  let months = 1
+  // 套餐资费
+  let cycleLabel = cycle
+
+  switch (cycle.toLowerCase()) {
+    case "月":
+    case "m":
+    case "mo":
+    case "month":
+    case "monthly":
+      cycleLabel = "月"
+      months = 1
+      break
+    case "年":
+    case "y":
+    case "yr":
+    case "year":
+    case "annual":
+      cycleLabel = "年"
+      months = 12
+      break
+    case "季":
+    case "quarterly":
+      cycleLabel = "季"
+      months = 3
+      break
+    case "半":
+    case "半年":
+    case "h":
+    case "half":
+    case "semi-annually":
+      cycleLabel = "半年"
+      months = 6
+      break
+    default:
+      cycleLabel = cycle
+      break
+  }
+
+  const nowTime = new Date().getTime()
+  const endTime = dayjs(endDate).valueOf()
+
+  if (autoRenewal !== "1") {
+    return {
+      days: getDaysBetweenDates(endDate, new Date(nowTime).toISOString()),
+      cycleLabel: cycleLabel,
+      remainingPercentage:
+        getDaysBetweenDates(endDate, new Date(nowTime).toISOString()) /
+          dayjs(endDate).diff(startDate, "day") >
+        1
+          ? 1
+          : getDaysBetweenDates(endDate, new Date(nowTime).toISOString()) /
+            dayjs(endDate).diff(startDate, "day"),
+    }
+  }
+
+  const nextTime = getNextCycleTime(endTime, months, nowTime)
+  const diff = dayjs(nextTime).diff(dayjs(), "day") + 1
+  const remainingPercentage = diff / (30 * months) > 1 ? 1 : diff / (30 * months)
+
+  console.log(
+    "nextTime",
+    nextTime,
+    "diff",
+    diff,
+    "month",
+    months,
+    "remainingPercentage",
+    remainingPercentage,
+  )
+
+  return {
+    days: diff,
+    cycleLabel: cycleLabel,
+    remainingPercentage: remainingPercentage,
+  }
+}
+
+// Thanks to hi2shark for the code
+// https://github.com/hi2shark/nazhua/blob/main/src/utils/date.js#L86
+export function getNextCycleTime(startDate: number, months: number, specifiedDate: number): number {
+  const start = dayjs(startDate)
+  const checkDate = dayjs(specifiedDate)
+
+  if (!start.isValid() || months <= 0) {
+    throw new Error("参数无效：请检查起始日期、周期月份数和指定日期。")
+  }
+
+  let nextDate = start
+
+  // 循环增加周期直到大于当前日期
+  let whileStatus = true
+  while (whileStatus) {
+    nextDate = nextDate.add(months, "month")
+    whileStatus = nextDate.valueOf() <= checkDate.valueOf()
+  }
+
+  return nextDate.valueOf() // 返回时间毫秒数
 }
 
 export function getDaysBetweenDates(date1: string, date2: string): number {
@@ -137,7 +244,7 @@ interface PlanData {
   extra: string
 }
 
-interface PublicNoteData {
+export interface PublicNoteData {
   billingDataMod?: BillingData
   planDataMod?: PlanData
 }
