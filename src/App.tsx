@@ -52,7 +52,7 @@ const App: React.FC = () => {
     return null
   }
 
-  if (!isCustomCodeInjected) {
+  if (settingData?.data?.custom_code && !isCustomCodeInjected) {
     return null
   }
 
