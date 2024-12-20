@@ -61,7 +61,7 @@ const App: React.FC = () => {
         {/* 固定定位的背景层 */}
         {customBackgroundImage && (
           <div
-            className={cn("fixed inset-0 z-0 bg-cover min-h-lvh bg-no-repeat bg-center", {
+            className={cn("fixed inset-0 z-0 bg-cover min-h-lvh bg-no-repeat bg-center dark:brightness-75", {
               "hidden sm:block": customMobileBackgroundImage,
             })}
             style={{ backgroundImage: `url(${customBackgroundImage})` }}
@@ -69,7 +69,7 @@ const App: React.FC = () => {
         )}
         {customMobileBackgroundImage && (
           <div
-            className={cn("fixed inset-0 z-0 bg-cover min-h-lvh bg-no-repeat bg-center sm:hidden")}
+            className={cn("fixed inset-0 z-0 bg-cover min-h-lvh bg-no-repeat bg-center sm:hidden dark:brightness-75")}
             style={{ backgroundImage: `url(${customMobileBackgroundImage})` }}
           />
         )}
