@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom"
 
+import ErrorBoundary from "./components/ErrorBoundary"
 import Footer from "./components/Footer"
 import Header from "./components/Header"
 import { InjectContext } from "./lib/inject"
@@ -56,37 +57,39 @@ const App: React.FC = () => {
 
   return (
     <Router basename={import.meta.env.BASE_URL}>
-      {/* 固定定位的背景层 */}
-      {customBackgroundImage && (
+      <ErrorBoundary>
+        {/* 固定定位的背景层 */}
+        {customBackgroundImage && (
+          <div
+            className={cn("fixed inset-0 z-0 bg-cover min-h-lvh bg-no-repeat bg-center", {
+              "hidden sm:block": customMobileBackgroundImage,
+            })}
+            style={{ backgroundImage: `url(${customBackgroundImage})` }}
+          />
+        )}
+        {customMobileBackgroundImage && (
+          <div
+            className={cn("fixed inset-0 z-0 bg-cover min-h-lvh bg-no-repeat bg-center sm:hidden")}
+            style={{ backgroundImage: `url(${customMobileBackgroundImage})` }}
+          />
+        )}
         <div
-          className={cn("fixed inset-0 z-0 bg-cover min-h-lvh bg-no-repeat bg-center", {
-            "hidden sm:block": customMobileBackgroundImage,
+          className={cn("flex min-h-screen w-full flex-col", {
+            "bg-background": !customBackgroundImage,
           })}
-          style={{ backgroundImage: `url(${customBackgroundImage})` }}
-        />
-      )}
-      {customMobileBackgroundImage && (
-        <div
-          className={cn("fixed inset-0 z-0 bg-cover min-h-lvh bg-no-repeat bg-center sm:hidden")}
-          style={{ backgroundImage: `url(${customMobileBackgroundImage})` }}
-        />
-      )}
-      <div
-        className={cn("flex min-h-screen w-full flex-col", {
-          "bg-background": !customBackgroundImage,
-        })}
-      >
-        <main className="flex z-20 min-h-[calc(100vh-calc(var(--spacing)*16))] flex-1 flex-col gap-4 p-4 md:p-10 md:pt-8">
-          <Header />
-          <Routes>
-            <Route path="/" element={<Server />} />
-            <Route path="/server/:id" element={<ServerDetail />} />
-            <Route path="/error" element={<ErrorPage />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-          <Footer />
-        </main>
-      </div>
+        >
+          <main className="flex z-20 min-h-[calc(100vh-calc(var(--spacing)*16))] flex-1 flex-col gap-4 p-4 md:p-10 md:pt-8">
+            <Header />
+            <Routes>
+              <Route path="/" element={<Server />} />
+              <Route path="/server/:id" element={<ServerDetail />} />
+              <Route path="/error" element={<ErrorPage />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+            <Footer />
+          </main>
+        </div>
+      </ErrorBoundary>
     </Router>
   )
 }
