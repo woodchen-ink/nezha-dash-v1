@@ -63,7 +63,7 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
           {parsedData?.billingDataMod && <BillingInfo parsedData={parsedData} />}
         </div>
       </section>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col sm:items-start items-center gap-2">
         <section
           className={cn("grid grid-cols-5 items-center gap-3", {
             "lg:grid-cols-6 lg:gap-4": fixedTopServerName,
