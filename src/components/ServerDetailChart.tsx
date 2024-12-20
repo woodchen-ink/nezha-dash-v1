@@ -68,12 +68,6 @@ export default function ServerDetailChart({ server_id }: { server_id: string }) 
     return <ServerDetailChartLoading />
   }
 
-  const { online } = formatNezhaInfo(nezhaWsData.now, server)
-
-  if (!online) {
-    return <ServerDetailChartLoading />
-  }
-
   const gpuStats = server.state.gpu || []
   const gpuList = server.host.gpu || []
 
