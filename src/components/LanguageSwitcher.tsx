@@ -33,7 +33,7 @@ export function LanguageSwitcher() {
           variant="outline"
           size="sm"
           className={cn("rounded-full px-[9px] bg-white dark:bg-black", {
-            "bg-white/80 dark:bg-black/80": customBackgroundImage,
+            "bg-white/70 dark:bg-black/70": customBackgroundImage,
           })}
         >
           {localeItems.find((item) => item.code === locale)?.name}

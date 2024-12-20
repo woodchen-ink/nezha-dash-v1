@@ -125,7 +125,7 @@ function GpuChart({ now, gpuStat, gpuName }: { now: number; gpuStat: number; gpu
   return (
     <Card
       className={cn({
-        "bg-card/80": customBackgroundImage,
+        "bg-card/70": customBackgroundImage,
       })}
     >
       <CardContent className="px-6 py-3">
@@ -207,7 +207,7 @@ function CpuChart({ now, data }: { now: number; data: NezhaServer }) {
   return (
     <Card
       className={cn({
-        "bg-card/80": customBackgroundImage,
+        "bg-card/70": customBackgroundImage,
       })}
     >
       <CardContent className="px-6 py-3">
@@ -287,7 +287,7 @@ function ProcessChart({ now, data }: { now: number; data: NezhaServer }) {
   return (
     <Card
       className={cn({
-        "bg-card/80": customBackgroundImage,
+        "bg-card/70": customBackgroundImage,
       })}
     >
       <CardContent className="px-6 py-3">
@@ -376,7 +376,7 @@ function MemChart({ now, data }: { now: number; data: NezhaServer }) {
   return (
     <Card
       className={cn({
-        "bg-card/80": customBackgroundImage,
+        "bg-card/70": customBackgroundImage,
       })}
     >
       <CardContent className="px-6 py-3">
@@ -489,7 +489,7 @@ function DiskChart({ now, data }: { now: number; data: NezhaServer }) {
   return (
     <Card
       className={cn({
-        "bg-card/80": customBackgroundImage,
+        "bg-card/70": customBackgroundImage,
       })}
     >
       <CardContent className="px-6 py-3">
@@ -583,7 +583,7 @@ function NetworkChart({ now, data }: { now: number; data: NezhaServer }) {
   return (
     <Card
       className={cn({
-        "bg-card/80": customBackgroundImage,
+        "bg-card/70": customBackgroundImage,
       })}
     >
       <CardContent className="px-6 py-3">
@@ -691,7 +691,7 @@ function ConnectChart({ now, data }: { now: number; data: NezhaServer }) {
   return (
     <Card
       className={cn({
-        "bg-card/80": customBackgroundImage,
+        "bg-card/70": customBackgroundImage,
       })}
     >
       <CardContent className="px-6 py-3">

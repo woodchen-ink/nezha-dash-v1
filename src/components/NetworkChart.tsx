@@ -242,7 +242,7 @@ export const NetworkChartClient = React.memo(function NetworkChart({
   return (
     <Card
       className={cn({
-        "bg-card/80": customBackgroundImage,
+        "bg-card/70": customBackgroundImage,
       })}
     >
       <CardHeader className="flex flex-col items-stretch space-y-0 p-0 sm:flex-row">

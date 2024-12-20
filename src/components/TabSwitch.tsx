@@ -11,7 +11,7 @@ export default function TabSwitch({ tabs, currentTab, setCurrentTab }: { tabs: s
     <div className="z-50 flex flex-col items-start rounded-[50px]">
       <div
         className={cn("flex items-center gap-1 rounded-[50px] bg-stone-100 p-[3px] dark:bg-stone-800", {
-          "bg-stone-100/80 dark:bg-stone-800/80": customBackgroundImage,
+          "bg-stone-100/70 dark:bg-stone-800/70": customBackgroundImage,
         })}
       >
         {tabs.map((tab: string) => (

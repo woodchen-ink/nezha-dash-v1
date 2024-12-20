@@ -28,7 +28,7 @@ export function ModeToggle() {
           variant="outline"
           size="sm"
           className={cn("rounded-full px-[9px] bg-white dark:bg-black", {
-            "bg-white/80 dark:bg-black/80": customBackgroundImage,
+            "bg-white/70 dark:bg-black/70": customBackgroundImage,
           })}
         >
           <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
