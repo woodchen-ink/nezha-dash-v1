@@ -47,7 +47,7 @@ function Header() {
   return (
     <div className="mx-auto w-full max-w-5xl">
       <section className="flex items-center justify-between">
-        <section onClick={() => navigate("/")} className="cursor-pointer flex items-center text-base font-medium">
+        <section onClick={() => navigate("/")} className="cursor-pointer flex items-center sm:text-base text-sm font-medium">
           <div className="mr-1 flex flex-row items-center justify-start">
             <img
               width={40}
@@ -70,7 +70,7 @@ function Header() {
           <ModeToggle />
         </section>
       </section>
-      <div className="w-full justify-items-end sm:hidden mt-1">
+      <div className="w-full flex justify-end sm:hidden mt-1">
         <Links />
       </div>
       <Overview />
