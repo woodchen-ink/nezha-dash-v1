@@ -6,6 +6,7 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom"
 import ErrorBoundary from "./components/ErrorBoundary"
 import Footer from "./components/Footer"
 import Header from "./components/Header"
+import { useTheme } from "./hooks/use-theme"
 import { InjectContext } from "./lib/inject"
 import { fetchSetting } from "./lib/nezha-api"
 import { cn } from "./lib/utils"
@@ -22,7 +23,13 @@ const App: React.FC = () => {
     refetchOnWindowFocus: true,
   })
   const { i18n } = useTranslation()
+  const { setTheme } = useTheme()
   const [isCustomCodeInjected, setIsCustomCodeInjected] = useState(false)
+
+  // 检测是否强制指定了主题颜色
+  const forceTheme =
+    // @ts-expect-error ForceTheme is a global variable
+    (window.ForceTheme as string) !== "" ? window.ForceTheme : undefined
 
   useEffect(() => {
     if (settingData?.data?.custom_code) {
@@ -30,6 +37,12 @@ const App: React.FC = () => {
       setIsCustomCodeInjected(true)
     }
   }, [settingData?.data?.custom_code])
+
+  useEffect(() => {
+    if (forceTheme === "dark" || forceTheme === "light") {
+      setTheme(forceTheme)
+    }
+  }, [forceTheme])
 
   if (error) {
     return <ErrorPage code={500} message={error.message} />
