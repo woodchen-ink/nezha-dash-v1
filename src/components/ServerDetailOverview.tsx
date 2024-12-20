@@ -18,7 +18,7 @@ export default function ServerDetailOverview({ server_id }: { server_id: string 
 
   const { lastMessage, connected } = useWebSocketContext()
 
-  if (!connected) {
+  if (!connected || !lastMessage) {
     return <ServerDetailLoading />
   }
 

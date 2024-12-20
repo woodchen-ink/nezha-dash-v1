@@ -52,7 +52,7 @@ type connectChartData = {
 export default function ServerDetailChart({ server_id }: { server_id: string }) {
   const { lastMessage, connected } = useWebSocketContext()
 
-  if (!connected) {
+  if (!connected || !lastMessage) {
     return <ServerDetailChartLoading />
   }
 

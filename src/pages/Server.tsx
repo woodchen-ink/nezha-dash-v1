@@ -64,7 +64,7 @@ export default function Servers() {
     }
   }, [connected])
 
-  if (!connected) {
+  if (!connected && !lastMessage) {
     return (
       <div className="flex flex-col items-center min-h-96 justify-center ">
         <div className="font-semibold flex items-center gap-2 text-sm">
