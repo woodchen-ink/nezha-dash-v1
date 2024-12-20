@@ -3,7 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { fetchMonitor } from "@/lib/nezha-api"
-import { formatTime } from "@/lib/utils"
+import { cn, formatTime } from "@/lib/utils"
 import { formatRelativeTime } from "@/lib/utils"
 import { NezhaMonitor, ServerMonitorChart } from "@/types/nezha-api"
 import { useQuery } from "@tanstack/react-query"
@@ -92,6 +92,10 @@ export const NetworkChartClient = React.memo(function NetworkChart({
   const { t } = useTranslation()
 
   const defaultChart = "All"
+
+  const customBackgroundImage =
+    // @ts-expect-error CustomBackgroundImage is a global variable
+    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
 
   const [activeChart, setActiveChart] = React.useState(defaultChart)
   const [isPeakEnabled, setIsPeakEnabled] = React.useState(false)
@@ -236,7 +240,11 @@ export const NetworkChartClient = React.memo(function NetworkChart({
   }, [isPeakEnabled, activeChart, formattedData, chartData, chartDataKey, defaultChart])
 
   return (
-    <Card>
+    <Card
+      className={cn({
+        "bg-card/80": customBackgroundImage,
+      })}
+    >
       <CardHeader className="flex flex-col items-stretch space-y-0 p-0 sm:flex-row">
         <div className="flex flex-none flex-col justify-center gap-1 border-b px-6 py-4">
           <CardTitle className="flex flex-none items-center gap-0.5 text-md">{serverName}</CardTitle>

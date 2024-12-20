@@ -2,7 +2,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { ChartConfig, ChartContainer } from "@/components/ui/chart"
 import { useWebSocketContext } from "@/hooks/use-websocket-context"
 import { formatBytes } from "@/lib/format"
-import { formatNezhaInfo, formatRelativeTime } from "@/lib/utils"
+import { cn, formatNezhaInfo, formatRelativeTime } from "@/lib/utils"
 import { NezhaServer, NezhaWebsocketResponse } from "@/types/nezha-api"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -99,6 +99,10 @@ export default function ServerDetailChart({ server_id }: { server_id: string }) 
 function GpuChart({ now, gpuStat, gpuName }: { now: number; gpuStat: number; gpuName?: string }) {
   const [gpuChartData, setGpuChartData] = useState([] as gpuChartData[])
 
+  const customBackgroundImage =
+    // @ts-expect-error CustomBackgroundImage is a global variable
+    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+
   useEffect(() => {
     if (gpuStat) {
       const timestamp = Date.now().toString()
@@ -125,7 +129,11 @@ function GpuChart({ now, gpuStat, gpuName }: { now: number; gpuStat: number; gpu
   } satisfies ChartConfig
 
   return (
-    <Card>
+    <Card
+      className={cn({
+        "bg-card/80": customBackgroundImage,
+      })}
+    >
       <CardContent className="px-6 py-3">
         <section className="flex flex-col gap-1">
           <div className="flex items-center justify-between">
@@ -173,6 +181,10 @@ function CpuChart({ now, data }: { now: number; data: NezhaServer }) {
 
   const { cpu } = formatNezhaInfo(now, data)
 
+  const customBackgroundImage =
+    // @ts-expect-error CustomBackgroundImage is a global variable
+    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+
   useEffect(() => {
     if (data) {
       const timestamp = Date.now().toString()
@@ -199,7 +211,11 @@ function CpuChart({ now, data }: { now: number; data: NezhaServer }) {
   } satisfies ChartConfig
 
   return (
-    <Card>
+    <Card
+      className={cn({
+        "bg-card/80": customBackgroundImage,
+      })}
+    >
       <CardContent className="px-6 py-3">
         <section className="flex flex-col gap-1">
           <div className="flex items-center justify-between">
@@ -243,6 +259,10 @@ function ProcessChart({ now, data }: { now: number; data: NezhaServer }) {
   const { t } = useTranslation()
   const [processChartData, setProcessChartData] = useState([] as processChartData[])
 
+  const customBackgroundImage =
+    // @ts-expect-error CustomBackgroundImage is a global variable
+    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+
   const { process } = formatNezhaInfo(now, data)
 
   useEffect(() => {
@@ -271,7 +291,11 @@ function ProcessChart({ now, data }: { now: number; data: NezhaServer }) {
   } satisfies ChartConfig
 
   return (
-    <Card>
+    <Card
+      className={cn({
+        "bg-card/80": customBackgroundImage,
+      })}
+    >
       <CardContent className="px-6 py-3">
         <section className="flex flex-col gap-1">
           <div className="flex items-center justify-between">
@@ -321,6 +345,10 @@ function MemChart({ now, data }: { now: number; data: NezhaServer }) {
   const { t } = useTranslation()
   const [memChartData, setMemChartData] = useState([] as memChartData[])
 
+  const customBackgroundImage =
+    // @ts-expect-error CustomBackgroundImage is a global variable
+    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+
   const { mem, swap } = formatNezhaInfo(now, data)
 
   useEffect(() => {
@@ -352,7 +380,11 @@ function MemChart({ now, data }: { now: number; data: NezhaServer }) {
   } satisfies ChartConfig
 
   return (
-    <Card>
+    <Card
+      className={cn({
+        "bg-card/80": customBackgroundImage,
+      })}
+    >
       <CardContent className="px-6 py-3">
         <section className="flex flex-col gap-1">
           <div className="flex items-center justify-between">
@@ -429,6 +461,10 @@ function DiskChart({ now, data }: { now: number; data: NezhaServer }) {
   const { t } = useTranslation()
   const [diskChartData, setDiskChartData] = useState([] as diskChartData[])
 
+  const customBackgroundImage =
+    // @ts-expect-error CustomBackgroundImage is a global variable
+    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+
   const { disk } = formatNezhaInfo(now, data)
 
   useEffect(() => {
@@ -457,7 +493,11 @@ function DiskChart({ now, data }: { now: number; data: NezhaServer }) {
   } satisfies ChartConfig
 
   return (
-    <Card>
+    <Card
+      className={cn({
+        "bg-card/80": customBackgroundImage,
+      })}
+    >
       <CardContent className="px-6 py-3">
         <section className="flex flex-col gap-1">
           <div className="flex items-center justify-between">
@@ -506,6 +546,10 @@ function NetworkChart({ now, data }: { now: number; data: NezhaServer }) {
   const { t } = useTranslation()
   const [networkChartData, setNetworkChartData] = useState([] as networkChartData[])
 
+  const customBackgroundImage =
+    // @ts-expect-error CustomBackgroundImage is a global variable
+    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+
   const { up, down } = formatNezhaInfo(now, data)
 
   useEffect(() => {
@@ -543,7 +587,11 @@ function NetworkChart({ now, data }: { now: number; data: NezhaServer }) {
   } satisfies ChartConfig
 
   return (
-    <Card>
+    <Card
+      className={cn({
+        "bg-card/80": customBackgroundImage,
+      })}
+    >
       <CardContent className="px-6 py-3">
         <section className="flex flex-col gap-1">
           <div className="flex items-center">
@@ -612,6 +660,10 @@ function NetworkChart({ now, data }: { now: number; data: NezhaServer }) {
 function ConnectChart({ now, data }: { now: number; data: NezhaServer }) {
   const [connectChartData, setConnectChartData] = useState([] as connectChartData[])
 
+  const customBackgroundImage =
+    // @ts-expect-error CustomBackgroundImage is a global variable
+    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+
   const { tcp, udp } = formatNezhaInfo(now, data)
 
   useEffect(() => {
@@ -643,7 +695,11 @@ function ConnectChart({ now, data }: { now: number; data: NezhaServer }) {
   } satisfies ChartConfig
 
   return (
-    <Card>
+    <Card
+      className={cn({
+        "bg-card/80": customBackgroundImage,
+      })}
+    >
       <CardContent className="px-6 py-3">
         <section className="flex flex-col gap-1">
           <div className="flex items-center">
