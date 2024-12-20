@@ -62,12 +62,50 @@ function Header() {
           <p className="hidden text-sm font-medium opacity-40 md:block">{customDesc}</p>
         </section>
         <section className="flex items-center gap-2">
+          <div className="hidden sm:block">
+            <Links />
+          </div>
           <DashboardLink />
           <LanguageSwitcher />
           <ModeToggle />
         </section>
       </section>
+      <div className="w-full justify-items-end sm:hidden mt-1">
+        <Links />
+      </div>
       <Overview />
+    </div>
+  )
+}
+
+type links = {
+  link: string
+  name: string
+}
+
+function Links() {
+  // @ts-expect-error CustomLinks is a global variable
+  const customLinks = window.CustomLinks as string
+
+  const links: links[] | null = customLinks ? JSON.parse(customLinks) : null
+
+  if (!links) return null
+
+  return (
+    <div className="flex items-center gap-2 w-fit">
+      {links.map((link, index) => {
+        return (
+          <a
+            key={index}
+            href={link.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-sm font-medium opacity-50 transition-opacity hover:opacity-100"
+          >
+            {link.name}
+          </a>
+        )
+      })}
     </div>
   )
 }
@@ -87,7 +125,7 @@ function DashboardLink() {
         href={"/dashboard"}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center gap-1 text-sm font-medium opacity-50 transition-opacity hover:opacity-100"
+        className="flex items-center text-nowrap gap-1 text-sm font-medium opacity-50 transition-opacity hover:opacity-100"
       >
         {!userData?.data?.id && t("login")}
         {userData?.data?.id && t("dashboard")}
