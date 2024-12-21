@@ -60,10 +60,11 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
         </div>
         <div className="relative flex flex-col">
           <p className={cn("break-all font-bold tracking-tight", showFlag ? "text-xs " : "text-sm")}>{name}</p>
-          {parsedData?.billingDataMod && <BillingInfo parsedData={parsedData} />}
+          <div className="hidden lg:block">{parsedData?.billingDataMod && <BillingInfo parsedData={parsedData} />}</div>
         </div>
       </section>
-      <div className="flex flex-col sm:items-start items-center gap-2">
+      <div className="flex items-center gap-2 -mt-2 lg:hidden">{parsedData?.billingDataMod && <BillingInfo parsedData={parsedData} />}</div>
+      <div className="flex flex-col lg:items-start items-center gap-2">
         <section
           className={cn("grid grid-cols-5 items-center gap-3", {
             "lg:grid-cols-6 lg:gap-4": fixedTopServerName,
@@ -158,9 +159,10 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
         </div>
         <div className="relative flex flex-col">
           <p className={cn("break-all font-bold tracking-tight max-w-[108px]", showFlag ? "text-xs" : "text-sm")}>{name}</p>
-          {parsedData?.billingDataMod && <BillingInfo parsedData={parsedData} />}
+          <div className="hidden lg:block">{parsedData?.billingDataMod && <BillingInfo parsedData={parsedData} />}</div>
         </div>
       </section>
+      <div className="flex items-center gap-2 lg:hidden">{parsedData?.billingDataMod && <BillingInfo parsedData={parsedData} />}</div>
       {parsedData?.planDataMod && <PlanInfo parsedData={parsedData} />}
     </Card>
   )
