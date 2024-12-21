@@ -37,6 +37,10 @@ function Header() {
   // @ts-expect-error CustomDesc is a global variable
   const customDesc = window.CustomDesc || t("nezha")
 
+  const customBackgroundImage =
+    // @ts-expect-error CustomBackgroundImage is a global variable
+    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+
   useEffect(() => {
     const link = document.querySelector("link[rel*='icon']") || document.createElement("link")
     // @ts-expect-error set link.type
@@ -79,7 +83,9 @@ function Header() {
           <Button
             variant="outline"
             size="sm"
-            className={cn("hover:bg-white dark:hover:bg-black cursor-default rounded-full flex items-center px-[9px] bg-white dark:bg-black")}
+            className={cn("hover:bg-white dark:hover:bg-black cursor-default rounded-full flex items-center px-[9px] bg-white dark:bg-black", {
+              "bg-white/70 dark:bg-black/70": customBackgroundImage,
+            })}
           >
             {connected ? onlineCount : <Loader visible={true} />}
             <p className="text-muted-foreground">{connected ? t("online") : t("offline")}</p>
