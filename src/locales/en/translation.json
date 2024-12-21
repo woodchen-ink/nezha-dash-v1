@@ -4,6 +4,7 @@
   "dashboard": "Dashboard",
   "login": "Login",
   "online": "Online",
+  "offline": "Offline",
   "whereTheTimeIs": "Where the time is",
   "info": {
     "websocketConnecting": "WebSocket connecting",

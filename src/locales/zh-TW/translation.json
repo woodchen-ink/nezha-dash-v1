@@ -4,6 +4,7 @@
   "dashboard": "管理後台",
   "login": "登錄",
   "online": "在線",
+  "offline": "離線",
   "whereTheTimeIs": "目前時間",
   "info": {
     "websocketConnecting": "WebSocket 連接中",

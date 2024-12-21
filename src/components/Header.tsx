@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 
 import { LanguageSwitcher } from "./LanguageSwitcher"
+import { Loader } from "./loading/Loader"
 import { Button } from "./ui/button"
 
 function Header() {
@@ -80,9 +81,13 @@ function Header() {
             size="sm"
             className={cn("hover:bg-white dark:hover:bg-black cursor-default rounded-full flex items-center px-[9px] bg-white dark:bg-black")}
           >
-            {connected ? onlineCount : "..."}
-            <p className="text-muted-foreground">{t("online")}</p>
-            <span className="h-2 w-2 rounded-full bg-green-500"></span>
+            {connected ? onlineCount : <Loader visible={true} />}
+            <p className="text-muted-foreground">{connected ? t("online") : t("offline")}</p>
+            <span
+              className={cn("h-2 w-2 rounded-full bg-green-500", {
+                "bg-red-500": !connected,
+              })}
+            ></span>
           </Button>
         </section>
       </section>
