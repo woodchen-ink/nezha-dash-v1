@@ -105,5 +105,15 @@
     "offlineReady": "应用可以离线使用了",
     "newContent": "发现新版本",
     "reload": "更新"
+  },
+  "billingInfo": {
+    "remaining": "剩余天数",
+    "error": "计算错误",
+    "indefinite": "永久",
+    "expired": "已过期",
+    "days": "天",
+    "price": "价格",
+    "free": "免费",
+    "usage-baseed": "按量计费"
   }
 }

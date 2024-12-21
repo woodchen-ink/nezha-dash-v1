@@ -105,5 +105,15 @@
     "offlineReady": "App ready to work offline",
     "newContent": "New content available",
     "reload": "Update"
+  },
+  "billingInfo": {
+    "remaining": "Remaining",
+    "error": "error",
+    "indefinite": "Indefinite",
+    "expired": "Expired",
+    "days": "days",
+    "price": "Price",
+    "free": "Free",
+    "usage-baseed": "Usage-based"
   }
 }

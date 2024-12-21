@@ -1,8 +1,10 @@
 import { PublicNoteData, cn, getDaysBetweenDatesWithAutoRenewal } from "@/lib/utils"
+import { useTranslation } from "react-i18next"
 
 import RemainPercentBar from "./RemainPercentBar"
 
 export default function BillingInfo({ parsedData }: { parsedData: PublicNoteData }) {
+  const { t } = useTranslation()
   if (!parsedData || !parsedData.billingDataMod) {
     return null
   }
@@ -22,36 +24,44 @@ export default function BillingInfo({ parsedData }: { parsedData: PublicNoteData
         daysLeftObject = getDaysBetweenDatesWithAutoRenewal(parsedData.billingDataMod)
       } catch (error) {
         console.error(error)
-        return <div className={cn("text-[10px] text-muted-foreground text-red-600")}>剩余时间: 计算出错</div>
+        return (
+          <div className={cn("text-[10px] text-muted-foreground text-red-600")}>
+            {t("billingInfo.remaining")}: {t("billingInfo.error")}
+          </div>
+        )
       }
     }
   }
 
   return daysLeftObject.days >= 0 ? (
     <>
-      <div className={cn("text-[10px] text-muted-foreground")}>剩余时间: {isNeverExpire ? "永久" : daysLeftObject.days + "天"}</div>
+      <div className={cn("text-[10px] text-muted-foreground")}>
+        {t("billingInfo.remaining")}: {isNeverExpire ? t("billingInfo.indefinite") : daysLeftObject.days + " " + t("billingInfo.days")}
+      </div>
       {parsedData.billingDataMod.amount && parsedData.billingDataMod.amount !== "0" && parsedData.billingDataMod.amount !== "-1" ? (
         <p className={cn("text-[10px] text-muted-foreground ")}>
-          价格: {parsedData.billingDataMod.amount}/{parsedData.billingDataMod.cycle}
+          {t("billingInfo.price")}: {parsedData.billingDataMod.amount}/{parsedData.billingDataMod.cycle}
         </p>
       ) : parsedData.billingDataMod.amount === "0" ? (
-        <p className={cn("text-[10px] text-green-600 ")}>免费</p>
+        <p className={cn("text-[10px] text-green-600 ")}>{t("billingInfo.free")}</p>
       ) : parsedData.billingDataMod.amount === "-1" ? (
-        <p className={cn("text-[10px] text-pink-600 ")}>按量收费</p>
+        <p className={cn("text-[10px] text-pink-600 ")}>{t("billingInfo.usage-baseed")}</p>
       ) : null}
       <RemainPercentBar className="mt-0.5" value={daysLeftObject.remainingPercentage * 100} />
     </>
   ) : (
     <>
-      <p className={cn("text-[10px] text-muted-foreground text-red-600")}>已过期: {daysLeftObject.days * -1} 天</p>
+      <p className={cn("text-[10px] text-muted-foreground text-red-600")}>
+        {t("billingInfo.expired")}: {daysLeftObject.days * -1} {t("billingInfo.days")}
+      </p>
       {parsedData.billingDataMod.amount && parsedData.billingDataMod.amount !== "0" && parsedData.billingDataMod.amount !== "-1" ? (
         <p className={cn("text-[10px] text-muted-foreground ")}>
-          价格: {parsedData.billingDataMod.amount}/{parsedData.billingDataMod.cycle}
+          {t("billingInfo.price")}: {parsedData.billingDataMod.amount}/{parsedData.billingDataMod.cycle}
         </p>
       ) : parsedData.billingDataMod.amount === "0" ? (
-        <p className={cn("text-[10px] text-green-600 ")}>免费</p>
+        <p className={cn("text-[10px] text-green-600 ")}>{t("billingInfo.free")}</p>
       ) : parsedData.billingDataMod.amount === "-1" ? (
-        <p className={cn("text-[10px] text-pink-600 ")}>按量收费</p>
+        <p className={cn("text-[10px] text-pink-600 ")}>{t("billingInfo.usage-baseed")}</p>
       ) : null}
     </>
   )

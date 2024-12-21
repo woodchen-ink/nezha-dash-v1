@@ -101,5 +101,15 @@
     "status": "狀態",
     "avgDelay": "延遲",
     "monitorCount": "個監控"
+  },
+  "billingInfo": {
+    "remaining": "剩餘天數",
+    "error": "獲取失敗",
+    "indefinite": "無限期",
+    "expired": "已過期",
+    "days": "天",
+    "price": "價格",
+    "free": "免費",
+    "usage-baseed": "按量計費"
   }
 }
