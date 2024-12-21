@@ -113,7 +113,7 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
           </div>
         </section>
         {showNetTransfer && (
-          <section className={"flex items-center justify-between gap-1"}>
+          <section className={"flex items-center w-full justify-between gap-1"}>
             <Badge
               variant="secondary"
               className="items-center flex-1 justify-center rounded-[8px] text-nowrap text-[11px] border-muted-50 shadow-md shadow-neutral-200/30 dark:shadow-none"
