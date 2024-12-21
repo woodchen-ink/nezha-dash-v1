@@ -69,10 +69,10 @@ function Header() {
           <p className="hidden text-sm font-medium opacity-40 md:block">{customDesc}</p>
         </section>
         <section className="flex items-center gap-2">
-          <div className="hidden sm:block">
+          <div className="hidden sm:flex items-center gap-2">
             <Links />
+            <DashboardLink />
           </div>
-          <DashboardLink />
           <LanguageSwitcher />
           <ModeToggle />
           <Button
@@ -86,7 +86,8 @@ function Header() {
           </Button>
         </section>
       </section>
-      <div className="w-full flex justify-end sm:hidden mt-1">
+      <div className="w-full flex justify-between sm:hidden mt-1">
+        <DashboardLink />
         <Links />
       </div>
       <Overview />
