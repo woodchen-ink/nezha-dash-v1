@@ -1,7 +1,9 @@
 import { ModeToggle } from "@/components/ThemeSwitcher"
 import { Separator } from "@/components/ui/separator"
 import { Skeleton } from "@/components/ui/skeleton"
+import { useWebSocketContext } from "@/hooks/use-websocket-context"
 import { fetchLoginUser, fetchSetting } from "@/lib/nezha-api"
+import { cn } from "@/lib/utils"
 import { useQuery } from "@tanstack/react-query"
 import { DateTime } from "luxon"
 import { useEffect, useRef, useState } from "react"
@@ -9,6 +11,7 @@ import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 
 import { LanguageSwitcher } from "./LanguageSwitcher"
+import { Button } from "./ui/button"
 
 function Header() {
   const { t } = useTranslation()
@@ -20,6 +23,10 @@ function Header() {
     refetchOnMount: true,
     refetchOnWindowFocus: true,
   })
+
+  const { lastMessage, connected } = useWebSocketContext()
+
+  const onlineCount = connected ? (lastMessage ? JSON.parse(lastMessage.data).online || 0 : 0) : "..."
 
   const siteName = settingData?.data?.site_name
 
@@ -68,6 +75,15 @@ function Header() {
           <DashboardLink />
           <LanguageSwitcher />
           <ModeToggle />
+          <Button
+            variant="outline"
+            size="sm"
+            className={cn("hover:bg-white dark:hover:bg-black cursor-default rounded-full flex items-center px-[9px] bg-white dark:bg-black")}
+          >
+            {connected ? onlineCount : "..."}
+            <p className="text-muted-foreground">{t("online")}</p>
+            <span className="h-2 w-2 rounded-full bg-green-500"></span>
+          </Button>
         </section>
       </section>
       <div className="w-full flex justify-end sm:hidden mt-1">

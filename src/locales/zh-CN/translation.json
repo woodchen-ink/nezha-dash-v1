@@ -3,6 +3,7 @@
   "overview": "概览",
   "dashboard": "管理后台",
   "login": "登录",
+  "online": "在线",
   "whereTheTimeIs": "当前时间",
   "info": {
     "websocketConnecting": "WebSocket 连接中",

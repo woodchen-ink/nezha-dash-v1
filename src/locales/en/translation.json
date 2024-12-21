@@ -3,6 +3,7 @@
   "overview": "Overview",
   "dashboard": "Dashboard",
   "login": "Login",
+  "online": "Online",
   "whereTheTimeIs": "Where the time is",
   "info": {
     "websocketConnecting": "WebSocket connecting",
