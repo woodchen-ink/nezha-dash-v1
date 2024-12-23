@@ -25,10 +25,6 @@ export default function ServerFlag({ country_code, className }: { country_code: 
 
   if (!country_code) return null
 
-  if (supportsEmojiFlags && country_code.toLowerCase() === "tw") {
-    country_code = "cn"
-  }
-
   return (
     <span className={cn("text-[12px] text-muted-foreground", className)}>
       {!supportsEmojiFlags ? <span className={`fi fi-${country_code}`} /> : getUnicodeFlagIcon(country_code)}
