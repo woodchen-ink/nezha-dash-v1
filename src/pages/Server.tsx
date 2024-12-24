@@ -128,7 +128,7 @@ export default function Servers() {
     const serverAInfo = formatNezhaInfo(nezhaWsData.now, a)
     const serverBInfo = formatNezhaInfo(nezhaWsData.now, b)
 
-    if (sortType !== "name" && sortType !== "system") {
+    if (sortType !== "name") {
       // 仅在非 "name" 排序时，先按在线状态排序
       if (!serverAInfo.online && serverBInfo.online) return 1
       if (serverAInfo.online && !serverBInfo.online) return -1
