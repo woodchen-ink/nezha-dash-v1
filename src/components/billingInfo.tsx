@@ -35,9 +35,6 @@ export default function BillingInfo({ parsedData }: { parsedData: PublicNoteData
 
   return daysLeftObject.days >= 0 ? (
     <>
-      <div className={cn("text-[10px] text-muted-foreground")}>
-        {t("billingInfo.remaining")}: {isNeverExpire ? t("billingInfo.indefinite") : daysLeftObject.days + " " + t("billingInfo.days")}
-      </div>
       {parsedData.billingDataMod.amount && parsedData.billingDataMod.amount !== "0" && parsedData.billingDataMod.amount !== "-1" ? (
         <p className={cn("text-[10px] text-muted-foreground ")}>
           {t("billingInfo.price")}: {parsedData.billingDataMod.amount}/{parsedData.billingDataMod.cycle}
@@ -47,13 +44,13 @@ export default function BillingInfo({ parsedData }: { parsedData: PublicNoteData
       ) : parsedData.billingDataMod.amount === "-1" ? (
         <p className={cn("text-[10px] text-pink-600 ")}>{t("billingInfo.usage-baseed")}</p>
       ) : null}
+      <div className={cn("text-[10px] text-muted-foreground")}>
+        {t("billingInfo.remaining")}: {isNeverExpire ? t("billingInfo.indefinite") : daysLeftObject.days + " " + t("billingInfo.days")}
+      </div>
       <RemainPercentBar className="mt-0.5" value={daysLeftObject.remainingPercentage * 100} />
     </>
   ) : (
     <>
-      <p className={cn("text-[10px] text-muted-foreground text-red-600")}>
-        {t("billingInfo.expired")}: {daysLeftObject.days * -1} {t("billingInfo.days")}
-      </p>
       {parsedData.billingDataMod.amount && parsedData.billingDataMod.amount !== "0" && parsedData.billingDataMod.amount !== "-1" ? (
         <p className={cn("text-[10px] text-muted-foreground ")}>
           {t("billingInfo.price")}: {parsedData.billingDataMod.amount}/{parsedData.billingDataMod.cycle}
@@ -63,6 +60,9 @@ export default function BillingInfo({ parsedData }: { parsedData: PublicNoteData
       ) : parsedData.billingDataMod.amount === "-1" ? (
         <p className={cn("text-[10px] text-pink-600 ")}>{t("billingInfo.usage-baseed")}</p>
       ) : null}
+      <p className={cn("text-[10px] text-muted-foreground text-red-600")}>
+        {t("billingInfo.expired")}: {daysLeftObject.days * -1} {t("billingInfo.days")}
+      </p>
     </>
   )
 }
