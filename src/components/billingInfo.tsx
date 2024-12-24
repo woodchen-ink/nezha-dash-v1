@@ -47,7 +47,7 @@ export default function BillingInfo({ parsedData }: { parsedData: PublicNoteData
       <div className={cn("text-[10px] text-muted-foreground")}>
         {t("billingInfo.remaining")}: {isNeverExpire ? t("billingInfo.indefinite") : daysLeftObject.days + " " + t("billingInfo.days")}
       </div>
-      <RemainPercentBar className="mt-0.5" value={daysLeftObject.remainingPercentage * 100} />
+      {!isNeverExpire && <RemainPercentBar className="mt-0.5" value={daysLeftObject.remainingPercentage * 100} />}
     </>
   ) : (
     <>
