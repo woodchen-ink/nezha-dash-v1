@@ -149,6 +149,7 @@ function DashboardLink() {
     refetchOnWindowFocus: true,
     refetchIntervalInBackground: true,
     refetchInterval: 1000 * 60 * 1,
+    retry: false,
   })
 
   let isLogin = !!userData?.data?.id
