@@ -145,6 +145,7 @@ function DashboardLink() {
     queryFn: () => fetchLoginUser(),
     refetchOnMount: true,
     refetchOnWindowFocus: true,
+    refetchInterval: 1000 * 60 * 1,
   })
 
   return (
