@@ -4,7 +4,7 @@ import { useWebSocketContext } from "@/hooks/use-websocket-context"
 import { formatBytes } from "@/lib/format"
 import { cn, formatNezhaInfo, formatRelativeTime } from "@/lib/utils"
 import { NezhaServer, NezhaWebsocketResponse } from "@/types/nezha-api"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Area, AreaChart, CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts"
 
@@ -50,7 +50,7 @@ type connectChartData = {
 }
 
 export default function ServerDetailChart({ server_id }: { server_id: string }) {
-  const { lastMessage, connected } = useWebSocketContext()
+  const { lastMessage, connected, messageHistory } = useWebSocketContext()
 
   if (!connected && !lastMessage) {
     return <ServerDetailChartLoading />
@@ -73,48 +73,108 @@ export default function ServerDetailChart({ server_id }: { server_id: string }) 
 
   return (
     <section className="grid md:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-3 server-charts">
-      <CpuChart now={nezhaWsData.now} data={server} />
+      <CpuChart now={nezhaWsData.now} data={server} messageHistory={messageHistory} />
       {gpuStats.length >= 1 && gpuList.length === gpuStats.length ? (
-        gpuList.map((gpu, index) => <GpuChart now={nezhaWsData.now} gpuStat={gpuStats[index]} gpuName={gpu} key={index} />)
+        gpuList.map((gpu, index) => (
+          <GpuChart
+            index={index}
+            id={server.id}
+            now={nezhaWsData.now}
+            gpuStat={gpuStats[index]}
+            gpuName={gpu}
+            messageHistory={messageHistory}
+            key={index}
+          />
+        ))
       ) : gpuStats.length > 0 ? (
-        gpuStats.map((gpu, index) => <GpuChart now={nezhaWsData.now} gpuStat={gpu} gpuName={`#${index + 1}`} key={index} />)
+        gpuStats.map((gpu, index) => (
+          <GpuChart
+            index={index}
+            id={server.id}
+            now={nezhaWsData.now}
+            gpuStat={gpu}
+            gpuName={`#${index + 1}`}
+            messageHistory={messageHistory}
+            key={index}
+          />
+        ))
       ) : (
         <></>
       )}
-      <ProcessChart now={nezhaWsData.now} data={server} />
-      <DiskChart now={nezhaWsData.now} data={server} />
-      <MemChart now={nezhaWsData.now} data={server} />
-      <NetworkChart now={nezhaWsData.now} data={server} />
-      <ConnectChart now={nezhaWsData.now} data={server} />
+      <ProcessChart now={nezhaWsData.now} data={server} messageHistory={messageHistory} />
+      <DiskChart now={nezhaWsData.now} data={server} messageHistory={messageHistory} />
+      <MemChart now={nezhaWsData.now} data={server} messageHistory={messageHistory} />
+      <NetworkChart now={nezhaWsData.now} data={server} messageHistory={messageHistory} />
+      <ConnectChart now={nezhaWsData.now} data={server} messageHistory={messageHistory} />
     </section>
   )
 }
 
-function GpuChart({ now, gpuStat, gpuName }: { now: number; gpuStat: number; gpuName?: string }) {
-  const [gpuChartData, setGpuChartData] = useState([] as gpuChartData[])
+function GpuChart({
+  id,
+  index,
+  gpuStat,
+  gpuName,
+  messageHistory,
+}: {
+  now: number
+  id: number
+  index: number
+  gpuStat: number
+  gpuName?: string
+  messageHistory: { data: string }[]
+}) {
+  const [gpuChartData, setGpuChartData] = useState<gpuChartData[]>([])
+  const hasInitialized = useRef(false)
+  const [historyLoaded, setHistoryLoaded] = useState(false)
 
   const customBackgroundImage =
     // @ts-expect-error CustomBackgroundImage is a global variable
     (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
 
+  // 初始化历史数据
   useEffect(() => {
-    if (gpuStat) {
-      const timestamp = Date.now().toString()
-      let newData = [] as gpuChartData[]
-      if (gpuChartData.length === 0) {
-        newData = [
-          { timeStamp: timestamp, gpu: gpuStat },
-          { timeStamp: timestamp, gpu: gpuStat },
-        ]
-      } else {
-        newData = [...gpuChartData, { timeStamp: timestamp, gpu: gpuStat }]
-      }
-      if (newData.length > 30) {
-        newData.shift()
-      }
-      setGpuChartData(newData)
+    if (!hasInitialized.current && messageHistory.length > 0) {
+      const historyData = messageHistory
+        .map((msg) => {
+          const wsData = JSON.parse(msg.data) as NezhaWebsocketResponse
+          const server = wsData.servers.find((s) => s.id === id)
+          if (!server) return null
+          const { gpu } = formatNezhaInfo(wsData.now, server)
+          return {
+            timeStamp: wsData.now.toString(),
+            gpu: gpu[index],
+          }
+        })
+        .filter((item): item is gpuChartData => item !== null)
+        .reverse()
+
+      setGpuChartData(historyData)
+      hasInitialized.current = true
+      setHistoryLoaded(true)
     }
-  }, [now, gpuStat])
+  }, [messageHistory])
+
+  useEffect(() => {
+    if (gpuStat && historyLoaded) {
+      const timestamp = Date.now().toString()
+      setGpuChartData((prevData) => {
+        let newData = [] as gpuChartData[]
+        if (prevData.length === 0) {
+          newData = [
+            { timeStamp: timestamp, gpu: gpuStat },
+            { timeStamp: timestamp, gpu: gpuStat },
+          ]
+        } else {
+          newData = [...prevData, { timeStamp: timestamp, gpu: gpuStat }]
+          if (newData.length > 30) {
+            newData.shift()
+          }
+        }
+        return newData
+      })
+    }
+  }, [gpuStat, historyLoaded])
 
   const chartConfig = {
     gpu: {
@@ -170,8 +230,10 @@ function GpuChart({ now, gpuStat, gpuName }: { now: number; gpuStat: number; gpu
   )
 }
 
-function CpuChart({ now, data }: { now: number; data: NezhaServer }) {
-  const [cpuChartData, setCpuChartData] = useState([] as cpuChartData[])
+function CpuChart({ now, data, messageHistory }: { now: number; data: NezhaServer; messageHistory: { data: string }[] }) {
+  const [cpuChartData, setCpuChartData] = useState<cpuChartData[]>([])
+  const hasInitialized = useRef(false)
+  const [historyLoaded, setHistoryLoaded] = useState(false)
 
   const { cpu } = formatNezhaInfo(now, data)
 
@@ -179,24 +241,50 @@ function CpuChart({ now, data }: { now: number; data: NezhaServer }) {
     // @ts-expect-error CustomBackgroundImage is a global variable
     (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
 
+  // 初始化历史数据
   useEffect(() => {
-    if (data) {
-      const timestamp = Date.now().toString()
-      let newData = [] as cpuChartData[]
-      if (cpuChartData.length === 0) {
-        newData = [
-          { timeStamp: timestamp, cpu: cpu },
-          { timeStamp: timestamp, cpu: cpu },
-        ]
-      } else {
-        newData = [...cpuChartData, { timeStamp: timestamp, cpu: cpu }]
-      }
-      if (newData.length > 30) {
-        newData.shift()
-      }
-      setCpuChartData(newData)
+    if (!hasInitialized.current && messageHistory.length > 0) {
+      const historyData = messageHistory
+        .map((msg) => {
+          const wsData = JSON.parse(msg.data) as NezhaWebsocketResponse
+          const server = wsData.servers.find((s) => s.id === data.id)
+          if (!server) return null
+          const { cpu } = formatNezhaInfo(wsData.now, server)
+          return {
+            timeStamp: wsData.now.toString(),
+            cpu: cpu,
+          }
+        })
+        .filter((item): item is cpuChartData => item !== null)
+        .reverse() // 保持时间顺序
+
+      setCpuChartData(historyData)
+      hasInitialized.current = true
+      setHistoryLoaded(true)
     }
-  }, [data])
+  }, [messageHistory])
+
+  // 更新实时数据
+  useEffect(() => {
+    if (data && historyLoaded) {
+      const timestamp = Date.now().toString()
+      setCpuChartData((prevData) => {
+        let newData = [] as cpuChartData[]
+        if (prevData.length === 0) {
+          newData = [
+            { timeStamp: timestamp, cpu: cpu },
+            { timeStamp: timestamp, cpu: cpu },
+          ]
+        } else {
+          newData = [...prevData, { timeStamp: timestamp, cpu: cpu }]
+          if (newData.length > 30) {
+            newData.shift()
+          }
+        }
+        return newData
+      })
+    }
+  }, [data, historyLoaded])
 
   const chartConfig = {
     cpu: {
@@ -249,9 +337,11 @@ function CpuChart({ now, data }: { now: number; data: NezhaServer }) {
   )
 }
 
-function ProcessChart({ now, data }: { now: number; data: NezhaServer }) {
+function ProcessChart({ now, data, messageHistory }: { now: number; data: NezhaServer; messageHistory: { data: string }[] }) {
   const { t } = useTranslation()
   const [processChartData, setProcessChartData] = useState([] as processChartData[])
+  const hasInitialized = useRef(false)
+  const [historyLoaded, setHistoryLoaded] = useState(false)
 
   const customBackgroundImage =
     // @ts-expect-error CustomBackgroundImage is a global variable
@@ -259,24 +349,50 @@ function ProcessChart({ now, data }: { now: number; data: NezhaServer }) {
 
   const { process } = formatNezhaInfo(now, data)
 
+  // 初始化历史数据
   useEffect(() => {
-    if (data) {
-      const timestamp = Date.now().toString()
-      let newData = [] as processChartData[]
-      if (processChartData.length === 0) {
-        newData = [
-          { timeStamp: timestamp, process: process },
-          { timeStamp: timestamp, process: process },
-        ]
-      } else {
-        newData = [...processChartData, { timeStamp: timestamp, process: process }]
-      }
-      if (newData.length > 30) {
-        newData.shift()
-      }
-      setProcessChartData(newData)
+    if (!hasInitialized.current && messageHistory.length > 0) {
+      const historyData = messageHistory
+        .map((msg) => {
+          const wsData = JSON.parse(msg.data) as NezhaWebsocketResponse
+          const server = wsData.servers.find((s) => s.id === data.id)
+          if (!server) return null
+          const { process } = formatNezhaInfo(wsData.now, server)
+          return {
+            timeStamp: wsData.now.toString(),
+            process,
+          }
+        })
+        .filter((item): item is processChartData => item !== null)
+        .reverse()
+
+      setProcessChartData(historyData)
+      hasInitialized.current = true
+      setHistoryLoaded(true)
     }
-  }, [data])
+  }, [messageHistory])
+
+  // 修改实时数据更新逻辑
+  useEffect(() => {
+    if (data && historyLoaded) {
+      const timestamp = Date.now().toString()
+      setProcessChartData((prevData) => {
+        let newData = [] as processChartData[]
+        if (prevData.length === 0) {
+          newData = [
+            { timeStamp: timestamp, process },
+            { timeStamp: timestamp, process },
+          ]
+        } else {
+          newData = [...prevData, { timeStamp: timestamp, process }]
+          if (newData.length > 30) {
+            newData.shift()
+          }
+        }
+        return newData
+      })
+    }
+  }, [data, historyLoaded])
 
   const chartConfig = {
     process: {
@@ -335,9 +451,11 @@ function ProcessChart({ now, data }: { now: number; data: NezhaServer }) {
   )
 }
 
-function MemChart({ now, data }: { now: number; data: NezhaServer }) {
+function MemChart({ now, data, messageHistory }: { now: number; data: NezhaServer; messageHistory: { data: string }[] }) {
   const { t } = useTranslation()
   const [memChartData, setMemChartData] = useState([] as memChartData[])
+  const hasInitialized = useRef(false)
+  const [historyLoaded, setHistoryLoaded] = useState(false)
 
   const customBackgroundImage =
     // @ts-expect-error CustomBackgroundImage is a global variable
@@ -345,24 +463,51 @@ function MemChart({ now, data }: { now: number; data: NezhaServer }) {
 
   const { mem, swap } = formatNezhaInfo(now, data)
 
+  // 初始化历史数据
   useEffect(() => {
-    if (data) {
-      const timestamp = Date.now().toString()
-      let newData = [] as memChartData[]
-      if (memChartData.length === 0) {
-        newData = [
-          { timeStamp: timestamp, mem: mem, swap: swap },
-          { timeStamp: timestamp, mem: mem, swap: swap },
-        ]
-      } else {
-        newData = [...memChartData, { timeStamp: timestamp, mem: mem, swap: swap }]
-      }
-      if (newData.length > 30) {
-        newData.shift()
-      }
-      setMemChartData(newData)
+    if (!hasInitialized.current && messageHistory.length > 0) {
+      const historyData = messageHistory
+        .map((msg) => {
+          const wsData = JSON.parse(msg.data) as NezhaWebsocketResponse
+          const server = wsData.servers.find((s) => s.id === data.id)
+          if (!server) return null
+          const { mem, swap } = formatNezhaInfo(wsData.now, server)
+          return {
+            timeStamp: wsData.now.toString(),
+            mem,
+            swap,
+          }
+        })
+        .filter((item): item is memChartData => item !== null)
+        .reverse()
+
+      setMemChartData(historyData)
+      hasInitialized.current = true
+      setHistoryLoaded(true)
     }
-  }, [data])
+  }, [messageHistory])
+
+  // 修改实时数据更新逻辑
+  useEffect(() => {
+    if (data && historyLoaded) {
+      const timestamp = Date.now().toString()
+      setMemChartData((prevData) => {
+        let newData = [] as memChartData[]
+        if (prevData.length === 0) {
+          newData = [
+            { timeStamp: timestamp, mem, swap },
+            { timeStamp: timestamp, mem, swap },
+          ]
+        } else {
+          newData = [...prevData, { timeStamp: timestamp, mem, swap }]
+          if (newData.length > 30) {
+            newData.shift()
+          }
+        }
+        return newData
+      })
+    }
+  }, [data, historyLoaded])
 
   const chartConfig = {
     mem: {
@@ -451,9 +596,11 @@ function MemChart({ now, data }: { now: number; data: NezhaServer }) {
   )
 }
 
-function DiskChart({ now, data }: { now: number; data: NezhaServer }) {
+function DiskChart({ now, data, messageHistory }: { now: number; data: NezhaServer; messageHistory: { data: string }[] }) {
   const { t } = useTranslation()
   const [diskChartData, setDiskChartData] = useState([] as diskChartData[])
+  const hasInitialized = useRef(false)
+  const [historyLoaded, setHistoryLoaded] = useState(false)
 
   const customBackgroundImage =
     // @ts-expect-error CustomBackgroundImage is a global variable
@@ -461,24 +608,50 @@ function DiskChart({ now, data }: { now: number; data: NezhaServer }) {
 
   const { disk } = formatNezhaInfo(now, data)
 
+  // 初始化历史数据
   useEffect(() => {
-    if (data) {
-      const timestamp = Date.now().toString()
-      let newData = [] as diskChartData[]
-      if (diskChartData.length === 0) {
-        newData = [
-          { timeStamp: timestamp, disk: disk },
-          { timeStamp: timestamp, disk: disk },
-        ]
-      } else {
-        newData = [...diskChartData, { timeStamp: timestamp, disk: disk }]
-      }
-      if (newData.length > 30) {
-        newData.shift()
-      }
-      setDiskChartData(newData)
+    if (!hasInitialized.current && messageHistory.length > 0) {
+      const historyData = messageHistory
+        .map((msg) => {
+          const wsData = JSON.parse(msg.data) as NezhaWebsocketResponse
+          const server = wsData.servers.find((s) => s.id === data.id)
+          if (!server) return null
+          const { disk } = formatNezhaInfo(wsData.now, server)
+          return {
+            timeStamp: wsData.now.toString(),
+            disk,
+          }
+        })
+        .filter((item): item is diskChartData => item !== null)
+        .reverse()
+
+      setDiskChartData(historyData)
+      hasInitialized.current = true
+      setHistoryLoaded(true)
     }
-  }, [data])
+  }, [messageHistory])
+
+  // 修改实时数据更新逻辑
+  useEffect(() => {
+    if (data && historyLoaded) {
+      const timestamp = Date.now().toString()
+      setDiskChartData((prevData) => {
+        let newData = [] as diskChartData[]
+        if (prevData.length === 0) {
+          newData = [
+            { timeStamp: timestamp, disk },
+            { timeStamp: timestamp, disk },
+          ]
+        } else {
+          newData = [...prevData, { timeStamp: timestamp, disk }]
+          if (newData.length > 30) {
+            newData.shift()
+          }
+        }
+        return newData
+      })
+    }
+  }, [data, historyLoaded])
 
   const chartConfig = {
     disk: {
@@ -536,9 +709,11 @@ function DiskChart({ now, data }: { now: number; data: NezhaServer }) {
   )
 }
 
-function NetworkChart({ now, data }: { now: number; data: NezhaServer }) {
+function NetworkChart({ now, data, messageHistory }: { now: number; data: NezhaServer; messageHistory: { data: string }[] }) {
   const { t } = useTranslation()
   const [networkChartData, setNetworkChartData] = useState([] as networkChartData[])
+  const hasInitialized = useRef(false)
+  const [historyLoaded, setHistoryLoaded] = useState(false)
 
   const customBackgroundImage =
     // @ts-expect-error CustomBackgroundImage is a global variable
@@ -546,24 +721,51 @@ function NetworkChart({ now, data }: { now: number; data: NezhaServer }) {
 
   const { up, down } = formatNezhaInfo(now, data)
 
+  // 初始化历史数据
   useEffect(() => {
-    if (data) {
-      const timestamp = Date.now().toString()
-      let newData = [] as networkChartData[]
-      if (networkChartData.length === 0) {
-        newData = [
-          { timeStamp: timestamp, upload: up, download: down },
-          { timeStamp: timestamp, upload: up, download: down },
-        ]
-      } else {
-        newData = [...networkChartData, { timeStamp: timestamp, upload: up, download: down }]
-      }
-      if (newData.length > 30) {
-        newData.shift()
-      }
-      setNetworkChartData(newData)
+    if (!hasInitialized.current && messageHistory.length > 0) {
+      const historyData = messageHistory
+        .map((msg) => {
+          const wsData = JSON.parse(msg.data) as NezhaWebsocketResponse
+          const server = wsData.servers.find((s) => s.id === data.id)
+          if (!server) return null
+          const { up, down } = formatNezhaInfo(wsData.now, server)
+          return {
+            timeStamp: wsData.now.toString(),
+            upload: up,
+            download: down,
+          }
+        })
+        .filter((item): item is networkChartData => item !== null)
+        .reverse()
+
+      setNetworkChartData(historyData)
+      hasInitialized.current = true
+      setHistoryLoaded(true)
     }
-  }, [data])
+  }, [messageHistory])
+
+  // 修改实时数据更新逻辑
+  useEffect(() => {
+    if (data && historyLoaded) {
+      const timestamp = Date.now().toString()
+      setNetworkChartData((prevData) => {
+        let newData = [] as networkChartData[]
+        if (prevData.length === 0) {
+          newData = [
+            { timeStamp: timestamp, upload: up, download: down },
+            { timeStamp: timestamp, upload: up, download: down },
+          ]
+        } else {
+          newData = [...prevData, { timeStamp: timestamp, upload: up, download: down }]
+          if (newData.length > 30) {
+            newData.shift()
+          }
+        }
+        return newData
+      })
+    }
+  }, [data, historyLoaded])
 
   let maxDownload = Math.max(...networkChartData.map((item) => item.download))
   maxDownload = Math.ceil(maxDownload)
@@ -651,8 +853,10 @@ function NetworkChart({ now, data }: { now: number; data: NezhaServer }) {
   )
 }
 
-function ConnectChart({ now, data }: { now: number; data: NezhaServer }) {
+function ConnectChart({ now, data, messageHistory }: { now: number; data: NezhaServer; messageHistory: { data: string }[] }) {
   const [connectChartData, setConnectChartData] = useState([] as connectChartData[])
+  const hasInitialized = useRef(false)
+  const [historyLoaded, setHistoryLoaded] = useState(false)
 
   const customBackgroundImage =
     // @ts-expect-error CustomBackgroundImage is a global variable
@@ -660,24 +864,51 @@ function ConnectChart({ now, data }: { now: number; data: NezhaServer }) {
 
   const { tcp, udp } = formatNezhaInfo(now, data)
 
+  // 初始化历史数据
   useEffect(() => {
-    if (data) {
-      const timestamp = Date.now().toString()
-      let newData = [] as connectChartData[]
-      if (connectChartData.length === 0) {
-        newData = [
-          { timeStamp: timestamp, tcp: tcp, udp: udp },
-          { timeStamp: timestamp, tcp: tcp, udp: udp },
-        ]
-      } else {
-        newData = [...connectChartData, { timeStamp: timestamp, tcp: tcp, udp: udp }]
-      }
-      if (newData.length > 30) {
-        newData.shift()
-      }
-      setConnectChartData(newData)
+    if (!hasInitialized.current && messageHistory.length > 0) {
+      const historyData = messageHistory
+        .map((msg) => {
+          const wsData = JSON.parse(msg.data) as NezhaWebsocketResponse
+          const server = wsData.servers.find((s) => s.id === data.id)
+          if (!server) return null
+          const { tcp, udp } = formatNezhaInfo(wsData.now, server)
+          return {
+            timeStamp: wsData.now.toString(),
+            tcp,
+            udp,
+          }
+        })
+        .filter((item): item is connectChartData => item !== null)
+        .reverse()
+
+      setConnectChartData(historyData)
+      hasInitialized.current = true
+      setHistoryLoaded(true)
     }
-  }, [data])
+  }, [messageHistory])
+
+  // 修改实时数据更新逻辑
+  useEffect(() => {
+    if (data && historyLoaded) {
+      const timestamp = Date.now().toString()
+      setConnectChartData((prevData) => {
+        let newData = [] as connectChartData[]
+        if (prevData.length === 0) {
+          newData = [
+            { timeStamp: timestamp, tcp, udp },
+            { timeStamp: timestamp, tcp, udp },
+          ]
+        } else {
+          newData = [...prevData, { timeStamp: timestamp, tcp, udp }]
+          if (newData.length > 30) {
+            newData.shift()
+          }
+        }
+        return newData
+      })
+    }
+  }, [data, historyLoaded])
 
   const chartConfig = {
     tcp: {

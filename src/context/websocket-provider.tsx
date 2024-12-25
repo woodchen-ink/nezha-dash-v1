@@ -9,6 +9,7 @@ interface WebSocketProviderProps {
 
 export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ url, children }) => {
   const [lastMessage, setLastMessage] = useState<{ data: string } | null>(null)
+  const [messageHistory, setMessageHistory] = useState<{ data: string }[]>([]) // 新增历史消息状态
   const [connected, setConnected] = useState(false)
   const ws = useRef<WebSocket | null>(null)
   const reconnectTimeout = useRef<NodeJS.Timeout>(null)
@@ -42,7 +43,13 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ url, child
       }
 
       ws.current.onmessage = (event) => {
-        setLastMessage({ data: event.data })
+        const newMessage = { data: event.data }
+        setLastMessage(newMessage)
+        // 更新历史消息，保持最新的30条记录
+        setMessageHistory((prev) => {
+          const updated = [newMessage, ...prev]
+          return updated.slice(0, 30)
+        })
       }
 
       ws.current.onerror = (error) => {
@@ -69,6 +76,7 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ url, child
   const contextValue: WebSocketContextType = {
     lastMessage,
     connected,
+    messageHistory, // 添加到 context value
   }
 
   return <WebSocketContext.Provider value={contextValue}>{children}</WebSocketContext.Provider>
