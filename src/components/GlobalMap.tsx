@@ -1,7 +1,7 @@
 import useTooltip from "@/hooks/use-tooltip"
 import { geoJsonString } from "@/lib/geo-json-string"
 import { countryCoordinates } from "@/lib/geo-limit"
-import { formatNezhaInfo } from "@/lib/utils"
+import { cn, formatNezhaInfo } from "@/lib/utils"
 import { NezhaServer } from "@/types/nezha-api"
 import { geoEquirectangular, geoPath } from "d3-geo"
 import { useTranslation } from "react-i18next"
@@ -12,6 +12,10 @@ export default function GlobalMap({ serverList, now }: { serverList: NezhaServer
   const { t } = useTranslation()
   const countryList: string[] = []
   const serverCounts: { [key: string]: number } = {}
+
+  const customBackgroundImage =
+    // @ts-expect-error CustomBackgroundImage is a global variable
+    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
 
   serverList.forEach((server) => {
     if (server.country_code) {
@@ -30,7 +34,11 @@ export default function GlobalMap({ serverList, now }: { serverList: NezhaServer
   const filteredFeatures = geoJson.features.filter((feature: { properties: { iso_a3_eh: string } }) => feature.properties.iso_a3_eh !== "")
 
   return (
-    <section className="flex flex-col gap-4 mt-8">
+    <section
+      className={cn("flex flex-col gap-4 mt-8", {
+        "bg-card/70 rounded-lg  p-4": customBackgroundImage,
+      })}
+    >
       <p className="text-sm font-medium opacity-40">
         {t("map.Distributions")} {countryList.length} {t("map.Regions")}
       </p>
