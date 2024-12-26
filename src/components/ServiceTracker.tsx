@@ -1,15 +1,14 @@
 import { fetchService } from "@/lib/nezha-api"
-import { ServiceData } from "@/types/nezha-api"
+import { NezhaServer, ServiceData } from "@/types/nezha-api"
 import { ExclamationTriangleIcon } from "@heroicons/react/20/solid"
 import { useQuery } from "@tanstack/react-query"
-import React from "react"
 import { useTranslation } from "react-i18next"
 
 import { CycleTransferStatsCard } from "./CycleTransferStats"
 import ServiceTrackerClient from "./ServiceTrackerClient"
 import { Loader } from "./loading/Loader"
 
-export const ServiceTracker: React.FC = () => {
+export function ServiceTracker({ serverList }: { serverList: NezhaServer[] }) {
   const { t } = useTranslation()
   const { data: serviceData, isLoading } = useQuery({
     queryKey: ["service"],
@@ -56,7 +55,7 @@ export const ServiceTracker: React.FC = () => {
     <div className="mt-4 w-full mx-auto ">
       {serviceData.data.cycle_transfer_stats && (
         <div>
-          <CycleTransferStatsCard cycleStats={serviceData.data.cycle_transfer_stats} />
+          <CycleTransferStatsCard serverList={serverList} cycleStats={serviceData.data.cycle_transfer_stats} />
         </div>
       )}
       {serviceData.data.services && Object.keys(serviceData.data.services).length > 0 && (

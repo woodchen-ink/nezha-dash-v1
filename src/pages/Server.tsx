@@ -304,7 +304,7 @@ export default function Servers() {
         </Popover>
       </div>
       {showMap === "1" && <GlobalMap now={nezhaWsData.now} serverList={nezhaWsData?.servers || []} />}
-      {showServices === "1" && <ServiceTracker />}
+      {showServices === "1" && <ServiceTracker serverList={filteredServers} />}
       {inline === "1" && (
         <section className="flex flex-col gap-2 overflow-x-scroll scrollbar-hidden mt-6 server-inline-list">
           {filteredServers.map((serverInfo) => (
