@@ -185,13 +185,14 @@ function DashboardLink() {
     isFetched,
     isLoadingError,
     isError,
+    refetch,
   } = useQuery({
     queryKey: ["login-user"],
     queryFn: () => fetchLoginUser(),
     refetchOnMount: false,
     refetchOnWindowFocus: true,
     refetchIntervalInBackground: true,
-    refetchInterval: 1000 * 5,
+    refetchInterval: 1000 * 30,
     retry: 0,
   })
 
@@ -200,6 +201,10 @@ function DashboardLink() {
   if (isLoadingError) {
     previousLoginState.current = isLogin
   }
+
+  useEffect(() => {
+    refetch()
+  }, [document.cookie])
 
   useEffect(() => {
     if (isFetched || isError) {
