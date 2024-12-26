@@ -38,4 +38,9 @@ jobs:
         run: |
           rsync -avz --delete -e "ssh -p ${{ secrets.SSH_PORT || 22 }}" \
             dist/ \
-            ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/opt/1panel/apps/openresty/openresty/www/sites/svr/index/ 
+            ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/opt/1panel/apps/openresty/openresty/www/sites/svr/index/
+
+      - name: Change file ownership
+        run: |
+          ssh -p ${{ secrets.SSH_PORT || 22 }} ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} \
+          'sudo chown -R 1000:1000 /opt/1panel/apps/openresty/openresty/www/sites/svr/index/' 
