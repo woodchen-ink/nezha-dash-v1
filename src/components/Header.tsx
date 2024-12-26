@@ -157,22 +157,20 @@ export function RefreshToast() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center">
-      <AnimatePresence>
-        <m.div
-          initial={{ opacity: 0, filter: "blur(10px)", scale: 0.8 }}
-          animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
-          exit={{ opacity: 0, filter: "blur(10px)", scale: 0.8 }}
-          transition={{ type: "spring", duration: 0.8 }}
-          className="fixed overflow-hidden top-[35px] z-[999] flex items-center justify-between gap-4 rounded-[50px] border-[1px] border-solid bg-white px-2 py-1.5 shadow-xl shadow-black/5 dark:border-stone-700 dark:bg-stone-800 dark:shadow-none"
-        >
-          <section className="flex items-center gap-1.5">
-            <LoadingSpinner />
-            <p className="text-[12.5px] font-medium">{t("refreshing")}...</p>
-          </section>
-        </m.div>
-      </AnimatePresence>
-    </div>
+    <AnimatePresence>
+      <m.div
+        initial={{ opacity: 0, filter: "blur(10px)", scale: 0.8 }}
+        animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
+        exit={{ opacity: 0, filter: "blur(10px)", scale: 0.8 }}
+        transition={{ type: "spring", duration: 0.8 }}
+        className="fixed left-1/2 -translate-x-1/2 top-8 z-[999] flex items-center justify-between gap-4 rounded-[50px] border-[1px] border-solid bg-white px-2 py-1.5 shadow-xl shadow-black/5 dark:border-stone-700 dark:bg-stone-800 dark:shadow-none"
+      >
+        <section className="flex items-center gap-1.5">
+          <LoadingSpinner />
+          <p className="text-[12.5px] font-medium">{t("refreshing")}...</p>
+        </section>
+      </m.div>
+    </AnimatePresence>
   )
 }
 

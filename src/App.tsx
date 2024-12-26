@@ -92,8 +92,8 @@ const App: React.FC = () => {
           })}
         >
           <main className="flex z-20 min-h-[calc(100vh-calc(var(--spacing)*16))] flex-1 flex-col gap-4 p-4 md:p-10 md:pt-8">
-            <Header />
             <RefreshToast />
+            <Header />
             <Routes>
               <Route path="/" element={<Server />} />
               <Route path="/server/:id" element={<ServerDetail />} />
