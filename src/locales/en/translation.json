@@ -6,6 +6,7 @@
   "online": "Online",
   "offline": "Offline",
   "whereTheTimeIs": "Where the time is",
+  "refreshing": "Refreshing",
   "info": {
     "websocketConnecting": "WebSocket connecting",
     "websocketConnected": "WebSocket connected",

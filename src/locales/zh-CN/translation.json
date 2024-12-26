@@ -6,6 +6,7 @@
   "online": "在线",
   "offline": "离线",
   "whereTheTimeIs": "当前时间",
+  "refreshing": "刷新中",
   "info": {
     "websocketConnecting": "WebSocket 连接中",
     "websocketConnected": "WebSocket 连接成功",

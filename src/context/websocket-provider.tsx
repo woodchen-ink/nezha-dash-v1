@@ -11,6 +11,7 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ url, child
   const [lastMessage, setLastMessage] = useState<{ data: string } | null>(null)
   const [messageHistory, setMessageHistory] = useState<{ data: string }[]>([]) // 新增历史消息状态
   const [connected, setConnected] = useState(false)
+  const [needReconnect, setNeedReconnect] = useState(false)
   const ws = useRef<WebSocket | null>(null)
   const reconnectTimeout = useRef<NodeJS.Timeout>(null)
   const maxReconnectAttempts = 30
@@ -99,7 +100,7 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ url, child
     cleanup()
     setTimeout(() => {
       connect()
-    }, 100)
+    }, 1000)
   }
 
   useEffect(() => {
@@ -113,8 +114,10 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ url, child
   const contextValue: WebSocketContextType = {
     lastMessage,
     connected,
-    messageHistory, // 添加到 context value
-    reconnect, // 添加到 context value
+    messageHistory,
+    reconnect,
+    needReconnect,
+    setNeedReconnect,
   }
 
   return <WebSocketContext.Provider value={contextValue}>{children}</WebSocketContext.Provider>

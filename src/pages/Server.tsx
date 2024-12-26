@@ -19,7 +19,6 @@ import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon, ChartBarSquareIcon, MapIc
 import { useQuery } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { toast } from "sonner"
 
 export default function Servers() {
   const { t } = useTranslation()
@@ -55,14 +54,6 @@ export default function Servers() {
   }, [])
 
   const groupTabs = ["All", ...(groupData?.data?.map((item: ServerGroup) => item.group.name) || [])]
-
-  useEffect(() => {
-    const hasShownToast = sessionStorage.getItem("websocket-connected-toast")
-    if (connected && !hasShownToast) {
-      toast.success(t("info.websocketConnected"))
-      sessionStorage.setItem("websocket-connected-toast", "true")
-    }
-  }, [connected])
 
   if (!connected && !lastMessage) {
     return (

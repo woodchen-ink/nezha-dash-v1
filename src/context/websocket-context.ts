@@ -5,6 +5,8 @@ export interface WebSocketContextType {
   connected: boolean
   messageHistory: { data: string }[]
   reconnect: () => void
+  needReconnect: boolean
+  setNeedReconnect: (needReconnect: boolean) => void
 }
 
 export const WebSocketContext = createContext<WebSocketContextType>({
@@ -12,4 +14,6 @@ export const WebSocketContext = createContext<WebSocketContextType>({
   connected: false,
   messageHistory: [],
   reconnect: () => {},
+  needReconnect: false,
+  setNeedReconnect: () => {},
 })

@@ -5,13 +5,14 @@ import { useWebSocketContext } from "@/hooks/use-websocket-context"
 import { fetchLoginUser, fetchSetting } from "@/lib/nezha-api"
 import { cn } from "@/lib/utils"
 import { useQuery } from "@tanstack/react-query"
+import { AnimatePresence, m } from "framer-motion"
 import { DateTime } from "luxon"
 import { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 
 import { LanguageSwitcher } from "./LanguageSwitcher"
-import { Loader } from "./loading/Loader"
+import { Loader, LoadingSpinner } from "./loading/Loader"
 import { Button } from "./ui/button"
 
 function Header() {
@@ -138,32 +139,75 @@ function Links() {
   )
 }
 
+export function RefreshToast() {
+  const { t } = useTranslation()
+  const navigate = useNavigate()
+
+  const { needReconnect } = useWebSocketContext()
+
+  if (!needReconnect) {
+    return null
+  }
+
+  if (needReconnect) {
+    sessionStorage.removeItem("needRefresh")
+    setTimeout(() => {
+      navigate(0)
+    }, 1000)
+  }
+
+  return (
+    <div className="flex flex-col items-center justify-center">
+      <AnimatePresence>
+        <m.div
+          initial={{ opacity: 0, filter: "blur(10px)", scale: 0.8 }}
+          animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
+          exit={{ opacity: 0, filter: "blur(10px)", scale: 0.8 }}
+          transition={{ type: "spring", duration: 0.8 }}
+          className="fixed overflow-hidden top-[35px] z-[999] flex items-center justify-between gap-4 rounded-[50px] border-[1px] border-solid bg-white px-2 py-1.5 shadow-xl shadow-black/5 dark:border-stone-700 dark:bg-stone-800 dark:shadow-none"
+        >
+          <section className="flex items-center gap-1.5">
+            <LoadingSpinner />
+            <p className="text-[12.5px] font-medium">{t("refreshing")}...</p>
+          </section>
+        </m.div>
+      </AnimatePresence>
+    </div>
+  )
+}
+
 function DashboardLink() {
   const { t } = useTranslation()
-  const { reconnect } = useWebSocketContext()
-  const initRef = useRef(false)
-  const { data: userData } = useQuery({
+  const { setNeedReconnect } = useWebSocketContext()
+  const previousLoginState = useRef<boolean | null>(null)
+  const {
+    data: userData,
+    isFetched,
+    isLoadingError,
+    isError,
+  } = useQuery({
     queryKey: ["login-user"],
     queryFn: () => fetchLoginUser(),
-    refetchOnMount: true,
+    refetchOnMount: false,
     refetchOnWindowFocus: true,
     refetchIntervalInBackground: true,
-    refetchInterval: 1000 * 60 * 1,
-    retry: false,
+    refetchInterval: 1000 * 5,
+    retry: 0,
   })
 
-  let isLogin = !!userData?.data?.id
+  const isLogin = isError ? false : userData ? !!userData?.data?.id && !!document.cookie : false
 
-  if (!document.cookie) {
-    isLogin = false
+  if (isLoadingError) {
+    previousLoginState.current = isLogin
   }
 
   useEffect(() => {
-    // 当登录状态变化时重新连接 WebSocket
-    if (initRef.current) {
-      reconnect()
-    } else {
-      initRef.current = true
+    if (isFetched || isError) {
+      // 只有当登录状态发生变化时才设置needReconnect
+      if (previousLoginState.current !== null && previousLoginState.current !== isLogin) {
+        setNeedReconnect(true)
+      }
+      previousLoginState.current = isLogin
     }
   }, [isLogin])
 
