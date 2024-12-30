@@ -32,11 +32,11 @@ const App: React.FC = () => {
     (window.ForceTheme as string) !== "" ? window.ForceTheme : undefined
 
   useEffect(() => {
-    if (settingData?.data?.custom_code) {
-      InjectContext(settingData?.data?.custom_code)
+    if (settingData?.data?.config?.custom_code) {
+      InjectContext(settingData?.data?.config?.custom_code)
       setIsCustomCodeInjected(true)
     }
-  }, [settingData?.data?.custom_code])
+  }, [settingData?.data?.config?.custom_code])
 
   useEffect(() => {
     if (forceTheme === "dark" || forceTheme === "light") {
@@ -52,12 +52,12 @@ const App: React.FC = () => {
     return null
   }
 
-  if (settingData?.data?.custom_code && !isCustomCodeInjected) {
+  if (settingData?.data?.config?.custom_code && !isCustomCodeInjected) {
     return null
   }
 
-  if (settingData?.data?.language && !localStorage.getItem("language")) {
-    i18n.changeLanguage(settingData?.data?.language)
+  if (settingData?.data?.config?.language && !localStorage.getItem("language")) {
+    i18n.changeLanguage(settingData?.data?.config?.language)
   }
 
   const customBackgroundImage =
