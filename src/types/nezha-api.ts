@@ -140,12 +140,19 @@ export interface CycleTransferData {
   }
 }
 
+type SettingConfig = {
+  debug: boolean
+  language: string
+  site_name: string
+  user_template: string
+  admin_template: string
+  custom_code: string
+}
+
 export interface SettingResponse {
   success: boolean
   data: {
-    language: string
-    site_name: string
-    custom_code: string
+    config: SettingConfig
     version: string
   }
 }
