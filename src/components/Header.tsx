@@ -30,7 +30,7 @@ function Header() {
 
   const onlineCount = connected ? (lastMessage ? JSON.parse(lastMessage.data).online || 0 : 0) : "..."
 
-  const siteName = settingData?.data?.site_name
+  const siteName = settingData?.data?.config?.site_name
 
   // @ts-expect-error CustomLogo is a global variable
   const customLogo = window.CustomLogo || "/apple-touch-icon.png"
