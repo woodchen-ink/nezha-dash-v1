@@ -38,6 +38,13 @@ export default function GroupSwitch({
   }, [])
 
   useEffect(() => {
+    const savedGroup = sessionStorage.getItem("selectedGroup")
+    if (savedGroup && tabs.includes(savedGroup)) {
+      setCurrentTab(savedGroup)
+    }
+  }, [tabs, setCurrentTab])
+
+  useEffect(() => {
     const currentTagRef = tagRefs.current[tabs.indexOf(currentTab)]
 
     if (currentTagRef && currentTagRef.current) {
