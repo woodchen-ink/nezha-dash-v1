@@ -7,6 +7,7 @@ import { useWebSocketContext } from "@/hooks/use-websocket-context"
 import { formatBytes } from "@/lib/format"
 import { cn, formatNezhaInfo } from "@/lib/utils"
 import { NezhaWebsocketResponse } from "@/types/nezha-api"
+import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 
@@ -16,10 +17,27 @@ export default function ServerDetailOverview({ server_id }: { server_id: string 
   const { t } = useTranslation()
   const navigate = useNavigate()
 
+  const [hasHistory, setHasHistory] = useState(false)
+
+  useEffect(() => {
+    const previousPath = sessionStorage.getItem("fromMainPage")
+    if (previousPath) {
+      setHasHistory(true)
+    }
+  }, [])
+
   const { lastMessage, connected } = useWebSocketContext()
 
   if (!connected && !lastMessage) {
     return <ServerDetailLoading />
+  }
+
+  const linkClick = () => {
+    if (hasHistory) {
+      navigate(-1)
+    } else {
+      navigate("/")
+    }
   }
 
   const nezhaWsData = lastMessage ? (JSON.parse(lastMessage.data) as NezhaWebsocketResponse) : null
@@ -66,7 +84,7 @@ export default function ServerDetailOverview({ server_id }: { server_id: string 
       })}
     >
       <div
-        onClick={() => navigate("/")}
+        onClick={linkClick}
         className="flex flex-none cursor-pointer font-semibold leading-none items-center break-all tracking-tight gap-1 text-xl server-name"
       >
         <BackIcon />
