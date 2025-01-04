@@ -20,6 +20,11 @@ export default function ServerCardInline({ now, serverInfo }: { now: number; ser
     serverInfo,
   )
 
+  const cardClick = () => {
+    sessionStorage.setItem("fromMainPage", "true")
+    navigate(`/server/${serverInfo.id}`)
+  }
+
   const showFlag = true
 
   const customBackgroundImage =
@@ -37,7 +42,7 @@ export default function ServerCardInline({ now, serverInfo }: { now: number; ser
             "bg-card/70": customBackgroundImage,
           },
         )}
-        onClick={() => navigate(`/server/${serverInfo.id}`)}
+        onClick={cardClick}
       >
         <section className={cn("grid items-center gap-2 lg:w-36")} style={{ gridTemplateColumns: "auto auto 1fr" }}>
           <span className="h-2 w-2 shrink-0 rounded-full bg-green-500 self-center"></span>
@@ -97,7 +102,7 @@ export default function ServerCardInline({ now, serverInfo }: { now: number; ser
             <div className={"flex w-16 flex-col"}>
               <p className="text-xs text-muted-foreground">{t("serverCard.download")}</p>
               <div className="flex items-center text-xs font-semibold">
-                {down >= 1024 ? `${(down / 1024).toFixed(2)}G/s` : up >= 1 ? `${down.toFixed(2)}M/s` : `${(down * 1024).toFixed(2)}K/s`}
+                {down >= 1024 ? `${(down / 1024).toFixed(2)}G/s` : down >= 1 ? `${down.toFixed(2)}M/s` : `${(down * 1024).toFixed(2)}K/s`}
               </div>
             </div>
             <div className={"flex w-20 flex-col"}>
@@ -121,7 +126,7 @@ export default function ServerCardInline({ now, serverInfo }: { now: number; ser
           "bg-card/70": customBackgroundImage,
         },
       )}
-      onClick={() => navigate(`/server/${serverInfo.id}`)}
+      onClick={cardClick}
     >
       <section className={cn("grid items-center gap-2 w-40")} style={{ gridTemplateColumns: "auto auto 1fr" }}>
         <span className="h-2 w-2 shrink-0 rounded-full bg-red-500 self-center"></span>

@@ -17,7 +17,7 @@ import { NezhaWebsocketResponse } from "@/types/nezha-api"
 import { ServerGroup } from "@/types/nezha-api"
 import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon, ChartBarSquareIcon, MapIcon, ViewColumnsIcon } from "@heroicons/react/20/solid"
 import { useQuery } from "@tanstack/react-query"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 export default function Servers() {
@@ -32,12 +32,26 @@ export default function Servers() {
   const [showServices, setShowServices] = useState<string>("0")
   const [showMap, setShowMap] = useState<string>("0")
   const [inline, setInline] = useState<string>("0")
+  const containerRef = useRef<HTMLDivElement>(null)
   const [settingsOpen, setSettingsOpen] = useState<boolean>(false)
   const [currentGroup, setCurrentGroup] = useState<string>("All")
 
   const customBackgroundImage =
     // @ts-expect-error CustomBackgroundImage is a global variable
     (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+
+  const restoreScrollPosition = () => {
+    const savedPosition = sessionStorage.getItem("scrollPosition")
+    if (savedPosition && containerRef.current) {
+      containerRef.current.scrollTop = Number(savedPosition)
+    }
+  }
+
+  const handleTagChange = (newGroup: string) => {
+    setCurrentGroup(newGroup)
+    sessionStorage.setItem("selectedGroup", newGroup)
+    sessionStorage.setItem("scrollPosition", String(containerRef.current?.scrollTop || 0))
+  }
 
   useEffect(() => {
     const showServicesState = localStorage.getItem("showServices")
@@ -51,6 +65,13 @@ export default function Servers() {
     if (inlineState !== null) {
       setInline(inlineState)
     }
+  }, [])
+
+  useEffect(() => {
+    const savedGroup = sessionStorage.getItem("selectedGroup") || "All"
+    setCurrentGroup(savedGroup)
+
+    restoreScrollPosition()
   }, [])
 
   const groupTabs = ["All", ...(groupData?.data?.map((item: ServerGroup) => item.group.name) || [])]
@@ -233,7 +254,7 @@ export default function Servers() {
           >
             <ViewColumnsIcon className="size-[13px]" />
           </button>
-          <GroupSwitch tabs={groupTabs} currentTab={currentGroup} setCurrentTab={setCurrentGroup} />
+          <GroupSwitch tabs={groupTabs} currentTab={currentGroup} setCurrentTab={handleTagChange} />
         </section>
         <Popover onOpenChange={setSettingsOpen}>
           <PopoverTrigger asChild>
@@ -306,14 +327,14 @@ export default function Servers() {
       {showMap === "1" && <GlobalMap now={nezhaWsData.now} serverList={nezhaWsData?.servers || []} />}
       {showServices === "1" && <ServiceTracker serverList={filteredServers} />}
       {inline === "1" && (
-        <section className="flex flex-col gap-2 overflow-x-scroll scrollbar-hidden mt-6 server-inline-list">
+        <section ref={containerRef} className="flex flex-col gap-2 overflow-x-scroll scrollbar-hidden mt-6 server-inline-list">
           {filteredServers.map((serverInfo) => (
             <ServerCardInline now={nezhaWsData.now} key={serverInfo.id} serverInfo={serverInfo} />
           ))}
         </section>
       )}
       {inline === "0" && (
-        <section className="grid grid-cols-1 gap-2 md:grid-cols-2 mt-6 server-card-list">
+        <section ref={containerRef} className="grid grid-cols-1 gap-2 md:grid-cols-2 mt-6 server-card-list">
           {filteredServers.map((serverInfo) => (
             <ServerCard now={nezhaWsData.now} key={serverInfo.id} serverInfo={serverInfo} />
           ))}
