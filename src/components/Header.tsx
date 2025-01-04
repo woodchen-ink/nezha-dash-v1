@@ -224,7 +224,6 @@ function DashboardLink() {
     <div className="flex items-center gap-2">
       <a
         href={"/dashboard"}
-        target="_blank"
         rel="noopener noreferrer"
         className="flex items-center text-nowrap gap-1 text-sm font-medium opacity-50 transition-opacity hover:opacity-100"
       >
