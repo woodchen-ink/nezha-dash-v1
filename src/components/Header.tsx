@@ -60,7 +60,13 @@ function Header() {
   return (
     <div className="mx-auto w-full max-w-5xl">
       <section className="flex items-center justify-between header-top">
-        <section onClick={() => navigate("/")} className="cursor-pointer flex items-center sm:text-base text-sm font-medium">
+        <section
+          onClick={() => {
+            sessionStorage.removeItem("selectedGroup")
+            navigate("/")
+          }}
+          className="cursor-pointer flex items-center sm:text-base text-sm font-medium"
+        >
           <div className="mr-1 flex flex-row items-center justify-start header-logo">
             <img
               width={40}
@@ -218,7 +224,6 @@ function DashboardLink() {
     <div className="flex items-center gap-2">
       <a
         href={"/dashboard"}
-        target="_blank"
         rel="noopener noreferrer"
         className="flex items-center text-nowrap gap-1 text-sm font-medium opacity-50 transition-opacity hover:opacity-100"
       >

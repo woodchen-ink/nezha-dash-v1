@@ -20,6 +20,11 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
     serverInfo,
   )
 
+  const cardClick = () => {
+    sessionStorage.setItem("fromMainPage", "true")
+    navigate(`/server/${serverInfo.id}`)
+  }
+
   const showFlag = true
 
   const customBackgroundImage =
@@ -46,7 +51,7 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
           "bg-card/70": customBackgroundImage,
         },
       )}
-      onClick={() => navigate(`/server/${serverInfo.id}`)}
+      onClick={cardClick}
     >
       <section
         className={cn("grid items-center gap-2", {
@@ -157,7 +162,7 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
           "bg-card/70": customBackgroundImage,
         },
       )}
-      onClick={() => navigate(`/server/${serverInfo.id}`, { replace: true })}
+      onClick={cardClick}
     >
       <section
         className={cn("grid items-center gap-2", {
