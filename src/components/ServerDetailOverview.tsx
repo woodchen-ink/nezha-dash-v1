@@ -7,6 +7,8 @@ import { useWebSocketContext } from "@/hooks/use-websocket-context"
 import { formatBytes } from "@/lib/format"
 import { cn, formatNezhaInfo } from "@/lib/utils"
 import { NezhaWebsocketResponse } from "@/types/nezha-api"
+import countries from "i18n-iso-countries"
+import enLocale from "i18n-iso-countries/langs/en.json"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
@@ -76,6 +78,8 @@ export default function ServerDetailOverview({ server_id }: { server_id: string 
   const customBackgroundImage =
     // @ts-expect-error CustomBackgroundImage is a global variable
     (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+
+  countries.registerLocale(enLocale)
 
   return (
     <div
@@ -168,7 +172,7 @@ export default function ServerDetailOverview({ server_id }: { server_id: string 
               <section className="flex flex-col items-start gap-0.5">
                 <p className="text-xs text-muted-foreground">{t("serverDetail.region")}</p>
                 <section className="flex items-start gap-1">
-                  <div className="text-xs text-start">{country_code?.toUpperCase()}</div>
+                  <div className="text-xs text-start">{countries.getName(country_code?.toUpperCase(), "en")}</div>
                   {country_code && <ServerFlag className="text-[11px] -mt-[1px]" country_code={country_code} />}
                 </section>
               </section>
