@@ -106,8 +106,15 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ url, child
   useEffect(() => {
     connect()
 
+    // 添加页面卸载事件监听
+    const handleBeforeUnload = () => {
+      cleanup()
+    }
+    window.addEventListener('beforeunload', handleBeforeUnload)
+
     return () => {
       cleanup()
+      window.removeEventListener('beforeunload', handleBeforeUnload)
     }
   }, [url])
 
