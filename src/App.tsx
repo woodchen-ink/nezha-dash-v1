@@ -28,17 +28,17 @@ const App: React.FC = () => {
   const [isCustomCodeInjected, setIsCustomCodeInjected] = useState(false)
   const { backgroundImage: customBackgroundImage } = useBackground()
 
-  // 检测是否强制指定了主题颜色
-  const forceTheme =
-    // @ts-expect-error ForceTheme is a global variable
-    (window.ForceTheme as string) !== "" ? window.ForceTheme : undefined
-
   useEffect(() => {
     if (settingData?.data?.config?.custom_code) {
       InjectContext(settingData?.data?.config?.custom_code)
       setIsCustomCodeInjected(true)
     }
   }, [settingData?.data?.config?.custom_code])
+
+  // 检测是否强制指定了主题颜色
+  const forceTheme =
+    // @ts-expect-error ForceTheme is a global variable
+    (window.ForceTheme as string) !== "" ? window.ForceTheme : undefined
 
   useEffect(() => {
     if (forceTheme === "dark" || forceTheme === "light") {
