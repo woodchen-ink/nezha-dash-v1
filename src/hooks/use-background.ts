@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 declare global {
   interface Window {
     CustomBackgroundImage: string
+    CustomMobileBackgroundImage: string
   }
 }
 

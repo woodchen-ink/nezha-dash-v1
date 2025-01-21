@@ -62,9 +62,7 @@ const App: React.FC = () => {
     i18n.changeLanguage(settingData?.data?.config?.language)
   }
 
-  const customMobileBackgroundImage =
-    // @ts-expect-error CustomMobileBackgroundImage is a global variable
-    (window.CustomMobileBackgroundImage as string) !== "" ? window.CustomMobileBackgroundImage : undefined
+  const customMobileBackgroundImage = window.CustomMobileBackgroundImage !== "" ? window.CustomMobileBackgroundImage : undefined
 
   return (
     <Router basename={import.meta.env.BASE_URL}>
