@@ -36,9 +36,7 @@ export default function Servers() {
   const [settingsOpen, setSettingsOpen] = useState<boolean>(false)
   const [currentGroup, setCurrentGroup] = useState<string>("All")
 
-  const customBackgroundImage =
-    // @ts-expect-error CustomBackgroundImage is a global variable
-    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+  const customBackgroundImage = (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
 
   const restoreScrollPosition = () => {
     const savedPosition = sessionStorage.getItem("scrollPosition")
@@ -74,7 +72,16 @@ export default function Servers() {
     restoreScrollPosition()
   }, [])
 
-  const groupTabs = ["All", ...(groupData?.data?.map((item: ServerGroup) => item.group.name) || [])]
+  const nezhaWsData = lastMessage ? (JSON.parse(lastMessage.data) as NezhaWebsocketResponse) : null
+
+  const groupTabs = [
+    "All",
+    ...(groupData?.data
+      ?.filter((item: ServerGroup) => {
+        return Array.isArray(item.servers) && item.servers.some((serverId) => nezhaWsData?.servers?.some((server) => server.id === serverId))
+      })
+      ?.map((item: ServerGroup) => item.group.name) || []),
+  ]
 
   if (!connected && !lastMessage) {
     return (
@@ -86,8 +93,6 @@ export default function Servers() {
       </div>
     )
   }
-
-  const nezhaWsData = lastMessage ? (JSON.parse(lastMessage.data) as NezhaWebsocketResponse) : null
 
   if (!nezhaWsData) {
     return (
