@@ -71,25 +71,29 @@ export function DashCommand() {
         <CommandInput placeholder={t("TypeCommand")} value={search} onValueChange={setSearch} />
         <CommandList>
           <CommandEmpty>{t("NoResults")}</CommandEmpty>
-          <CommandGroup heading={t("Servers")}>
-            {nezhaWsData.servers.map((server) => (
-              <CommandItem
-                key={server.id}
-                value={server.name}
-                onSelect={() => {
-                  navigate(`/server/${server.id}`)
-                  setOpen(false)
-                }}
-              >
-                {formatNezhaInfo(nezhaWsData.now, server).online ? (
-                  <span className="h-2 w-2 shrink-0 rounded-full bg-green-500 self-center" />
-                ) : (
-                  <span className="h-2 w-2 shrink-0 rounded-full bg-red-500 self-center" />
-                )}
-                <span>{server.name}</span>
-              </CommandItem>
-            ))}
-          </CommandGroup>
+          {nezhaWsData.servers.length > 0 && (
+            <>
+              <CommandGroup heading={t("Servers")}>
+                {nezhaWsData.servers.map((server) => (
+                  <CommandItem
+                    key={server.id}
+                    value={server.name}
+                    onSelect={() => {
+                      navigate(`/server/${server.id}`)
+                      setOpen(false)
+                    }}
+                  >
+                    {formatNezhaInfo(nezhaWsData.now, server).online ? (
+                      <span className="h-2 w-2 shrink-0 rounded-full bg-green-500 self-center" />
+                    ) : (
+                      <span className="h-2 w-2 shrink-0 rounded-full bg-red-500 self-center" />
+                    )}
+                    <span>{server.name}</span>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </>
+          )}
           <CommandSeparator />
 
           <CommandGroup heading={t("Shortcuts")}>
