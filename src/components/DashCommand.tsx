@@ -71,7 +71,7 @@ export function DashCommand() {
         <CommandInput placeholder={t("TypeCommand")} value={search} onValueChange={setSearch} />
         <CommandList>
           <CommandEmpty>{t("NoResults")}</CommandEmpty>
-          {nezhaWsData.servers.length > 0 && (
+          {nezhaWsData.servers && nezhaWsData.servers.length > 0 && (
             <>
               <CommandGroup heading={t("Servers")}>
                 {nezhaWsData.servers.map((server) => (
