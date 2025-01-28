@@ -69,7 +69,7 @@ export function DashCommand() {
     <>
       <CommandDialog open={open} onOpenChange={setOpen}>
         <CommandInput placeholder={t("TypeCommand")} value={search} onValueChange={setSearch} />
-        <CommandList>
+        <CommandList className="border-t">
           <CommandEmpty>{t("NoResults")}</CommandEmpty>
           {nezhaWsData.servers && nezhaWsData.servers.length > 0 && (
             <>
