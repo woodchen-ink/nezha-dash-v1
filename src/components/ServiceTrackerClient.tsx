@@ -1,12 +1,8 @@
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
 import React from "react"
 import { useTranslation } from "react-i18next"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
+
 import { Separator } from "./ui/separator"
 
 interface ServiceTrackerProps {
@@ -60,17 +56,9 @@ export const ServiceTrackerClient: React.FC<ServiceTrackerProps> = ({ days, clas
           <span className="font-medium text-sm">{title}</span>
         </div>
         <div className="flex items-center gap-3">
-          <span className={cn(
-            "font-medium text-sm transition-colors",
-            getDelayColor(avgDelay)
-          )}>
-            {avgDelay.toFixed(0)}ms
-          </span>
+          <span className={cn("font-medium text-sm transition-colors", getDelayColor(avgDelay))}>{avgDelay.toFixed(0)}ms</span>
           <Separator className="h-4" orientation="vertical" />
-          <span className={cn(
-            "font-medium text-sm transition-colors",
-            getUptimeColor(uptime)
-          )}>
+          <span className={cn("font-medium text-sm transition-colors", getUptimeColor(uptime))}>
             {uptime.toFixed(1)}% {t("serviceTracker.uptime")}
           </span>
         </div>
@@ -88,7 +76,7 @@ export const ServiceTrackerClient: React.FC<ServiceTrackerProps> = ({ days, clas
                     "after:absolute after:inset-0 after:rounded-[4px] after:shadow-[inset_0_1px_theme(colors.white/10%)]",
                     day.completed
                       ? "bg-gradient-to-b from-green-500/90 to-green-600 shadow-[0_1px_2px_theme(colors.green.600/30%)]"
-                      : "bg-gradient-to-b from-red-500/80 to-red-600/90 shadow-[0_1px_2px_theme(colors.red.600/30%)]"
+                      : "bg-gradient-to-b from-red-500/80 to-red-600/90 shadow-[0_1px_2px_theme(colors.red.600/30%)]",
                   )}
                 />
               </TooltipTrigger>
@@ -98,13 +86,16 @@ export const ServiceTrackerClient: React.FC<ServiceTrackerProps> = ({ days, clas
                   <div className="space-y-1.5">
                     <div className="flex items-center justify-between gap-3">
                       <span className="text-xs text-muted-foreground">{t("serviceTracker.uptime")}:</span>
-                      <span className={cn("text-xs font-medium", day.uptime > 95 ? "text-green-500" : "text-red-500")}>
-                        {day.uptime.toFixed(1)}%
-                      </span>
+                      <span className={cn("text-xs font-medium", day.uptime > 95 ? "text-green-500" : "text-red-500")}>{day.uptime.toFixed(1)}%</span>
                     </div>
                     <div className="flex items-center justify-between gap-3">
                       <span className="text-xs text-muted-foreground">{t("serviceTracker.delay")}:</span>
-                      <span className={cn("text-xs font-medium", day.delay < 100 ? "text-green-500" : day.delay < 300 ? "text-yellow-500" : "text-red-500")}>
+                      <span
+                        className={cn(
+                          "text-xs font-medium",
+                          day.delay < 100 ? "text-green-500" : day.delay < 300 ? "text-yellow-500" : "text-red-500",
+                        )}
+                      >
                         {day.delay.toFixed(0)}ms
                       </span>
                     </div>

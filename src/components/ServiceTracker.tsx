@@ -26,7 +26,7 @@ export function ServiceTracker({ serverList }: { serverList: NezhaServer[] }) {
         completed: up > serviceData.down[index],
         date: new Date(Date.now() - (29 - index) * 24 * 60 * 60 * 1000),
         uptime: dailyUptime,
-        delay: serviceData.delay[index] || 0
+        delay: serviceData.delay[index] || 0,
       }
     })
 
