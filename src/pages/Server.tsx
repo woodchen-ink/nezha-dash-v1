@@ -224,9 +224,11 @@ export default function Servers() {
               },
             )}
           >
-            <MapIcon className={cn("size-[13px]", {
-              "text-white": showMap === "1",
-            })} />
+            <MapIcon
+              className={cn("size-[13px]", {
+                "text-white": showMap === "1",
+              })}
+            />
           </button>
           <button
             onClick={() => {
@@ -244,9 +246,11 @@ export default function Servers() {
               },
             )}
           >
-            <ChartBarSquareIcon className={cn("size-[13px]", {
-              "text-white": showServices === "1",
-            })} />
+            <ChartBarSquareIcon
+              className={cn("size-[13px]", {
+                "text-white": showServices === "1",
+              })}
+            />
           </button>
           <button
             onClick={() => {
@@ -264,9 +268,11 @@ export default function Servers() {
               },
             )}
           >
-            <ViewColumnsIcon className={cn("size-[13px]", {
-              "text-white": inline === "1",
-            })} />
+            <ViewColumnsIcon
+              className={cn("size-[13px]", {
+                "text-white": inline === "1",
+              })}
+            />
           </button>
           <GroupSwitch tabs={groupTabs} currentTab={currentGroup} setCurrentTab={handleTagChange} />
         </section>
