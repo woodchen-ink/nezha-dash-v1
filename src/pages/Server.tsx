@@ -53,15 +53,28 @@ export default function Servers() {
 
   useEffect(() => {
     const showServicesState = localStorage.getItem("showServices")
-    if (showServicesState !== null) {
+    if (window.ForceShowServices) {
+      setShowServices("1")
+    } else if (showServicesState !== null) {
       setShowServices(showServicesState)
     }
   }, [])
 
   useEffect(() => {
     const inlineState = localStorage.getItem("inline")
-    if (inlineState !== null) {
+    if (window.ForceCardInline) {
+      setInline("1")
+    } else if (inlineState !== null) {
       setInline(inlineState)
+    }
+  }, [])
+
+  useEffect(() => {
+    const showMapState = localStorage.getItem("showMap")
+    if (window.ForceShowMap) {
+      setShowMap("1")
+    } else if (showMapState !== null) {
+      setShowMap(showMapState)
     }
   }, [])
 
@@ -212,6 +225,7 @@ export default function Servers() {
           <button
             onClick={() => {
               setShowMap(showMap === "0" ? "1" : "0")
+              localStorage.setItem("showMap", showMap === "0" ? "1" : "0")
             }}
             className={cn(
               "rounded-[50px] bg-white dark:bg-stone-800 cursor-pointer p-[10px] transition-all border border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700",
