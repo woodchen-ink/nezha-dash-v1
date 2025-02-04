@@ -214,17 +214,21 @@ export default function Servers() {
               setShowMap(showMap === "0" ? "1" : "0")
             }}
             className={cn(
-              "rounded-[50px] cursor-pointer [text-shadow:_0_1px_0_rgb(0_0_0_/_20%)] p-[10px] transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] border-2",
+              "rounded-[50px] bg-white dark:bg-stone-800 cursor-pointer p-[10px] transition-all border border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700",
               {
-                "text-white bg-blue-500 border-blue-500": showMap === "1",
-                "text-blue-700 border-blue-700 bg-gray-200": showMap === "0",
+                "!bg-blue-500 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": showMap === "1",
+                "text-white": showMap === "1",
               },
               {
-                "bg-opacity-70": customBackgroundImage,
+                "bg-opacity-70 dark:bg-opacity-70": customBackgroundImage,
               },
             )}
           >
-            <MapIcon className="size-[13px]" />
+            <MapIcon
+              className={cn("size-[13px]", {
+                "text-white": showMap === "1",
+              })}
+            />
           </button>
           <button
             onClick={() => {
@@ -232,17 +236,21 @@ export default function Servers() {
               localStorage.setItem("showServices", showServices === "0" ? "1" : "0")
             }}
             className={cn(
-              "rounded-[50px] cursor-pointer [text-shadow:_0_1px_0_rgb(0_0_0_/_20%)] p-[10px] transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] border-2",
+              "rounded-[50px] bg-white dark:bg-stone-800 cursor-pointer p-[10px] transition-all border border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700",
               {
-                "text-white bg-blue-500 border-blue-500": showServices === "1",
-                "text-blue-700 border-blue-700 bg-gray-200": showServices === "0",
+                "!bg-blue-500 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": showServices === "1",
+                "text-white": showServices === "1",
               },
               {
-                "bg-opacity-70": customBackgroundImage,
+                "bg-opacity-70 dark:bg-opacity-70": customBackgroundImage,
               },
             )}
           >
-            <ChartBarSquareIcon className="size-[13px]" />
+            <ChartBarSquareIcon
+              className={cn("size-[13px]", {
+                "text-white": showServices === "1",
+              })}
+            />
           </button>
           <button
             onClick={() => {
@@ -250,17 +258,21 @@ export default function Servers() {
               localStorage.setItem("inline", inline === "0" ? "1" : "0")
             }}
             className={cn(
-              "rounded-[50px] cursor-pointer [text-shadow:_0_1px_0_rgb(0_0_0_/_20%)] p-[10px] transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] border-2",
+              "rounded-[50px] bg-white dark:bg-stone-800 cursor-pointer p-[10px] transition-all border border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700",
               {
-                "text-white bg-blue-500 border-blue-500": inline === "1",
-                "text-blue-700 border-blue-700 bg-gray-200": inline === "0",
+                "!bg-blue-500 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": inline === "1",
+                "text-white": inline === "1",
               },
               {
-                "bg-opacity-70": customBackgroundImage,
+                "bg-opacity-70 dark:bg-opacity-70": customBackgroundImage,
               },
             )}
           >
-            <ViewColumnsIcon className="size-[13px]" />
+            <ViewColumnsIcon
+              className={cn("size-[13px]", {
+                "text-white": inline === "1",
+              })}
+            />
           </button>
           <GroupSwitch tabs={groupTabs} currentTab={currentGroup} setCurrentTab={handleTagChange} />
         </section>
