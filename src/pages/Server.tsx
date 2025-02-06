@@ -229,9 +229,9 @@ export default function Servers() {
               localStorage.setItem("showMap", showMap === "0" ? "1" : "0")
             }}
             className={cn(
-              "rounded-[50px] bg-white dark:bg-stone-800 cursor-pointer p-[10px] transition-all border border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700",
+              "rounded-[50px] bg-white dark:bg-stone-800 cursor-pointer p-[10px] transition-all border dark:border-none border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]",
               {
-                "!bg-blue-600 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": showMap === "1",
+                "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] !bg-blue-600 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": showMap === "1",
                 "text-white": showMap === "1",
               },
               {
@@ -251,9 +251,9 @@ export default function Servers() {
               localStorage.setItem("showServices", showServices === "0" ? "1" : "0")
             }}
             className={cn(
-              "rounded-[50px] bg-white dark:bg-stone-800 cursor-pointer p-[10px] transition-all border border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700",
+              "rounded-[50px] bg-white dark:bg-stone-800 cursor-pointer p-[10px] transition-all border dark:border-none border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]",
               {
-                "!bg-blue-600 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": showServices === "1",
+                "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] !bg-blue-600 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": showServices === "1",
                 "text-white": showServices === "1",
               },
               {
@@ -273,9 +273,9 @@ export default function Servers() {
               localStorage.setItem("inline", inline === "0" ? "1" : "0")
             }}
             className={cn(
-              "rounded-[50px] bg-white dark:bg-stone-800 cursor-pointer p-[10px] transition-all border border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700",
+              "rounded-[50px] bg-white dark:bg-stone-800 cursor-pointer p-[10px] transition-all border dark:border-none border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]",
               {
-                "!bg-blue-600 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": inline === "1",
+                "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] !bg-blue-600 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": inline === "1",
                 "text-white": inline === "1",
               },
               {
