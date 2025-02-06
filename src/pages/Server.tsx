@@ -230,7 +230,7 @@ export default function Servers() {
             className={cn(
               "rounded-[50px] bg-white dark:bg-stone-800 cursor-pointer p-[10px] transition-all border border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700",
               {
-                "!bg-blue-500 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": showMap === "1",
+                "!bg-blue-600 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": showMap === "1",
                 "text-white": showMap === "1",
               },
               {
@@ -252,7 +252,7 @@ export default function Servers() {
             className={cn(
               "rounded-[50px] bg-white dark:bg-stone-800 cursor-pointer p-[10px] transition-all border border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700",
               {
-                "!bg-blue-500 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": showServices === "1",
+                "!bg-blue-600 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": showServices === "1",
                 "text-white": showServices === "1",
               },
               {
@@ -274,7 +274,7 @@ export default function Servers() {
             className={cn(
               "rounded-[50px] bg-white dark:bg-stone-800 cursor-pointer p-[10px] transition-all border border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700",
               {
-                "!bg-blue-500 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": inline === "1",
+                "!bg-blue-600 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": inline === "1",
                 "text-white": inline === "1",
               },
               {
