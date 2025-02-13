@@ -1,7 +1,7 @@
 {
-  "name": "nazha-dashboard-vite",
+  "name": "nazha-dash-v1",
   "private": true,
-  "version": "1.0.1",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
