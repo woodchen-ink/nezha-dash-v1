@@ -4,6 +4,7 @@ import ReactDOM from "react-dom/client"
 import { Toaster } from "sonner"
 
 import App from "./App"
+import { ThemeColorManager } from "./components/ThemeColorManager"
 import { ThemeProvider } from "./components/ThemeProvider"
 import { MotionProvider } from "./components/motion/motion-provider"
 import { SortProvider } from "./context/sort-provider"
@@ -18,6 +19,7 @@ const queryClient = new QueryClient()
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <MotionProvider>
     <ThemeProvider storageKey="vite-ui-theme">
+      <ThemeColorManager />
       <QueryClientProvider client={queryClient}>
         <WebSocketProvider url="/api/v1/ws/server">
           <StatusProvider>
