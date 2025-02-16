@@ -4,7 +4,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { fetchMonitor } from "@/lib/nezha-api"
 import { cn, formatTime } from "@/lib/utils"
-import { formatRelativeTime } from "@/lib/utils"
 import { NezhaMonitor, ServerMonitorChart } from "@/types/nezha-api"
 import { useQuery } from "@tanstack/react-query"
 import * as React from "react"
@@ -264,12 +263,22 @@ export const NetworkChartClient = React.memo(function NetworkChart({
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="created_at"
-              tickLine={false}
+              tickLine={true}
+              tickSize={3}
               axisLine={false}
               tickMargin={8}
-              minTickGap={32}
-              interval={"preserveStartEnd"}
-              tickFormatter={(value) => formatRelativeTime(value)}
+              minTickGap={80}
+              interval={0}
+              ticks={processedData
+                .filter((item) => {
+                  const date = new Date(item.created_at)
+                  return date.getMinutes() === 0 && date.getHours() % 3 === 0
+                })
+                .map((item) => item.created_at)}
+              tickFormatter={(value) => {
+                const date = new Date(value)
+                return `${date.getHours()}:00`
+              }}
             />
             <YAxis tickLine={false} axisLine={false} tickMargin={15} minTickGap={20} tickFormatter={(value) => `${value}ms`} />
             <ChartTooltip
