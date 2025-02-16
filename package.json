@@ -39,7 +39,7 @@
     "country-flag-icons": "^1.5.16",
     "d3-geo": "^3.1.1",
     "dayjs": "^1.11.13",
-    "framer-motion": "^12.4.2",
+    "framer-motion": "^12.4.3",
     "i18n-iso-countries": "^7.13.0",
     "i18next": "^24.2.2",
     "lucide-react": "^0.460.0",
@@ -56,7 +56,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.20.0",
-    "@types/node": "^22.13.1",
+    "@types/node": "^22.13.4",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
     "@vitejs/plugin-react-swc": "^3.8.0",
