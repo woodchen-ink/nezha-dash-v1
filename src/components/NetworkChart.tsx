@@ -94,8 +94,10 @@ export const NetworkChartClient = React.memo(function NetworkChart({
 
   const customBackgroundImage = (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
 
+  const forcePeakCutEnabled = (window.ForcePeakCutEnabled as boolean) ?? false
+
   const [activeChart, setActiveChart] = React.useState(defaultChart)
-  const [isPeakEnabled, setIsPeakEnabled] = React.useState(false)
+  const [isPeakEnabled, setIsPeakEnabled] = React.useState(forcePeakCutEnabled)
 
   const handleButtonClick = useCallback(
     (chart: string) => {
@@ -281,11 +283,7 @@ export const NetworkChartClient = React.memo(function NetworkChart({
                   // 根据时间跨度调整显示间隔
                   if (hours <= 12) {
                     // 12小时内，每60分钟显示一个刻度
-                    return (
-                      index === 0 ||
-                      index === array.length - 1 ||
-                      new Date(item.created_at).getMinutes() % 60 === 0
-                    )
+                    return index === 0 || index === array.length - 1 || new Date(item.created_at).getMinutes() % 60 === 0
                   }
                   // 超过12小时，每2小时显示一个刻度
                   const date = new Date(item.created_at)

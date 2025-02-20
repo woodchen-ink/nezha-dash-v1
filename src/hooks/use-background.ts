@@ -7,6 +7,7 @@ declare global {
     ForceShowServices: boolean
     ForceCardInline: boolean
     ForceShowMap: boolean
+    ForcePeakCutEnabled: boolean
   }
 }
 
