@@ -4,6 +4,10 @@ declare global {
   interface Window {
     CustomBackgroundImage: string
     CustomMobileBackgroundImage: string
+    ForceShowServices: boolean
+    ForceCardInline: boolean
+    ForceShowMap: boolean
+    ForcePeakCutEnabled: boolean
   }
 }
 

@@ -1,5 +1,6 @@
 import react from "@vitejs/plugin-react-swc"
 import { execSync } from "child_process"
+import fs from "fs"
 import path from "path"
 import { defineConfig } from "vite"
 
@@ -26,6 +27,10 @@ export default defineConfig({
     },
   },
   server: {
+    https: {
+      key: fs.readFileSync("./.cert/key.pem"),
+      cert: fs.readFileSync("./.cert/cert.pem"),
+    },
     proxy: {
       "/api/v1/ws/server": {
         target: "ws://localhost:18009",

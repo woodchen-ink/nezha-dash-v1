@@ -293,7 +293,7 @@ function Overview() {
           <div style={{ fontVariantNumeric: "tabular-nums" }} className="flex text-sm font-medium mt-0.5">
             <NumberFlow trend={1} value={time.hh} format={{ minimumIntegerDigits: 2 }} />
             <NumberFlow prefix=":" trend={1} value={time.mm} digits={{ 1: { max: 5 } }} format={{ minimumIntegerDigits: 2 }} />
-            <NumberFlow prefix=":" trend={1} value={time.ss} digits={{ 1: { max: 5 } }} format={{ minimumIntegerDigits: 2 }} />
+            <p className="mt-[0.5px]">:{time.ss.toString().padStart(2, "0")}</p>
           </div>
         </NumberFlowGroup>
       </div>
