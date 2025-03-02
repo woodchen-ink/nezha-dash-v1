@@ -4,7 +4,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { fetchMonitor } from "@/lib/nezha-api"
 import { cn, formatTime } from "@/lib/utils"
-import { formatRelativeTime } from "@/lib/utils"
 import { NezhaMonitor, ServerMonitorChart } from "@/types/nezha-api"
 import { useQuery } from "@tanstack/react-query"
 import * as React from "react"
@@ -95,8 +94,10 @@ export const NetworkChartClient = React.memo(function NetworkChart({
 
   const customBackgroundImage = (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
 
+  const forcePeakCutEnabled = (window.ForcePeakCutEnabled as boolean) ?? false
+
   const [activeChart, setActiveChart] = React.useState(defaultChart)
-  const [isPeakEnabled, setIsPeakEnabled] = React.useState(false)
+  const [isPeakEnabled, setIsPeakEnabled] = React.useState(forcePeakCutEnabled)
 
   const handleButtonClick = useCallback(
     (chart: string) => {
@@ -264,12 +265,36 @@ export const NetworkChartClient = React.memo(function NetworkChart({
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="created_at"
-              tickLine={false}
+              tickLine={true}
+              tickSize={3}
               axisLine={false}
               tickMargin={8}
-              minTickGap={32}
-              interval={"preserveStartEnd"}
-              tickFormatter={(value) => formatRelativeTime(value)}
+              minTickGap={80}
+              ticks={processedData
+                .filter((item, index, array) => {
+                  if (array.length < 6) {
+                    return index === 0 || index === array.length - 1
+                  }
+
+                  // 计算数据的总时间跨度（毫秒）
+                  const timeSpan = array[array.length - 1].created_at - array[0].created_at
+                  const hours = timeSpan / (1000 * 60 * 60)
+
+                  // 根据时间跨度调整显示间隔
+                  if (hours <= 12) {
+                    // 12小时内，每60分钟显示一个刻度
+                    return index === 0 || index === array.length - 1 || new Date(item.created_at).getMinutes() % 60 === 0
+                  }
+                  // 超过12小时，每2小时显示一个刻度
+                  const date = new Date(item.created_at)
+                  return date.getMinutes() === 0 && date.getHours() % 2 === 0
+                })
+                .map((item) => item.created_at)}
+              tickFormatter={(value) => {
+                const date = new Date(value)
+                const minutes = date.getMinutes()
+                return minutes === 0 ? `${date.getHours()}:00` : `${date.getHours()}:${minutes}`
+              }}
             />
             <YAxis tickLine={false} axisLine={false} tickMargin={15} minTickGap={20} tickFormatter={(value) => `${value}ms`} />
             <ChartTooltip
