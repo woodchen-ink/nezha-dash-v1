@@ -1,9 +1,9 @@
 {
-  "name": "Nezha Monitoring",
-  "short_name": "Nezha Monitoring",
+  "name": "CZL Server",
+  "short_name": "CZL Server",
   "icons": [
     {
-      "src": "/android-chrome-192x192.png",
+      "src": "/apple-touch-icon.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
