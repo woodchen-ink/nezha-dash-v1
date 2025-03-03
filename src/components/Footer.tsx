@@ -1,4 +1,7 @@
 import React from "react"
+import { useTranslation } from "react-i18next"
+import { useQuery } from "@tanstack/react-query"
+import { fetchSetting } from "../lib/nezha-api"
 
 const Footer: React.FC = () => {
   const { t } = useTranslation()
