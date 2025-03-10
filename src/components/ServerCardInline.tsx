@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom"
 
 import PlanInfo from "./PlanInfo"
 import BillingInfo from "./billingInfo"
-import { Badge } from "./ui/badge"
 import { Card } from "./ui/card"
 import { Separator } from "./ui/separator"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip"
@@ -145,10 +144,10 @@ export default function ServerCardInline({ now, serverInfo }: { now: number; ser
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Badge variant="outline" className="text-[10px] py-0 px-1.5 h-5">
-                        {cpu_info[0].includes("Virtual") ? "vCPU: " : "CPU: "}
-                        {cpu_info[0].match(/(\d+)\s+(?:Virtual\s+)?Core/)?.[1] || "?"}
-                      </Badge>
+                      <p className={cn("text-[9px] bg-blue-600 dark:bg-blue-800 text-blue-200 dark:text-blue-300 w-fit rounded-[5px] px-[3px] py-[1.5px]")}>
+                        {cpu_info[0].includes("Physical") ? "物理CPU: " : "vCPU: "}
+                        {cpu_info[0].match(/(\d+)\s+(?:Physical|Virtual)\s+Core/)?.[1] || "?"}
+                      </p>
                     </TooltipTrigger>
                     <TooltipContent className="text-xs">
                       {cpu_info.join(", ")}
@@ -158,33 +157,33 @@ export default function ServerCardInline({ now, serverInfo }: { now: number; ser
               )}
               
               {mem_total > 0 && (
-                <Badge variant="outline" className="text-[10px] py-0 px-1.5 h-5">
+                <p className={cn("text-[9px] bg-green-600 text-green-200 dark:bg-green-800 dark:text-green-300 w-fit rounded-[5px] px-[3px] py-[1.5px]")}>
                   {t("serverCard.mem")}: {formatBytes(mem_total)}
-                </Badge>
+                </p>
               )}
               
               {disk_total > 0 && (
-                <Badge variant="outline" className="text-[10px] py-0 px-1.5 h-5">
+                <p className={cn("text-[9px] bg-purple-600 text-purple-200 dark:bg-purple-800 dark:text-purple-300 w-fit rounded-[5px] px-[3px] py-[1.5px]")}>
                   {t("serverCard.stg")}: {formatBytes(disk_total)}
-                </Badge>
+                </p>
               )}
               
               {tcp > 0 && (
-                <Badge variant="outline" className="text-[10px] py-0 px-1.5 h-5">
+                <p className={cn("text-[9px] bg-pink-600 text-pink-200 dark:bg-pink-800 dark:text-pink-300 w-fit rounded-[5px] px-[3px] py-[1.5px]")}>
                   TCP: {tcp}
-                </Badge>
+                </p>
               )}
               
               {udp > 0 && (
-                <Badge variant="outline" className="text-[10px] py-0 px-1.5 h-5">
+                <p className={cn("text-[9px] bg-orange-600 text-orange-200 dark:bg-orange-800 dark:text-orange-300 w-fit rounded-[5px] px-[3px] py-[1.5px]")}>
                   UDP: {udp}
-                </Badge>
+                </p>
               )}
               
               {process > 0 && (
-                <Badge variant="outline" className="text-[10px] py-0 px-1.5 h-5">
+                <p className={cn("text-[9px] bg-yellow-600 text-yellow-200 dark:bg-yellow-800 dark:text-yellow-300 w-fit rounded-[5px] px-[3px] py-[1.5px]")}>
                   {t("serverDetailChart.process")}: {process}
-                </Badge>
+                </p>
               )}
             </section>
           )}

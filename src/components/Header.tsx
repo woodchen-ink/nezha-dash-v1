@@ -76,7 +76,7 @@ function Header() {
   const customBackgroundImage = backgroundImage
 
   return (
-    <div className="mx-auto w-full max-w-5xl">
+    <div className="mx-auto w-full max-w-screen-xl">
       <section className="flex items-center justify-between header-top">
         <section
           onClick={() => {
@@ -212,7 +212,7 @@ export function RefreshToast() {
 }
 
 function DashboardLink() {
-  const { t } = useTranslation()
+  // const { t } = useTranslation()
   const { setNeedReconnect } = useWebSocketContext()
   const previousLoginState = useRef<boolean | null>(null)
   const {
@@ -253,14 +253,14 @@ function DashboardLink() {
 
   return (
     <div className="flex items-center gap-2">
-      <a
+      {/* <a
         href={"/dashboard"}
         rel="noopener noreferrer"
         className="flex items-center text-nowrap gap-1 text-sm font-medium opacity-50 transition-opacity hover:opacity-100"
       >
         {!isLogin && t("login")}
         {isLogin && t("dashboard")}
-      </a>
+      </a> */}
     </div>
   )
 }
