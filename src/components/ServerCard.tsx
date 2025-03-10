@@ -162,62 +162,66 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
           </div>
         </section>
         
-        {/* 服务器详细信息标签 */}
-        {showServerDetails && (
-          <section className="flex flex-wrap items-center gap-1 w-full mt-1">
-            {cpu_info && cpu_info.length > 0 && (
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <p className={cn("text-[9px] bg-blue-600 dark:bg-blue-800 text-blue-200 dark:text-blue-300 w-fit rounded-[5px] px-[3px] py-[1.5px]")}>
-                      {cpu_info[0].includes("Physical") ? "物理CPU: " : "vCPU: "}
-                      {cpu_info[0].match(/(\d+)\s+(?:Physical|Virtual)\s+Core/)?.[1] || "?"}
-                    </p>
-                  </TooltipTrigger>
-                  <TooltipContent className="text-xs">
-                    {cpu_info.join(", ")}
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            )}
-            
-            {mem_total > 0 && (
-              <p className={cn("text-[9px] bg-green-600 text-green-200 dark:bg-green-800 dark:text-green-300 w-fit rounded-[5px] px-[3px] py-[1.5px]")}>
-                {t("serverCard.mem")}: {formatBytes(mem_total)}
-              </p>
-            )}
-            
-            {disk_total > 0 && (
-              <p className={cn("text-[9px] bg-purple-600 text-purple-200 dark:bg-purple-800 dark:text-purple-300 w-fit rounded-[5px] px-[3px] py-[1.5px]")}>
-                {t("serverCard.stg")}: {formatBytes(disk_total)}
-              </p>
-            )}
-            
-            {tcp > 0 && (
-              <p className={cn("text-[9px] bg-pink-600 text-pink-200 dark:bg-pink-800 dark:text-pink-300 w-fit rounded-[5px] px-[3px] py-[1.5px]")}>
-                TCP: {tcp}
-              </p>
-            )}
-            
-            {udp > 0 && (
-              <p className={cn("text-[9px] bg-orange-600 text-orange-200 dark:bg-orange-800 dark:text-orange-300 w-fit rounded-[5px] px-[3px] py-[1.5px]")}>
-                UDP: {udp}
-              </p>
-            )}
-            
-            {process > 0 && (
-              <p className={cn("text-[9px] bg-yellow-600 text-yellow-200 dark:bg-yellow-800 dark:text-yellow-300 w-fit rounded-[5px] px-[3px] py-[1.5px]")}>
-                {t("serverDetailChart.process")}: {process}
-              </p>
-            )}
-            
-            {uptime > 0 && (
-              <p className={cn("text-[9px] bg-stone-600 text-stone-200 dark:bg-stone-800 dark:text-stone-300 w-fit rounded-[5px] px-[3px] py-[1.5px]")}>
-                {t("serverCard.uptime")}: {formatUptime(uptime)}
-              </p>
-            )}
-          </section>
-        )}
+        {/* 服务器详细信息标签和 PlanInfo */}
+        <section className="flex items-center gap-1.5 w-full mt-1">
+          {showServerDetails && (
+            <>
+              {cpu_info && cpu_info.length > 0 && (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <p className={cn("text-[10px] text-muted-foreground")}>
+                        {cpu_info[0].includes("Physical") ? "物理CPU: " : "vCPU: "}
+                        {cpu_info[0].match(/(\d+)\s+(?:Physical|Virtual)\s+Core/)?.[1] || "?"}
+                      </p>
+                    </TooltipTrigger>
+                    <TooltipContent className="text-xs">
+                      {cpu_info.join(", ")}
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
+              
+              {mem_total > 0 && (
+                <p className={cn("text-[10px] text-muted-foreground")}>
+                  {t("serverCard.mem")}: {formatBytes(mem_total)}
+                </p>
+              )}
+              
+              {disk_total > 0 && (
+                <p className={cn("text-[10px] text-muted-foreground")}>
+                  {t("serverCard.stg")}: {formatBytes(disk_total)}
+                </p>
+              )}
+              
+              {tcp > 0 && (
+                <p className={cn("text-[10px] text-muted-foreground")}>
+                  TCP: {tcp}
+                </p>
+              )}
+              
+              {udp > 0 && (
+                <p className={cn("text-[10px] text-muted-foreground")}>
+                  UDP: {udp}
+                </p>
+              )}
+              
+              {process > 0 && (
+                <p className={cn("text-[10px] text-muted-foreground")}>
+                  {t("serverDetailChart.process")}: {process}
+                </p>
+              )}
+              
+              {uptime > 0 && (
+                <p className={cn("text-[10px] text-muted-foreground")}>
+                  {t("serverCard.uptime")}: {formatUptime(uptime)}
+                </p>
+              )}
+            </>
+          )}
+          
+          {parsedData?.planDataMod && <PlanInfo parsedData={parsedData} />}
+        </section>
         
         {showNetTransfer && (
           <section className={"flex items-center w-full justify-between gap-1"}>
@@ -235,7 +239,6 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
             </Badge>
           </section>
         )}
-        {parsedData?.planDataMod && <PlanInfo parsedData={parsedData} />}
       </div>
     </Card>
   ) : (
