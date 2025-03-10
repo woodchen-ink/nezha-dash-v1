@@ -163,7 +163,7 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
         </section>
         
         {/* 服务器详细信息标签和 PlanInfo */}
-        <section className="flex items-center gap-1.5 w-full mt-1">
+        <section className="flex flex-wrap items-center gap-1.5 w-full mt-1">
           {showServerDetails && (
             <>
               {cpu_info && cpu_info.length > 0 && (
