@@ -62,7 +62,7 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
   const parsedData = parsePublicNote(public_note)
 
   // 格式化运行时间
-  const formatUptime = (seconds: number) => {
+  const formatUptime = (seconds: number, t: any) => {
     if (seconds >= 86400) {
       return `${Math.floor(seconds / 86400)} ${t("serverCard.days")}`
     } else {
@@ -163,64 +163,72 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
         </section>
         
         {/* 服务器详细信息标签和 PlanInfo */}
-        <section className="flex flex-wrap items-center gap-1.5 w-full mt-1">
+        <section className="flex flex-col gap-1 w-full mt-1">
           {showServerDetails && (
             <>
-              {cpu_info && cpu_info.length > 0 && (
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <p className={cn("text-[10px] text-muted-foreground")}>
-                        {cpu_info[0].includes("Physical") ? "物理CPU: " : "vCPU: "}
-                        {cpu_info[0].match(/(\d+)\s+(?:Physical|Virtual)\s+Core/)?.[1] || "?"}
-                      </p>
-                    </TooltipTrigger>
-                    <TooltipContent className="text-xs">
-                      {cpu_info.join(", ")}
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              )}
-              
-              {mem_total > 0 && (
-                <p className={cn("text-[10px] text-muted-foreground")}>
-                  {t("serverCard.mem")}: {formatBytes(mem_total)}
-                </p>
-              )}
-              
-              {disk_total > 0 && (
-                <p className={cn("text-[10px] text-muted-foreground")}>
-                  {t("serverCard.stg")}: {formatBytes(disk_total)}
-                </p>
-              )}
-              
-              {tcp > 0 && (
-                <p className={cn("text-[10px] text-muted-foreground")}>
-                  TCP: {tcp}
-                </p>
-              )}
-              
-              {udp > 0 && (
-                <p className={cn("text-[10px] text-muted-foreground")}>
-                  UDP: {udp}
-                </p>
-              )}
-              
-              {process > 0 && (
-                <p className={cn("text-[10px] text-muted-foreground")}>
-                  {t("serverDetailChart.process")}: {process}
-                </p>
-              )}
-              
-              {uptime > 0 && (
-                <p className={cn("text-[10px] text-muted-foreground")}>
-                  {t("serverCard.uptime")}: {formatUptime(uptime)}
-                </p>
-              )}
+              {/* 第一行：运行时间、CPU、内存、硬盘 */}
+              <div className="flex items-center gap-1.5">
+                {uptime > 0 && (
+                  <p className={cn("text-[10px] text-muted-foreground")}>
+                    {t("serverCard.uptime")}: {formatUptime(uptime, t)}
+                  </p>
+                )}
+                
+                {cpu_info && cpu_info.length > 0 && (
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <p className={cn("text-[10px] text-muted-foreground")}>
+                          {cpu_info[0].includes("Physical") ? "物理CPU: " : "vCPU: "}
+                          {cpu_info[0].match(/(\d+)\s+(?:Physical|Virtual)\s+Core/)?.[1] || "?"}
+                        </p>
+                      </TooltipTrigger>
+                      <TooltipContent className="text-xs">
+                        {cpu_info.join(", ")}
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                )}
+                
+                {mem_total > 0 && (
+                  <p className={cn("text-[10px] text-muted-foreground")}>
+                    {t("serverCard.mem")}: {formatBytes(mem_total)}
+                  </p>
+                )}
+                
+                {disk_total > 0 && (
+                  <p className={cn("text-[10px] text-muted-foreground")}>
+                    {t("serverCard.stg")}: {formatBytes(disk_total)}
+                  </p>
+                )}
+              </div>
+
+              {/* 第二行：TCP、UDP、进程数，以及 PlanInfo */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  {tcp > 0 && (
+                    <p className={cn("text-[10px] text-muted-foreground")}>
+                      TCP: {tcp}
+                    </p>
+                  )}
+                  
+                  {udp > 0 && (
+                    <p className={cn("text-[10px] text-muted-foreground")}>
+                      UDP: {udp}
+                    </p>
+                  )}
+                  
+                  {process > 0 && (
+                    <p className={cn("text-[10px] text-muted-foreground")}>
+                      {t("serverDetailChart.process")}: {process}
+                    </p>
+                  )}
+                </div>
+                
+                {parsedData?.planDataMod && <PlanInfo parsedData={parsedData} />}
+              </div>
             </>
           )}
-          
-          {parsedData?.planDataMod && <PlanInfo parsedData={parsedData} />}
         </section>
         
         {showNetTransfer && (
