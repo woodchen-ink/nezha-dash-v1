@@ -36,7 +36,12 @@
     "system": "系统",
     "uptime": "运行时间",
     "totalUpload": "总上传",
-    "totalDownload": "总下载"
+    "totalDownload": "总下载",
+    "cpu": "处理器",
+    "vcpu": "虚拟核心",
+    "tcp": "TCP连接",
+    "udp": "UDP连接",
+    "process": "进程数"
   },
   "cycleTransfer": {
     "used": "已使用",

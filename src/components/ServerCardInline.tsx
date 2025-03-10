@@ -9,13 +9,35 @@ import { useNavigate } from "react-router-dom"
 
 import PlanInfo from "./PlanInfo"
 import BillingInfo from "./billingInfo"
+import { Badge } from "./ui/badge"
 import { Card } from "./ui/card"
 import { Separator } from "./ui/separator"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip"
 
 export default function ServerCardInline({ now, serverInfo }: { now: number; serverInfo: NezhaServer }) {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { name, country_code, online, cpu, up, down, mem, stg, platform, uptime, net_in_transfer, net_out_transfer, public_note } = formatNezhaInfo(
+  const { 
+    name, 
+    country_code, 
+    online, 
+    cpu, 
+    up, 
+    down, 
+    mem, 
+    stg, 
+    platform, 
+    uptime, 
+    net_in_transfer, 
+    net_out_transfer, 
+    public_note,
+    cpu_info,
+    mem_total,
+    disk_total,
+    tcp,
+    udp,
+    process
+  } = formatNezhaInfo(
     now,
     serverInfo,
   )
@@ -28,6 +50,9 @@ export default function ServerCardInline({ now, serverInfo }: { now: number; ser
   const showFlag = true
 
   const customBackgroundImage = (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+
+  // @ts-expect-error ShowServerDetails is a global variable
+  const showServerDetails = window.ShowServerDetails !== undefined ? window.ShowServerDetails as boolean : true
 
   const parsedData = parsePublicNote(public_note)
 
@@ -112,6 +137,58 @@ export default function ServerCardInline({ now, serverInfo }: { now: number; ser
               <div className="flex items-center text-xs font-semibold">{formatBytes(net_in_transfer)}</div>
             </div>
           </section>
+          
+          {/* 服务器详细信息标签 */}
+          {showServerDetails && (
+            <section className="flex flex-wrap items-center gap-1 w-full mt-1">
+              {cpu_info && cpu_info.length > 0 && (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Badge variant="outline" className="text-[10px] py-0 px-1.5 h-5">
+                        {cpu_info[0].includes("Virtual") ? "vCPU: " : "CPU: "}
+                        {cpu_info[0].match(/(\d+)\s+(?:Virtual\s+)?Core/)?.[1] || "?"}
+                      </Badge>
+                    </TooltipTrigger>
+                    <TooltipContent className="text-xs">
+                      {cpu_info.join(", ")}
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
+              
+              {mem_total > 0 && (
+                <Badge variant="outline" className="text-[10px] py-0 px-1.5 h-5">
+                  {t("serverCard.mem")}: {formatBytes(mem_total)}
+                </Badge>
+              )}
+              
+              {disk_total > 0 && (
+                <Badge variant="outline" className="text-[10px] py-0 px-1.5 h-5">
+                  {t("serverCard.stg")}: {formatBytes(disk_total)}
+                </Badge>
+              )}
+              
+              {tcp > 0 && (
+                <Badge variant="outline" className="text-[10px] py-0 px-1.5 h-5">
+                  TCP: {tcp}
+                </Badge>
+              )}
+              
+              {udp > 0 && (
+                <Badge variant="outline" className="text-[10px] py-0 px-1.5 h-5">
+                  UDP: {udp}
+                </Badge>
+              )}
+              
+              {process > 0 && (
+                <Badge variant="outline" className="text-[10px] py-0 px-1.5 h-5">
+                  {t("serverDetailChart.process")}: {process}
+                </Badge>
+              )}
+            </section>
+          )}
+          
           {parsedData?.planDataMod && <PlanInfo parsedData={parsedData} />}
         </div>
       </Card>
