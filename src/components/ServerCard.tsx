@@ -179,7 +179,7 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <p className={cn("text-[10px] text-muted-foreground")}>
-                          {cpu_info[0].includes("Physical") ? "物理CPU: " : "vCPU: "}
+                          {cpu_info[0].includes("Physical") ? "pCPU: " : "vCPU: "}
                           {cpu_info[0].match(/(\d+)\s+(?:Physical|Virtual)\s+Core/)?.[1] || "?"}
                         </p>
                       </TooltipTrigger>
