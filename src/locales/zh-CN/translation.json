@@ -60,6 +60,7 @@
     "status": "状态",
     "online": "在线",
     "days": "天",
+    "hours": "小时",
     "offline": "离线",
     "unknown": "未知",
     "uptime": "运行时间",
@@ -72,7 +73,8 @@
     "upload": "上传",
     "download": "下载",
     "lastActive": "最后上报时间",
-    "temperature": "温度"
+    "temperature": "温度",
+    "bootTime": "启动时间"
   },
   "serverDetailChart": {
     "process": "进程数",
