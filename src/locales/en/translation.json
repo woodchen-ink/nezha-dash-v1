@@ -55,6 +55,7 @@
     "status": "Status",
     "online": "Online",
     "days": "Days",
+    "hours": "Hours",
     "offline": "Offline",
     "unknown": "Unknown",
     "uptime": "Uptime",
@@ -67,7 +68,8 @@
     "upload": "Upload",
     "download": "Download",
     "lastActive": "Last active time",
-    "temperature": "Temperature"
+    "temperature": "Temperature",
+    "bootTime": "Boot time"
   },
   "serverDetailChart": {
     "process": "Process",
