@@ -16,7 +16,7 @@ export function formatNezhaInfo(now: number, serverInfo: NezhaServer) {
     process: serverInfo.state.process_count || 0,
     up: serverInfo.state.net_out_speed / 1024 / 1024 || 0,
     down: serverInfo.state.net_in_speed / 1024 / 1024 || 0,
-    last_active_time_string: lastActiveTime ? dayjs(lastActiveTime * 1000).format("YYYY-MM-DD HH:mm:ss") : "",
+    last_active_time_string: lastActiveTime ? dayjs(lastActiveTime).format("YYYY-MM-DD HH:mm:ss") : "",
     online: now - lastActiveTime <= 30000,
     uptime: serverInfo.state.uptime || 0,
     version: serverInfo.host.version || null,
