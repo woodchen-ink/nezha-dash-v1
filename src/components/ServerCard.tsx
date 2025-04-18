@@ -73,7 +73,7 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
   return online ? (
     <Card
       className={cn(
-        "flex flex-col items-center justify-start gap-3 p-3 md:px-5 cursor-pointer hover:bg-accent/50 transition-colors",
+        "flex flex-col items-center justify-start gap-4 p-4 md:px-6 cursor-pointer hover:bg-accent/50 transition-colors",
         {
           "flex-col": fixedTopServerName,
           "lg:flex-row": !fixedTopServerName,
@@ -84,18 +84,19 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
       )}
       onClick={cardClick}
     >
+      {/* 服务器名称和标识区域 */}
       <section
-        className={cn("grid items-center gap-2", {
-          "lg:w-40": !fixedTopServerName,
+        className={cn("grid items-center gap-3", {
+          "lg:w-44": !fixedTopServerName,
         })}
         style={{ gridTemplateColumns: "auto auto 1fr" }}
       >
-        <span className="h-2 w-2 shrink-0 rounded-full bg-green-500 self-center"></span>
-        <div className={cn("flex items-center justify-center", showFlag ? "min-w-[17px]" : "min-w-0")}>
+        <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-green-500 shadow-sm shadow-green-300 dark:shadow-green-900"></span>
+        <div className={cn("flex items-center justify-center", showFlag ? "min-w-[20px]" : "min-w-0")}>
           {showFlag ? <ServerFlag country_code={country_code} /> : null}
         </div>
         <div className="relative flex flex-col">
-          <p className={cn("break-all font-bold tracking-tight", showFlag ? "text-xs " : "text-sm")}>{name}</p>
+          <p className={cn("break-all font-bold tracking-tight", showFlag ? "text-sm" : "text-base")}>{name}</p>
           <div
             className={cn("hidden lg:block", {
               "lg:hidden": fixedTopServerName,
@@ -105,6 +106,8 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
           </div>
         </div>
       </section>
+      
+      {/* 计费信息移动端展示 */}
       <div
         className={cn("flex items-center gap-2 -mt-2 lg:hidden", {
           "lg:flex": fixedTopServerName,
@@ -112,49 +115,61 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
       >
         {parsedData?.billingDataMod && <BillingInfo parsedData={parsedData} />}
       </div>
-      <div className="flex flex-col lg:items-start items-center gap-2">
+      
+      <div className="flex flex-col lg:items-start items-center gap-3 w-full">
+        {/* 系统和资源使用情况 */}
         <section
-          className={cn("grid grid-cols-5 items-center gap-3", {
-            "lg:grid-cols-6 lg:gap-4": fixedTopServerName,
+          className={cn("grid grid-cols-5 items-center gap-4", {
+            "lg:grid-cols-6 lg:gap-5": fixedTopServerName,
           })}
         >
           {fixedTopServerName && (
             <div className={"hidden col-span-1 items-center lg:flex lg:flex-row gap-2"}>
               <div className="text-xs font-semibold">
                 {platform.includes("Windows") ? (
-                  <MageMicrosoftWindows className="size-[10px]" />
+                  <MageMicrosoftWindows className="size-[12px]" />
                 ) : (
                   <p className={`fl-${GetFontLogoClass(platform)}`} />
                 )}
               </div>
-              <div className={"flex w-14 flex-col"}>
+              <div className={"flex w-16 flex-col"}>
                 <p className="text-xs text-muted-foreground">{t("serverCard.system")}</p>
-                <div className="flex items-center text-[10.5px] font-semibold">{platform.includes("Windows") ? "Windows" : GetOsName(platform)}</div>
+                <div className="flex items-center text-[11px] font-semibold">{platform.includes("Windows") ? "Windows" : GetOsName(platform)}</div>
               </div>
             </div>
           )}
-          <div className={"flex w-14 flex-col"}>
+          
+          {/* CPU使用率 */}
+          <div className={"flex w-16 flex-col"}>
             <p className="text-xs text-muted-foreground">{"CPU"}</p>
             <div className="flex items-center text-xs font-semibold">{cpu.toFixed(2)}%</div>
             <ServerUsageBar value={cpu} />
           </div>
-          <div className={"flex w-14 flex-col"}>
+          
+          {/* 内存使用率 */}
+          <div className={"flex w-16 flex-col"}>
             <p className="text-xs text-muted-foreground">{t("serverCard.mem")}</p>
             <div className="flex items-center text-xs font-semibold">{mem.toFixed(2)}%</div>
             <ServerUsageBar value={mem} />
           </div>
-          <div className={"flex w-14 flex-col"}>
+          
+          {/* 存储使用率 */}
+          <div className={"flex w-16 flex-col"}>
             <p className="text-xs text-muted-foreground">{t("serverCard.stg")}</p>
             <div className="flex items-center text-xs font-semibold">{stg.toFixed(2)}%</div>
             <ServerUsageBar value={stg} />
           </div>
-          <div className={"flex w-14 flex-col"}>
+          
+          {/* 上传速度 */}
+          <div className={"flex w-16 flex-col"}>
             <p className="text-xs text-muted-foreground">{t("serverCard.upload")}</p>
             <div className="flex items-center text-xs font-semibold">
               {up >= 1024 ? `${(up / 1024).toFixed(2)}G/s` : up >= 1 ? `${up.toFixed(2)}M/s` : `${(up * 1024).toFixed(2)}K/s`}
             </div>
           </div>
-          <div className={"flex w-14 flex-col"}>
+          
+          {/* 下载速度 */}
+          <div className={"flex w-16 flex-col"}>
             <p className="text-xs text-muted-foreground">{t("serverCard.download")}</p>
             <div className="flex items-center text-xs font-semibold">
               {down >= 1024 ? `${(down / 1024).toFixed(2)}G/s` : down >= 1 ? `${down.toFixed(2)}M/s` : `${(down * 1024).toFixed(2)}K/s`}
@@ -162,88 +177,103 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
           </div>
         </section>
         
-        {/* 服务器详细信息标签和 PlanInfo */}
-        <section className="flex flex-col gap-1 w-full mt-1">
-          {showServerDetails && (
-            <>
-              {/* 第一行：运行时间、CPU、内存、硬盘 */}
-              <div className="flex items-center gap-1.5">
-                {uptime > 0 && (
-                  <p className={cn("text-[10px] text-muted-foreground")}>
-                    {t("serverCard.uptime")}: {formatUptime(uptime, t)}
-                  </p>
-                )}
-                
-                {cpu_info && cpu_info.length > 0 && (
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <p className={cn("text-[10px] text-muted-foreground")}>
-                          {cpu_info[0].includes("Physical") ? "pCPU: " : "vCPU: "}
-                          {cpu_info[0].match(/(\d+)\s+(?:Physical|Virtual)\s+Core/)?.[1] || "?"}
-                        </p>
-                      </TooltipTrigger>
-                      <TooltipContent className="text-xs">
-                        {cpu_info.join(", ")}
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                )}
-                
-                {mem_total > 0 && (
-                  <p className={cn("text-[10px] text-muted-foreground")}>
-                    {t("serverCard.mem")}: {formatBytes(mem_total)}
-                  </p>
-                )}
-                
-                {disk_total > 0 && (
-                  <p className={cn("text-[10px] text-muted-foreground")}>
-                    {t("serverCard.stg")}: {formatBytes(disk_total)}
-                  </p>
-                )}
+        {/* 服务器详细信息区域 */}
+        {showServerDetails && (
+          <section className="flex flex-col gap-2 w-full mt-1 bg-muted/30 p-2 rounded-md">
+            {/* 服务器配置信息 */}
+            <div className="flex flex-wrap items-center gap-2">
+              {/* 运行时间 */}
+              {uptime > 0 && (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Badge variant="outline" className="text-[10px] py-0 h-5">
+                        {t("serverCard.uptime")}: {formatUptime(uptime, t)}
+                      </Badge>
+                    </TooltipTrigger>
+                    <TooltipContent className="text-xs">
+                      {t("serverCard.uptime")}: {formatUptime(uptime, t)}
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
+              
+              {/* CPU信息 */}
+              {cpu_info && cpu_info.length > 0 && (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Badge variant="outline" className="text-[10px] py-0 h-5">
+                        {cpu_info[0].includes("Physical") ? "pCPU: " : "vCPU: "}
+                        {cpu_info[0].match(/(\d+)\s+(?:Physical|Virtual)\s+Core/)?.[1] || "?"}
+                      </Badge>
+                    </TooltipTrigger>
+                    <TooltipContent className="text-xs">
+                      {cpu_info.join(", ")}
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
+              
+              {/* 内存大小 */}
+              {mem_total > 0 && (
+                <Badge variant="outline" className="text-[10px] py-0 h-5">
+                  {t("serverCard.mem")}: {formatBytes(mem_total)}
+                </Badge>
+              )}
+              
+              {/* 存储大小 */}
+              {disk_total > 0 && (
+                <Badge variant="outline" className="text-[10px] py-0 h-5">
+                  {t("serverCard.stg")}: {formatBytes(disk_total)}
+                </Badge>
+              )}
+              
+              {/* TCP连接数 */}
+              {tcp > 0 && (
+                <Badge variant="outline" className="text-[10px] py-0 h-5">
+                  TCP: {tcp}
+                </Badge>
+              )}
+              
+              {/* UDP连接数 */}
+              {udp > 0 && (
+                <Badge variant="outline" className="text-[10px] py-0 h-5">
+                  UDP: {udp}
+                </Badge>
+              )}
+              
+              {/* 进程数 */}
+              {process > 0 && (
+                <Badge variant="outline" className="text-[10px] py-0 h-5">
+                  {t("serverDetailChart.process")}: {process}
+                </Badge>
+              )}
+            </div>
+            
+            {/* 套餐信息 */}
+            {parsedData?.planDataMod && (
+              <div className="flex justify-end">
+                <PlanInfo parsedData={parsedData} />
               </div>
-
-              {/* 第二行：TCP、UDP、进程数，以及 PlanInfo */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5">
-                  {tcp > 0 && (
-                    <p className={cn("text-[10px] text-muted-foreground")}>
-                      TCP: {tcp}
-                    </p>
-                  )}
-                  
-                  {udp > 0 && (
-                    <p className={cn("text-[10px] text-muted-foreground")}>
-                      UDP: {udp}
-                    </p>
-                  )}
-                  
-                  {process > 0 && (
-                    <p className={cn("text-[10px] text-muted-foreground")}>
-                      {t("serverDetailChart.process")}: {process}
-                    </p>
-                  )}
-                </div>
-                
-                {parsedData?.planDataMod && <PlanInfo parsedData={parsedData} />}
-              </div>
-            </>
-          )}
-        </section>
+            )}
+          </section>
+        )}
         
+        {/* 网络传输信息 */}
         {showNetTransfer && (
-          <section className={"flex items-center w-full justify-between gap-1"}>
+          <section className={"flex items-center w-full justify-between gap-2 mt-1"}>
             <Badge
               variant="secondary"
-              className="items-center flex-1 justify-center rounded-[8px] text-nowrap text-[11px] border-muted-50 shadow-md shadow-neutral-200/30 dark:shadow-none"
+              className="items-center flex-1 justify-center rounded-[8px] text-[11px] border-muted-50 shadow-sm py-1.5"
             >
-              {t("serverCard.upload")}:{formatBytes(net_out_transfer)}
+              {t("serverCard.upload")}: {formatBytes(net_out_transfer)}
             </Badge>
             <Badge
               variant="outline"
-              className="items-center flex-1 justify-center rounded-[8px] text-nowrap text-[11px] shadow-md shadow-neutral-200/30 dark:shadow-none"
+              className="items-center flex-1 justify-center rounded-[8px] text-[11px] shadow-sm py-1.5"
             >
-              {t("serverCard.download")}:{formatBytes(net_in_transfer)}
+              {t("serverCard.download")}: {formatBytes(net_in_transfer)}
             </Badge>
           </section>
         )}
@@ -252,8 +282,8 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
   ) : (
     <Card
       className={cn(
-        "flex flex-col items-center justify-start gap-3 sm:gap-0 p-3 md:px-5 cursor-pointer hover:bg-accent/50 transition-colors",
-        showNetTransfer ? "lg:min-h-[91px] min-h-[123px]" : "lg:min-h-[61px] min-h-[93px]",
+        "flex flex-col items-center justify-start gap-4 p-4 md:px-6 cursor-pointer hover:bg-accent/50 transition-colors",
+        showNetTransfer ? "lg:min-h-[100px] min-h-[130px]" : "lg:min-h-[70px] min-h-[100px]",
         {
           "flex-col": fixedTopServerName,
           "lg:flex-row": !fixedTopServerName,
@@ -265,17 +295,17 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
       onClick={cardClick}
     >
       <section
-        className={cn("grid items-center gap-2", {
-          "lg:w-40": !fixedTopServerName,
+        className={cn("grid items-center gap-3", {
+          "lg:w-44": !fixedTopServerName,
         })}
         style={{ gridTemplateColumns: "auto auto 1fr" }}
       >
-        <span className="h-2 w-2 shrink-0 rounded-full bg-red-500 self-center"></span>
-        <div className={cn("flex items-center justify-center", showFlag ? "min-w-[17px]" : "min-w-0")}>
+        <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-red-500 shadow-sm shadow-red-300 dark:shadow-red-900"></span>
+        <div className={cn("flex items-center justify-center", showFlag ? "min-w-[20px]" : "min-w-0")}>
           {showFlag ? <ServerFlag country_code={country_code} /> : null}
         </div>
         <div className="relative flex flex-col">
-          <p className={cn("break-all font-bold tracking-tight max-w-[108px]", showFlag ? "text-xs" : "text-sm")}>{name}</p>
+          <p className={cn("break-all font-bold tracking-tight", showFlag ? "text-sm" : "text-base")}>{name}</p>
           <div
             className={cn("hidden lg:block", {
               "lg:hidden": fixedTopServerName,
