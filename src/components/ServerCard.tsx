@@ -3,7 +3,7 @@ import ServerUsageBar from "@/components/ServerUsageBar"
 import { formatBytes } from "@/lib/format"
 import { GetFontLogoClass, GetOsName, MageMicrosoftWindows } from "@/lib/logo-class"
 import { cn, formatNezhaInfo, parsePublicNote } from "@/lib/utils"
-import { NezhaServer } from "@/types/nezha-api"
+import { CycleTransferData, NezhaServer } from "@/types/nezha-api"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 
@@ -12,9 +12,17 @@ import BillingInfo from "./billingInfo"
 import { Badge } from "./ui/badge"
 import { Card, CardContent, CardHeader, CardFooter } from "./ui/card"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip"
-import { ArrowDown, ArrowUp, Clock, Cpu, HardDrive, Server, Activity } from "lucide-react"
+import { ArrowDown, ArrowUp, Clock, Cpu, HardDrive, Server, Activity, BarChart3 } from "lucide-react"
 
-export default function ServerCard({ now, serverInfo }: { now: number; serverInfo: NezhaServer }) {
+interface ServerCardProps {
+  now: number; 
+  serverInfo: NezhaServer;
+  cycleStats?: {
+    [key: string]: CycleTransferData
+  };
+}
+
+export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardProps) {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { 
@@ -55,6 +63,49 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
   const showServerDetails = window.ShowServerDetails !== undefined ? window.ShowServerDetails as boolean : true
 
   const parsedData = parsePublicNote(public_note)
+  
+  // 获取匹配当前服务器的流量计费周期
+  const getServerCycleData = () => {
+    if (!cycleStats) return null
+    
+    const serverId = serverInfo.id.toString()
+    const matchedCycles: Array<{
+      name: string;
+      from: string;
+      to: string;
+      max: number;
+      transfer: number;
+      nextUpdate: string;
+      progress: number;
+    }> = []
+    
+    // 遍历所有流量周期，查找匹配当前服务器ID的数据
+    Object.values(cycleStats).forEach(cycleData => {
+      if (
+        cycleData.server_name && 
+        cycleData.server_name[serverId] && 
+        cycleData.transfer && 
+        cycleData.transfer[serverId] !== undefined
+      ) {
+        const transfer = cycleData.transfer[serverId]
+        const progress = (transfer / cycleData.max) * 100
+        
+        matchedCycles.push({
+          name: cycleData.name,
+          from: cycleData.from,
+          to: cycleData.to,
+          max: cycleData.max,
+          transfer: transfer,
+          nextUpdate: cycleData.next_update?.[serverId] || "",
+          progress: progress
+        })
+      }
+    })
+    
+    return matchedCycles.length > 0 ? matchedCycles : null
+  }
+
+  const serverCycleData = getServerCycleData()
 
   // 格式化运行时间
   const formatUptime = (seconds: number, t: any) => {
@@ -79,6 +130,13 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
     if (value > 90) return "text-red-500"
     if (value > 70) return "text-orange-400"
     return "text-green-500"
+  }
+  
+  // 根据进度获取状态颜色
+  const getProgressColorClass = (value: number) => {
+    if (value > 90) return "bg-red-500"
+    if (value > 70) return "bg-orange-500"
+    return "bg-emerald-500"
   }
 
   if (!online) {
@@ -111,6 +169,39 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
               </div>
             )}
           </div>
+          
+          {/* 添加流量使用统计 */}
+          {serverCycleData && (
+            <div className="mt-3">
+              {serverCycleData.map((cycle, index) => (
+                <div key={index} className="mt-3 bg-muted/30 rounded-md p-2">
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="flex items-center">
+                      <BarChart3 className="size-[12px] mr-1 text-emerald-500" />
+                      <span className="text-xs font-medium">{cycle.name}</span>
+                    </div>
+                    <span className="text-[10px] bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded">
+                      {new Date(cycle.from).toLocaleDateString()} - {new Date(cycle.to).toLocaleDateString()}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center text-xs mt-1">
+                    <div className="flex items-baseline gap-1">
+                      <span className="font-medium text-xs">{formatBytes(cycle.transfer)}</span>
+                      <span className="text-[10px] text-muted-foreground">/ {formatBytes(cycle.max)}</span>
+                    </div>
+                    <span className="text-[10px] font-medium">{cycle.progress.toFixed(1)}%</span>
+                  </div>
+                  <div className="relative h-1 mt-1">
+                    <div className="absolute inset-0 bg-muted rounded-full" />
+                    <div
+                      className={cn("absolute inset-0 rounded-full transition-all duration-300", getProgressColorClass(cycle.progress))}
+                      style={{ width: `${Math.min(cycle.progress, 100)}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </CardContent>
       </Card>
     )
@@ -163,6 +254,51 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
       </CardHeader>
 
       <CardContent className="p-4 pt-0 pb-2">
+        {/* 流量使用统计 */}
+        {serverCycleData && serverCycleData.length > 0 && (
+          <div className="mb-3 mt-2">
+            {serverCycleData.map((cycle, index) => (
+              <div key={index} className="bg-muted/40 rounded-lg p-2 mb-2 last:mb-0">
+                <div className="flex items-center justify-between mb-1">
+                  <div className="flex items-center">
+                    <BarChart3 className="size-[14px] mr-1 text-emerald-500" />
+                    <span className="text-xs font-medium">{cycle.name}</span>
+                  </div>
+                  <div className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded text-[10px] font-medium">
+                    {cycle.progress.toFixed(1)}%
+                  </div>
+                </div>
+                
+                <div className="flex justify-between items-center text-xs mb-1">
+                  <div className="flex items-baseline gap-1">
+                    <span className="font-medium">{formatBytes(cycle.transfer)}</span>
+                    <span className="text-[10px] text-muted-foreground">/ {formatBytes(cycle.max)}</span>
+                  </div>
+                </div>
+                
+                <div className="relative h-1">
+                  <div className="absolute inset-0 bg-muted rounded-full" />
+                  <div
+                    className={cn("absolute inset-0 rounded-full transition-all duration-300", getProgressColorClass(cycle.progress))}
+                    style={{ width: `${Math.min(cycle.progress, 100)}%` }}
+                  />
+                </div>
+                
+                <div className="mt-1 text-[10px] text-muted-foreground flex justify-between">
+                  <span>
+                    {new Date(cycle.from).toLocaleDateString()} - {new Date(cycle.to).toLocaleDateString()}
+                  </span>
+                  {cycle.nextUpdate && (
+                    <span>
+                      {t("cycleTransfer.nextUpdate")}: {new Date(cycle.nextUpdate).toLocaleTimeString()}
+                    </span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      
         {/* 主要资源使用情况 - 全新设计 */}
         <div className="grid grid-cols-3 gap-4 mt-3">
           {/* CPU使用率 */}
