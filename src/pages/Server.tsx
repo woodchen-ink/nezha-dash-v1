@@ -58,6 +58,9 @@ export default function Servers() {
       setShowServices("1")
     } else if (showServicesState !== null) {
       setShowServices(showServicesState)
+    } else {
+      localStorage.setItem("showServices", "0")
+      setShowServices("0")
     }
   }, [])
 
@@ -121,22 +124,7 @@ export default function Servers() {
   })
 
   const cycleTransferStats = serviceData?.data?.cycle_transfer_stats
-  console.log('Server.tsx - cycleTransferStats:', cycleTransferStats);
   
-  // 检查服务器ID是否匹配
-  if (cycleTransferStats && nezhaWsData?.servers) {
-    console.log('Server IDs in cycleTransferStats:');
-    Object.entries(cycleTransferStats).forEach(([cycleId, cycleData]) => {
-      if (cycleData.server_name) {
-        console.log(`Cycle ${cycleId} server IDs:`, Object.keys(cycleData.server_name));
-      }
-    });
-    
-    console.log('Server IDs from websocket:');
-    nezhaWsData.servers.forEach(server => {
-      console.log(`Server ${server.name} ID:`, server.id, typeof server.id);
-    });
-  }
 
   if (!connected && !lastMessage) {
     return (

@@ -67,16 +67,12 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
   // 获取匹配当前服务器的流量计费周期
   const getServerCycleData = () => {
     if (!cycleStats) {
-      console.log('cycleStats is null or undefined');
       return null;
     }
     
     // 确保服务器ID的所有可能形式
     const serverId = String(serverInfo.id);
     const serverIdNum = Number(serverInfo.id);
-    
-    console.log(`ServerCard: Looking for server "${serverInfo.name}" with ID:`, serverId, 'type:', typeof serverInfo.id);
-    console.log('All cycleStats:', cycleStats);
     
     const matchedCycles: Array<{
       name: string;
@@ -89,16 +85,13 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
     }> = []
     
     // 遍历所有流量周期，查找匹配当前服务器ID的数据
-    Object.entries(cycleStats).forEach(([cycleId, cycleData]) => {
-      console.log(`\nChecking cycle ${cycleId}:`, cycleData.name);
+    Object.values(cycleStats).forEach((cycleData) => {
       
       if (!cycleData.server_name) {
-        console.log(`  No server_name in this cycle`);
         return;
       }
       
       const serverIdsInCycle = Object.keys(cycleData.server_name);
-      console.log(`  Server IDs in this cycle:`, serverIdsInCycle);
       
       // 检查各种可能的ID形式
       let matchedId = null;
@@ -106,12 +99,10 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
       // 1. 直接匹配字符串ID
       if (serverIdsInCycle.includes(serverId)) {
         matchedId = serverId;
-        console.log(`  ✓ Direct string match: ${serverId}`);
       }
       // 2. 尝试匹配数字ID (如果API返回的是数字ID)
       else if (serverIdsInCycle.includes(String(serverIdNum))) {
         matchedId = String(serverIdNum);
-        console.log(`  ✓ Numeric match: ${serverIdNum}`);
       } 
       // 3. 通过名称匹配
       else {
@@ -120,7 +111,6 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
         for (const [id, name] of serverNames) {
           if (name === serverInfo.name) {
             matchedId = id;
-            console.log(`  ✓ Name match: ${serverInfo.name} -> ID: ${id}`);
             break;
           }
         }
@@ -128,10 +118,8 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
         // 如果还没匹配，尝试循环比较所有ID
         if (!matchedId) {
           for (const id of serverIdsInCycle) {
-            console.log(`  Comparing IDs: ${id} vs ${serverId}`);
             if (Number(id) === serverIdNum) {
               matchedId = id;
-              console.log(`  ✓ Found match after conversion: ${id}`);
               break;
             }
           }
@@ -140,7 +128,6 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
       
       // 如果找到匹配的ID，且有对应的传输数据
       if (matchedId && cycleData.transfer && cycleData.transfer[matchedId] !== undefined) {
-        console.log(`  ✓ Found valid transfer data for server ${serverInfo.name} (ID: ${matchedId}) in cycle ${cycleId}`);
         const transfer = cycleData.transfer[matchedId];
         const progress = (transfer / cycleData.max) * 100;
         
@@ -153,12 +140,9 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
           nextUpdate: cycleData.next_update?.[matchedId] || "",
           progress: progress
         });
-      } else {
-        console.log(`  ✗ No valid transfer data found for this server in this cycle`);
       }
     });
     
-    console.log('Matched cycles result:', matchedCycles);
     return matchedCycles.length > 0 ? matchedCycles : null;
   }
 
