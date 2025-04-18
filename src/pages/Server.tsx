@@ -12,7 +12,7 @@ import { SORT_ORDERS, SORT_TYPES } from "@/context/sort-context"
 import { useSort } from "@/hooks/use-sort"
 import { useStatus } from "@/hooks/use-status"
 import { useWebSocketContext } from "@/hooks/use-websocket-context"
-import { fetchServerGroup } from "@/lib/nezha-api"
+import { fetchServerGroup, fetchService } from "@/lib/nezha-api"
 import { cn, formatNezhaInfo } from "@/lib/utils"
 import { NezhaWebsocketResponse } from "@/types/nezha-api"
 import { ServerGroup } from "@/types/nezha-api"
@@ -110,6 +110,33 @@ export default function Servers() {
       })
       ?.map((item: ServerGroup) => item.group.name) || []),
   ]
+
+  // 获取cycle_transfer_stats数据
+  const { data: serviceData } = useQuery({
+    queryKey: ["service"],
+    queryFn: () => fetchService(),
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    refetchInterval: 10000,
+  })
+
+  const cycleTransferStats = serviceData?.data?.cycle_transfer_stats
+  console.log('Server.tsx - cycleTransferStats:', cycleTransferStats);
+  
+  // 检查服务器ID是否匹配
+  if (cycleTransferStats && nezhaWsData?.servers) {
+    console.log('Server IDs in cycleTransferStats:');
+    Object.entries(cycleTransferStats).forEach(([cycleId, cycleData]) => {
+      if (cycleData.server_name) {
+        console.log(`Cycle ${cycleId} server IDs:`, Object.keys(cycleData.server_name));
+      }
+    });
+    
+    console.log('Server IDs from websocket:');
+    nezhaWsData.servers.forEach(server => {
+      console.log(`Server ${server.name} ID:`, server.id, typeof server.id);
+    });
+  }
 
   if (!connected && !lastMessage) {
     return (
@@ -376,7 +403,12 @@ export default function Servers() {
       {inline === "0" && (
         <section ref={containerRef} className="grid grid-cols-1 gap-2 md:grid-cols-2 mt-6 server-card-list">
           {filteredServers.map((serverInfo) => (
-            <ServerCard now={nezhaWsData.now} key={serverInfo.id} serverInfo={serverInfo} />
+            <ServerCard 
+              now={nezhaWsData.now} 
+              key={serverInfo.id} 
+              serverInfo={serverInfo} 
+              cycleStats={cycleTransferStats}
+            />
           ))}
         </section>
       )}

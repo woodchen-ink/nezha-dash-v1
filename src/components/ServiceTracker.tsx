@@ -57,6 +57,9 @@ export function ServiceTracker({ serverList }: { serverList: NezhaServer[] }) {
     )
   }
 
+  // 调试日志
+  console.log('cycle_transfer_stats data:', serviceData?.data?.cycle_transfer_stats);
+
   return (
     <div className="mt-4 w-full mx-auto ">
       {serviceData.data.cycle_transfer_stats && (
