@@ -1,0 +1,45 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm install --force
+
+      - name: Build project
+        run: npm run build
+        
+      - name: Create zip archive
+        run: |
+          cd dist
+          zip -r ../nezha-dash-v1.zip .
+          cd ..
+          
+      - name: Extract tag name
+        id: get_tag
+        run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+      
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: nezha-dash-v1.zip
+          name: Release ${{ env.TAG_NAME }}
+          draft: false
+          prerelease: false
+          token: ${{ secrets.GITHUB_TOKEN }} 
