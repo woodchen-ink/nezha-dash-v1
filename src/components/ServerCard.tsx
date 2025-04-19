@@ -445,7 +445,7 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
                   <TooltipTrigger asChild>
                     <Badge variant="outline" className="text-[10px] py-0 h-5 bg-blue-500/10 hover:bg-blue-500/20">
                       {cpu_info[0].includes("Physical") ? "pCPU: " : "vCPU: "}
-                      {cpu_info[0].match(/(\d+)\s+(?:Physical|Virtual)\s+Core/)?.[1] || "?"}
+                      {cpu_info[0].match(/(\d+)\s+(?:Physical|Virtual)\s+Core/)?.[1] || "-"}
                     </Badge>
                   </TooltipTrigger>
                   <TooltipContent className="text-xs">
@@ -456,16 +456,24 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
             )}
             
             {/* 内存大小 */}
-            {mem_total > 0 && (
+            {mem_total > 0 ? (
               <Badge variant="outline" className="text-[10px] py-0 h-5 bg-purple-500/10 hover:bg-purple-500/20">
-                {t("serverCard.mem")}: {formatBytes(mem_total)}
+                RAM: {formatBytes(mem_total)}
+              </Badge>
+            ) : (
+              <Badge variant="outline" className="text-[10px] py-0 h-5 bg-purple-500/10 hover:bg-purple-500/20">
+                RAM: -
               </Badge>
             )}
             
             {/* 存储大小 */}
-            {disk_total > 0 && (
+            {disk_total > 0 ? (
               <Badge variant="outline" className="text-[10px] py-0 h-5 bg-amber-500/10 hover:bg-amber-500/20">
-                {t("serverCard.stg")}: {formatBytes(disk_total)}
+                DISK: {formatBytes(disk_total)}
+              </Badge>
+            ) : (
+              <Badge variant="outline" className="text-[10px] py-0 h-5 bg-amber-500/10 hover:bg-amber-500/20">
+                DISK: -
               </Badge>
             )}
           </div>
