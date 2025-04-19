@@ -1,7 +1,6 @@
 import GlobalMap from "@/components/GlobalMap"
 import GroupSwitch from "@/components/GroupSwitch"
 import ServerCard from "@/components/ServerCard"
-import ServerCardInline from "@/components/ServerCardInline"
 import ServerOverview from "@/components/ServerOverview"
 import { ServiceTracker } from "@/components/ServiceTracker"
 import { Loader } from "@/components/loading/Loader"
@@ -16,7 +15,7 @@ import { fetchServerGroup, fetchService } from "@/lib/nezha-api"
 import { cn, formatNezhaInfo } from "@/lib/utils"
 import { NezhaWebsocketResponse } from "@/types/nezha-api"
 import { ServerGroup } from "@/types/nezha-api"
-import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon, ChartBarSquareIcon, MapIcon, ViewColumnsIcon } from "@heroicons/react/20/solid"
+import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon, ChartBarSquareIcon, MapIcon } from "@heroicons/react/20/solid"
 import { useQuery } from "@tanstack/react-query"
 import { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -32,7 +31,6 @@ export default function Servers() {
   const { status } = useStatus()
   const [showServices, setShowServices] = useState<string>("0")
   const [showMap, setShowMap] = useState<string>("0")
-  const [inline, setInline] = useState<string>("0")
   const containerRef = useRef<HTMLDivElement>(null)
   const [settingsOpen, setSettingsOpen] = useState<boolean>(false)
   const [currentGroup, setCurrentGroup] = useState<string>("All")
@@ -61,29 +59,6 @@ export default function Servers() {
     } else {
       localStorage.setItem("showServices", "0")
       setShowServices("0")
-    }
-  }, [])
-
-  useEffect(() => {
-    const checkInlineSettings = () => {
-      const isMobile = window.innerWidth < 768
-
-      if (!isMobile) {
-        const inlineState = localStorage.getItem("inline")
-        if (window.ForceCardInline) {
-          setInline("1")
-        } else if (inlineState !== null) {
-          setInline(inlineState)
-        }
-      }
-    }
-
-    checkInlineSettings()
-
-    window.addEventListener("resize", checkInlineSettings)
-
-    return () => {
-      window.removeEventListener("resize", checkInlineSettings)
     }
   }, [])
 
@@ -296,28 +271,6 @@ export default function Servers() {
               })}
             />
           </button>
-          <button
-            onClick={() => {
-              setInline(inline === "0" ? "1" : "0")
-              localStorage.setItem("inline", inline === "0" ? "1" : "0")
-            }}
-            className={cn(
-              "rounded-[50px] bg-white dark:bg-stone-800 cursor-pointer p-[10px] transition-all border dark:border-none border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]",
-              {
-                "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] !bg-blue-600 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": inline === "1",
-                "text-white": inline === "1",
-              },
-              {
-                "bg-opacity-70 dark:bg-opacity-70": customBackgroundImage,
-              },
-            )}
-          >
-            <ViewColumnsIcon
-              className={cn("size-[13px]", {
-                "text-white": inline === "1",
-              })}
-            />
-          </button>
           <GroupSwitch tabs={groupTabs} currentTab={currentGroup} setCurrentTab={handleTagChange} />
         </section>
         <Popover onOpenChange={setSettingsOpen}>
@@ -381,25 +334,16 @@ export default function Servers() {
       </div>
       {showMap === "1" && <GlobalMap now={nezhaWsData.now} serverList={nezhaWsData?.servers || []} />}
       {showServices === "1" && <ServiceTracker serverList={filteredServers} />}
-      {inline === "1" && (
-        <section ref={containerRef} className="flex flex-col gap-2 overflow-x-scroll scrollbar-hidden mt-6 server-inline-list">
-          {filteredServers.map((serverInfo) => (
-            <ServerCardInline now={nezhaWsData.now} key={serverInfo.id} serverInfo={serverInfo} />
-          ))}
-        </section>
-      )}
-      {inline === "0" && (
-        <section ref={containerRef} className="grid grid-cols-1 gap-2 md:grid-cols-2 mt-6 server-card-list">
-          {filteredServers.map((serverInfo) => (
-            <ServerCard 
-              now={nezhaWsData.now} 
-              key={serverInfo.id} 
-              serverInfo={serverInfo} 
-              cycleStats={cycleTransferStats}
-            />
-          ))}
-        </section>
-      )}
+      <section ref={containerRef} className="grid grid-cols-1 gap-4 md:grid-cols-3 mt-6 server-card-list">
+        {filteredServers.map((serverInfo) => (
+          <ServerCard 
+            now={nezhaWsData.now} 
+            key={serverInfo.id} 
+            serverInfo={serverInfo} 
+            cycleStats={cycleTransferStats}
+          />
+        ))}
+      </section>
     </div>
   )
 }
