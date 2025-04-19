@@ -420,24 +420,18 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
           
           {/* 连接数与进程数 */}
           <div className="bg-muted/40 rounded-lg p-2 grid grid-cols-2 gap-2">
-            {tcp > 0 && (
               <div className="flex items-center">
                 <Server className="size-[14px] text-indigo-500 mr-1" />
-                <span className="text-xs">TCP: {tcp}</span>
+                <span className="text-xs">T: {tcp}</span>
               </div>
-            )}
-            {udp > 0 && (
               <div className="flex items-center">
                 <Server className="size-[14px] text-pink-500 mr-1" />
-                <span className="text-xs">UDP: {udp}</span>
+                <span className="text-xs">U: {udp}</span>
               </div>
-            )}
-            {process > 0 && (
               <div className="flex items-center">
                 <Activity className="size-[14px] text-orange-500 mr-1" />
-                <span className="text-xs">{t("serverDetailChart.process")}: {process}</span>
+                <span className="text-xs">P: {process}</span>
               </div>
-            )}
           </div>
         </div>
         
