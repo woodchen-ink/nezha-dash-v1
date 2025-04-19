@@ -12,7 +12,7 @@ import BillingInfo from "./billingInfo"
 import { Badge } from "./ui/badge"
 import { Card, CardContent, CardHeader, CardFooter } from "./ui/card"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip"
-import { ArrowDown, ArrowUp, Clock, Cpu, HardDrive, Server, Activity, BarChart3 } from "lucide-react"
+import { ArrowDown, ArrowUp, Clock, Cpu, HardDrive, Server, Activity, BarChart3, Calendar } from "lucide-react"
 
 interface ServerCardProps {
   now: number; 
@@ -44,7 +44,8 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
     tcp,
     udp,
     process,
-    uptime
+    uptime,
+    last_active_time_string
   } = formatNezhaInfo(
     now,
     serverInfo,
@@ -290,12 +291,21 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
             </div>
           )}
           
-          {uptime > 0 && (
-            <div className="flex items-center text-xs text-muted-foreground">
-              <Clock className="size-[12px] mr-1" />
-              <span>{formatUptime(uptime, t)}</span>
-            </div>
-          )}
+          <div className="flex flex-col gap-1 items-end">
+            {uptime > 0 && (
+              <div className="flex items-center text-xs text-muted-foreground">
+                <Clock className="size-[12px] mr-1" />
+                <span>{formatUptime(uptime, t)}</span>
+              </div>
+            )}
+            
+            {last_active_time_string && (
+              <div className="flex items-center text-xs text-muted-foreground">
+                <Calendar className="size-[12px] mr-1" />
+                <span>{last_active_time_string}</span>
+              </div>
+            )}
+          </div>
         </div>
       </CardHeader>
 
