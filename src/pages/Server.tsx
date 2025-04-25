@@ -202,7 +202,7 @@ export default function Servers() {
       case "mem":
         comparison = (a.state?.mem_used ?? 0) - (b.state?.mem_used ?? 0)
         break
-      case "stg":
+      case "disk":
         comparison = (a.state?.disk_used ?? 0) - (b.state?.disk_used ?? 0)
         break
       case "up":
