@@ -439,21 +439,19 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
           </div>
           
           {/* 连接数与进程数 */}
-          <div className="bg-muted/40 rounded-lg p-2">
-            <div className="flex justify-between items-center">
-              <div className="flex items-center min-w-0 flex-1">
+          <div className="bg-muted/40 rounded-lg p-2 grid grid-cols-2 gap-2">
+              <div className="flex items-center min-w-0">
                 <Server className="size-[14px] text-indigo-500 mr-1 flex-shrink-0" />
                 <span className="text-xs truncate" title={`TCP连接: ${tcp}`}>T: {formatLargeNumber(tcp)}</span>
               </div>
-              <div className="flex items-center min-w-0 flex-1 justify-center">
+              <div className="flex items-center min-w-0">
                 <Server className="size-[14px] text-pink-500 mr-1 flex-shrink-0" />
                 <span className="text-xs truncate" title={`UDP连接: ${udp}`}>U: {formatLargeNumber(udp)}</span>
               </div>
-              <div className="flex items-center min-w-0 flex-1 justify-end">
+              <div className="flex items-center min-w-0 col-span-2">
                 <Activity className="size-[14px] text-orange-500 mr-1 flex-shrink-0" />
                 <span className="text-xs truncate" title={`进程数: ${process}`}>P: {formatLargeNumber(process)}</span>
               </div>
-            </div>
           </div>
         </div>
         
