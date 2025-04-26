@@ -9,13 +9,12 @@ import { useNavigate } from "react-router-dom"
 
 import PlanInfo from "./PlanInfo"
 import BillingInfo from "./billingInfo"
-import { Badge } from "./ui/badge"
 import { Card, CardContent, CardHeader, CardFooter } from "./ui/card"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip"
 import { ArrowDown, ArrowUp, Clock, Cpu, HardDrive, Server, Activity, BarChart3, Calendar } from "lucide-react"
 
 interface ServerCardProps {
-  now: number; 
+  now: number;
   serverInfo: NezhaServer;
   cycleStats?: {
     [key: string]: CycleTransferData
@@ -25,18 +24,18 @@ interface ServerCardProps {
 export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardProps) {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { 
-    name, 
-    country_code, 
-    online, 
-    cpu, 
-    up, 
-    down, 
-    mem, 
-    stg, 
-    net_in_transfer, 
-    net_out_transfer, 
-    public_note, 
+  const {
+    name,
+    country_code,
+    online,
+    cpu,
+    up,
+    down,
+    mem,
+    stg,
+    net_in_transfer,
+    net_out_transfer,
+    public_note,
     platform,
     cpu_info,
     mem_total,
@@ -45,7 +44,10 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
     udp,
     process,
     uptime,
-    last_active_time_string
+    last_active_time_string,
+    arch,
+    swap,
+    swap_total
   } = formatNezhaInfo(
     now,
     serverInfo,
@@ -60,21 +62,19 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
   const customBackgroundImage = (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
   // @ts-expect-error ShowNetTransfer is a global variable
   const showNetTransfer = window.ShowNetTransfer as boolean
-  // @ts-expect-error ShowServerDetails is a global variable
-  const showServerDetails = window.ShowServerDetails !== undefined ? window.ShowServerDetails as boolean : true
 
   const parsedData = parsePublicNote(public_note)
-  
+
   // 获取匹配当前服务器的流量计费周期
   const getServerCycleData = () => {
     if (!cycleStats) {
       return null;
     }
-    
+
     // 确保服务器ID的所有可能形式
     const serverId = String(serverInfo.id);
     const serverIdNum = Number(serverInfo.id);
-    
+
     const matchedCycles: Array<{
       name: string;
       from: string;
@@ -84,19 +84,19 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
       nextUpdate: string;
       progress: number;
     }> = []
-    
+
     // 遍历所有流量周期，查找匹配当前服务器ID的数据
     Object.values(cycleStats).forEach((cycleData) => {
-      
+
       if (!cycleData.server_name) {
         return;
       }
-      
+
       const serverIdsInCycle = Object.keys(cycleData.server_name);
-      
+
       // 检查各种可能的ID形式
       let matchedId = null;
-      
+
       // 1. 直接匹配字符串ID
       if (serverIdsInCycle.includes(serverId)) {
         matchedId = serverId;
@@ -104,7 +104,7 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
       // 2. 尝试匹配数字ID (如果API返回的是数字ID)
       else if (serverIdsInCycle.includes(String(serverIdNum))) {
         matchedId = String(serverIdNum);
-      } 
+      }
       // 3. 通过名称匹配
       else {
         // 检查名称是否匹配
@@ -115,7 +115,7 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
             break;
           }
         }
-        
+
         // 如果还没匹配，尝试循环比较所有ID
         if (!matchedId) {
           for (const id of serverIdsInCycle) {
@@ -126,12 +126,12 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
           }
         }
       }
-      
+
       // 如果找到匹配的ID，且有对应的传输数据
       if (matchedId && cycleData.transfer && cycleData.transfer[matchedId] !== undefined) {
         const transfer = cycleData.transfer[matchedId];
         const progress = (transfer / cycleData.max) * 100;
-        
+
         matchedCycles.push({
           name: cycleData.name,
           from: cycleData.from,
@@ -143,7 +143,7 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
         });
       }
     });
-    
+
     return matchedCycles.length > 0 ? matchedCycles : null;
   }
 
@@ -160,10 +160,10 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
 
   // 格式化网络速度
   const formatSpeed = (speed: number) => {
-    return speed >= 1024 
-      ? `${(speed / 1024).toFixed(2)}G/s` 
-      : speed >= 1 
-        ? `${speed.toFixed(2)}M/s` 
+    return speed >= 1024
+      ? `${(speed / 1024).toFixed(2)}G/s`
+      : speed >= 1
+        ? `${speed.toFixed(2)}M/s`
         : `${(speed * 1024).toFixed(2)}K/s`
   }
 
@@ -173,7 +173,7 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
     if (value > 70) return "text-orange-400"
     return "text-green-500"
   }
-  
+
   // 根据进度获取状态颜色
   const getProgressColorClass = (value: number) => {
     if (value > 90) return "bg-red-500"
@@ -214,14 +214,14 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
                 <BillingInfo parsedData={parsedData} />
               </div>
             )}
-            
+
             {parsedData?.planDataMod && (
               <div className="mt-2">
                 <PlanInfo parsedData={parsedData} />
               </div>
             )}
           </div>
-          
+
           {/* 添加流量使用统计 */}
           {serverCycleData && serverCycleData.length > 0 && (
             <div className="mt-3">
@@ -273,7 +273,7 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
       onClick={cardClick}
     >
       <div className="absolute top-0 left-0 w-1 h-full bg-green-500 rounded-l-md"></div>
-      
+
       <CardHeader className="p-4 pb-2">
         <div className="flex justify-between">
           <div className="flex items-center gap-3">
@@ -281,7 +281,7 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
             {showFlag && <ServerFlag country_code={country_code} />}
             <h3 className="font-bold text-sm truncate">{name}</h3>
           </div>
-          
+
           <div className="flex items-center text-xs gap-2 text-muted-foreground">
             <div className="flex items-center">
               {platform.includes("Windows") ? (
@@ -293,14 +293,14 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
             </div>
           </div>
         </div>
-        
+
         <div className="flex justify-between items-start mt-2">
           {parsedData?.billingDataMod && (
             <div>
               <BillingInfo parsedData={parsedData} />
             </div>
           )}
-          
+
           <div className="flex flex-col gap-1 items-end">
             {uptime > 0 && (
               <div className="flex items-center text-xs text-muted-foreground">
@@ -308,7 +308,7 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
                 <span>{formatUptime(uptime, t)}</span>
               </div>
             )}
-            
+
             {last_active_time_string && (
               <div className="flex items-center text-xs text-muted-foreground">
                 <Calendar className="size-[12px] mr-1" />
@@ -334,14 +334,14 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
                     {cycle.progress.toFixed(1)}%
                   </div>
                 </div>
-                
+
                 <div className="flex justify-between items-center text-xs mb-1">
                   <div className="flex items-baseline gap-1">
                     <span className="font-medium">{formatBytes(cycle.transfer)}</span>
                     <span className="text-[10px] text-muted-foreground">/ {formatBytes(cycle.max)}</span>
                   </div>
                 </div>
-                
+
                 <div className="relative h-1">
                   <div className="absolute inset-0 bg-muted rounded-full" />
                   <div
@@ -349,7 +349,7 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
                     style={{ width: `${Math.min(cycle.progress, 100)}%` }}
                   />
                 </div>
-                
+
                 <div className="mt-1 text-[10px] text-muted-foreground flex justify-between">
                   <span>
                     {new Date(cycle.from).toLocaleDateString()} - {new Date(cycle.to).toLocaleDateString()}
@@ -364,7 +364,7 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
             ))}
           </div>
         )}
-      
+
         {/* 主要资源使用情况 - 全新设计 */}
         <div className="grid grid-cols-3 gap-4 mt-3">
           {/* CPU使用率 */}
@@ -379,8 +379,31 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
               </span>
             </div>
             <ServerUsageBar value={cpu} />
+            {/* CPU信息 */}
+            {cpu_info && cpu_info.length > 0 && (
+              <div className="mt-1.5 flex flex-col gap-1 text-[10px]">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded px-1.5 py-0.5 text-center">
+                        {cpu_info[0].includes("Physical") ? "pCPU: " : "vCPU: "}
+                        {cpu_info[0].match(/(\d+)\s+(?:Physical|Virtual)\s+Core/)?.[1] || "-"}
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent className="max-w-[250px] text-xs whitespace-pre-wrap p-2">
+                      {cpu_info.join("\n")}
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                {arch && (
+                  <div className="bg-green-500/10 text-green-600 dark:text-green-400 rounded px-1.5 py-0.5 text-center">
+                    {arch}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
-          
+
           {/* 内存使用率 */}
           <div className="bg-muted/40 rounded-lg p-2 flex flex-col">
             <div className="flex items-center justify-between mb-1">
@@ -401,8 +424,43 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
               </span>
             </div>
             <ServerUsageBar value={mem} />
+            {/* 内存信息 */}
+            <div className="mt-1.5 flex flex-col gap-1 text-[10px]">
+              <div className="bg-purple-500/10 text-purple-600 dark:text-purple-400 rounded px-1.5 py-0.5 text-center">
+                {mem_total > 0 ? formatBytes(mem_total) : "-"}
+              </div>
+              {swap_total > 0 ? (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className={cn("bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded px-1.5 py-0.5 text-center",
+                        Number(swap) > 90 ? "bg-red-500/10 text-red-600 dark:text-red-400" : 
+                        Number(swap) > 70 ? "bg-orange-500/10 text-orange-600 dark:text-orange-400" : "")}>
+                        SWAP:{swap.toFixed(0)}%
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent className="text-xs">
+                      <div className="flex flex-col gap-1 p-2">
+                        <div className="flex justify-between items-center gap-3">
+                          <span>总容量:</span>
+                          <span>{formatBytes(swap_total)}</span>
+                        </div>
+                        <div className="flex justify-between items-center gap-3">
+                          <span>使用率:</span>
+                          <span className={getColorClass(Number(swap))}>{swap.toFixed(1)}%</span>
+                        </div>
+                      </div>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              ):(
+                <div className="bg-amber-500/10 text-amber-600 dark:text-amber-400 rounded px-1.5 py-0.5 text-center">
+                  -
+                </div>
+              )}
+            </div>
           </div>
-          
+
           {/* 存储使用率 */}
           <div className="bg-muted/40 rounded-lg p-2 flex flex-col">
             <div className="flex items-center justify-between mb-1">
@@ -415,9 +473,13 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
               </span>
             </div>
             <ServerUsageBar value={stg} />
+            {/* 存储信息 */}
+            <div className="mt-1.5 bg-amber-500/10 text-amber-600 dark:text-amber-400 rounded px-1.5 py-0.5 text-center text-[10px]">
+              {disk_total > 0 ? formatBytes(disk_total) : "-"}
+            </div>
           </div>
         </div>
-        
+
         {/* 网络使用情况 */}
         <div className="grid grid-cols-2 gap-4 mt-3">
           {/* 网络速率 */}
@@ -437,67 +499,23 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
               <span className="text-xs font-medium">{formatSpeed(down)}</span>
             </div>
           </div>
-          
+
           {/* 连接数与进程数 */}
           <div className="bg-muted/40 rounded-lg p-2 grid grid-cols-2 gap-2">
-              <div className="flex items-center min-w-0">
-                <Server className="size-[14px] text-indigo-500 mr-1 flex-shrink-0" />
-                <span className="text-xs truncate" title={`TCP连接: ${tcp}`}>T: {formatLargeNumber(tcp)}</span>
-              </div>
-              <div className="flex items-center min-w-0">
-                <Server className="size-[14px] text-pink-500 mr-1 flex-shrink-0" />
-                <span className="text-xs truncate" title={`UDP连接: ${udp}`}>U: {formatLargeNumber(udp)}</span>
-              </div>
-              <div className="flex items-center min-w-0 col-span-2">
-                <Activity className="size-[14px] text-orange-500 mr-1 flex-shrink-0" />
-                <span className="text-xs truncate" title={`进程数: ${process}`}>P: {formatLargeNumber(process)}</span>
-              </div>
+            <div className="flex items-center min-w-0">
+              <Server className="size-[14px] text-indigo-500 mr-1 flex-shrink-0" />
+              <span className="text-xs truncate" title={`TCP连接: ${tcp}`}>T: {formatLargeNumber(tcp)}</span>
+            </div>
+            <div className="flex items-center min-w-0">
+              <Server className="size-[14px] text-pink-500 mr-1 flex-shrink-0" />
+              <span className="text-xs truncate" title={`UDP连接: ${udp}`}>U: {formatLargeNumber(udp)}</span>
+            </div>
+            <div className="flex items-center min-w-0 col-span-2">
+              <Activity className="size-[14px] text-orange-500 mr-1 flex-shrink-0" />
+              <span className="text-xs truncate" title={`进程数: ${process}`}>P: {formatLargeNumber(process)}</span>
+            </div>
           </div>
         </div>
-        
-        {/* 服务器详细信息区域 */}
-        {showServerDetails && (
-          <div className="mt-3 flex items-center flex-wrap gap-1.5">
-            {/* CPU信息 */}
-            {cpu_info && cpu_info.length > 0 && (
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Badge variant="outline" className="text-[10px] py-0 h-5 bg-blue-500/10 hover:bg-blue-500/20">
-                      {cpu_info[0].includes("Physical") ? "pCPU: " : "vCPU: "}
-                      {cpu_info[0].match(/(\d+)\s+(?:Physical|Virtual)\s+Core/)?.[1] || "-"}
-                    </Badge>
-                  </TooltipTrigger>
-                  <TooltipContent className="text-xs">
-                    {cpu_info.join(", ")}
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            )}
-            
-            {/* 内存大小 */}
-            {mem_total > 0 ? (
-              <Badge variant="outline" className="text-[10px] py-0 h-5 bg-purple-500/10 hover:bg-purple-500/20">
-                RAM: {formatBytes(mem_total)}
-              </Badge>
-            ) : (
-              <Badge variant="outline" className="text-[10px] py-0 h-5 bg-purple-500/10 hover:bg-purple-500/20">
-                RAM: -
-              </Badge>
-            )}
-            
-            {/* 存储大小 */}
-            {disk_total > 0 ? (
-              <Badge variant="outline" className="text-[10px] py-0 h-5 bg-amber-500/10 hover:bg-amber-500/20">
-                DISK: {formatBytes(disk_total)}
-              </Badge>
-            ) : (
-              <Badge variant="outline" className="text-[10px] py-0 h-5 bg-amber-500/10 hover:bg-amber-500/20">
-                DISK: -
-              </Badge>
-            )}
-          </div>
-        )}
       </CardContent>
 
       <CardFooter className="p-4 pt-0 flex flex-col gap-2 pb-3">
@@ -507,7 +525,7 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
             <PlanInfo parsedData={parsedData} />
           </div>
         )}
-        
+
         {/* 网络传输信息 */}
         {showNetTransfer && (
           <div className="grid grid-cols-2 w-full gap-3 mt-1">
@@ -528,7 +546,7 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
           </div>
         )}
       </CardFooter>
-      
+
       {/* 视觉元素：左侧状态条 */}
       <style>
         {`
