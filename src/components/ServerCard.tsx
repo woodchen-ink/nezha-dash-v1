@@ -11,7 +11,7 @@ import PlanInfo from "./PlanInfo"
 import BillingInfo from "./billingInfo"
 import { Card, CardContent, CardHeader, CardFooter } from "./ui/card"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip"
-import { ArrowDown, ArrowUp, Clock, Cpu, HardDrive, Server, Activity, BarChart3, Calendar } from "lucide-react"
+import { ArrowDown, ArrowUp, Clock, Cpu, HardDrive, Server, Activity, BarChart3 } from "lucide-react"
 
 interface ServerCardProps {
   now: number;
@@ -19,9 +19,10 @@ interface ServerCardProps {
   cycleStats?: {
     [key: string]: CycleTransferData
   };
+  groupName?: string;
 }
 
-export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardProps) {
+export default function ServerCard({ now, serverInfo, cycleStats, groupName }: ServerCardProps) {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const {
@@ -44,7 +45,6 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
     udp,
     process,
     uptime,
-    last_active_time_string,
     arch,
     swap,
     swap_total
@@ -201,7 +201,17 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
         onClick={cardClick}
       >
         <div className="absolute top-0 left-0 w-1 h-full bg-red-500 rounded-l-md"></div>
-        <CardContent className="p-4">
+
+        {/* 离线卡片的分组标签 */}
+        {groupName && (
+          <div className="absolute top-2 right-2">
+            <div className="px-1.5 py-0.5 text-[10px] font-medium bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400 rounded-sm border border-red-200 dark:border-red-800">
+              {groupName}
+            </div>
+          </div>
+        )}
+
+        <CardContent className="p-4 pt-6">
           <div className="flex items-center gap-3 mb-2">
             <span className="h-3 w-3 shrink-0 rounded-full bg-red-500 shadow-sm pulse-animation shadow-red-300 dark:shadow-red-900"></span>
             {showFlag && <ServerFlag country_code={country_code} />}
@@ -272,14 +282,20 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
       )}
       onClick={cardClick}
     >
+      {/* 左侧状态条 */}
       <div className="absolute top-0 left-0 w-1 h-full bg-green-500 rounded-l-md"></div>
 
-      <CardHeader className="p-4 pb-2">
+      <CardHeader className="p-4 pb-2 pt-2">
         <div className="flex justify-between">
           <div className="flex items-center gap-3">
             <span className="h-3 w-3 shrink-0 rounded-full bg-green-500 shadow-sm shadow-green-300 dark:shadow-green-900 animate-pulse"></span>
             {showFlag && <ServerFlag country_code={country_code} />}
             <h3 className="font-bold text-sm truncate">{name}</h3>
+            {groupName && (
+              <div className="px-1.5 py-0.5 text-[10px] font-medium bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400 rounded-sm border border-green-200 dark:border-green-800">
+                {groupName}
+              </div>
+            )}
           </div>
 
           <div className="flex items-center text-xs gap-2 text-muted-foreground">
@@ -306,13 +322,6 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
               <div className="flex items-center text-xs text-muted-foreground">
                 <Clock className="size-[12px] mr-1" />
                 <span>{formatUptime(uptime, t)}</span>
-              </div>
-            )}
-
-            {last_active_time_string && (
-              <div className="flex items-center text-xs text-muted-foreground">
-                <Calendar className="size-[12px] mr-1" />
-                <span>{last_active_time_string}</span>
               </div>
             )}
           </div>
@@ -434,8 +443,8 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <div className={cn("bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded px-1.5 py-0.5 text-center",
-                        Number(swap) > 90 ? "bg-red-500/10 text-red-600 dark:text-red-400" : 
-                        Number(swap) > 70 ? "bg-orange-500/10 text-orange-600 dark:text-orange-400" : "")}>
+                        Number(swap) > 90 ? "bg-red-500/10 text-red-600 dark:text-red-400" :
+                          Number(swap) > 70 ? "bg-orange-500/10 text-orange-600 dark:text-orange-400" : "")}>
                         SWAP:{swap.toFixed(0)}%
                       </div>
                     </TooltipTrigger>
@@ -453,7 +462,7 @@ export default function ServerCard({ now, serverInfo, cycleStats }: ServerCardPr
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
-              ):(
+              ) : (
                 <div className="bg-amber-500/10 text-amber-600 dark:text-amber-400 rounded px-1.5 py-0.5 text-center">
                   -
                 </div>

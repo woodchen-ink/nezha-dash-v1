@@ -335,14 +335,22 @@ export default function Servers() {
       {showMap === "1" && <GlobalMap now={nezhaWsData.now} serverList={nezhaWsData?.servers || []} />}
       {showServices === "1" && <ServiceTracker serverList={filteredServers} />}
       <section ref={containerRef} className="grid grid-cols-1 gap-4 md:grid-cols-3 mt-6 server-card-list">
-        {filteredServers.map((serverInfo) => (
-          <ServerCard 
-            now={nezhaWsData.now} 
-            key={serverInfo.id} 
-            serverInfo={serverInfo} 
-            cycleStats={cycleTransferStats}
-          />
-        ))}
+        {filteredServers.map((serverInfo) => {
+          // 查找服务器所属的分组
+          const serverGroup = groupData?.data?.find(
+            (g: ServerGroup) => Array.isArray(g.servers) && g.servers.includes(serverInfo.id)
+          );
+          
+          return (
+            <ServerCard 
+              now={nezhaWsData.now} 
+              key={serverInfo.id} 
+              serverInfo={serverInfo} 
+              cycleStats={cycleTransferStats}
+              groupName={serverGroup?.group.name}
+            />
+          );
+        })}
       </section>
     </div>
   )
