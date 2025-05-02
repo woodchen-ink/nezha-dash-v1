@@ -40,7 +40,7 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
   return online ? (
     <Card
       className={cn(
-        "flex flex-col items-center justify-start gap-3 p-3 md:px-5 cursor-pointer hover:bg-accent/50 transition-colors break-words",
+        "flex flex-col items-center justify-start gap-3 p-3 md:px-5 cursor-pointer hover:bg-accent/50 transition-colors",
         {
           "flex-col": fixedTopServerName,
           "lg:flex-row": !fixedTopServerName,
