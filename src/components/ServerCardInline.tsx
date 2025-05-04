@@ -48,7 +48,7 @@ export default function ServerCardInline({ now, serverInfo }: { now: number; ser
             {showFlag ? <ServerFlag country_code={country_code} /> : null}
           </div>
           <div className="relative w-28 flex flex-col">
-            <p className={cn("break-all font-bold tracking-tight", showFlag ? "text-xs " : "text-sm")}>{name}</p>
+            <p className={cn("break-normal font-bold tracking-tight", showFlag ? "text-xs " : "text-sm")}>{name}</p>
             {parsedData?.billingDataMod && <BillingInfo parsedData={parsedData} />}
           </div>
         </section>
@@ -132,7 +132,7 @@ export default function ServerCardInline({ now, serverInfo }: { now: number; ser
           {showFlag ? <ServerFlag country_code={country_code} /> : null}
         </div>
         <div className="relative flex flex-col">
-          <p className={cn("break-all font-bold w-28 tracking-tight", showFlag ? "text-xs" : "text-sm")}>{name}</p>
+          <p className={cn("break-normal font-bold w-28 tracking-tight", showFlag ? "text-xs" : "text-sm")}>{name}</p>
           {parsedData?.billingDataMod && <BillingInfo parsedData={parsedData} />}
         </div>
       </section>
