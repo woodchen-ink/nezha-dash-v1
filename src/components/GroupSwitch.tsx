@@ -17,6 +17,9 @@ export default function GroupSwitch({
   const customBackgroundImage = (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
   const [isDarkMode, setIsDarkMode] = useState(false)
 
+  // 使用一个唯一的ID来确保各个组件的layoutId不会冲突
+  const layoutIdPrefix = isCountrySwitch ? "country-switch-" : "tab-switch-"
+
   const scrollRef = useRef<HTMLDivElement>(null)
   const tagRefs = useRef(tabs.map(() => createRef<HTMLDivElement>()))
 
@@ -67,9 +70,17 @@ export default function GroupSwitch({
     }
   }, [tabs, setCurrentTab, isCountrySwitch])
 
+  // 当tabs变化时更新tagRefs
   useEffect(() => {
-    const currentTagRef = tagRefs.current[tabs.indexOf(currentTab)]
+    tagRefs.current = tabs.map(() => createRef<HTMLDivElement>())
+  }, [tabs])
 
+  // 处理选中标签的滚动逻辑
+  useEffect(() => {
+    const currentTagIndex = tabs.indexOf(currentTab)
+    if (currentTagIndex === -1) return // 如果当前选中的标签不在tabs中，不执行滚动
+
+    const currentTagRef = tagRefs.current[currentTagIndex]
     if (currentTagRef && currentTagRef.current) {
       currentTagRef.current.scrollIntoView({
         behavior: "smooth",
@@ -79,8 +90,24 @@ export default function GroupSwitch({
     }
   }, [currentTab, tabs])
 
+  // 记录当前组件类型和选中的标签
+  console.log(isCountrySwitch ? '国家筛选组件:' : '分组筛选组件:', {
+    tabs,
+    currentTab,
+    layoutIdPrefix
+  })
+
+  const handleTabClick = (tab: string) => {
+    console.log(isCountrySwitch ? '点击国家标签:' : '点击分组标签:', tab)
+    if (tab === currentTab) return; // 如果点击的是当前选中的标签，不执行操作
+    setCurrentTab(tab)
+  }
+
   return (
-    <div ref={scrollRef} className="scrollbar-hidden z-50 flex flex-col items-start overflow-x-scroll rounded-[50px]">
+    <div className={cn(
+      "scrollbar-hidden z-50 flex flex-col items-start overflow-x-scroll rounded-[50px]",
+      isCountrySwitch ? "border-l border-stone-200 dark:border-stone-700 ml-1 pl-1" : ""
+    )} ref={scrollRef}>
       <div
         className={cn("flex items-center gap-1 rounded-[50px] bg-stone-100 p-[3px] dark:bg-stone-800", {
           "bg-stone-100/70 dark:bg-stone-800/70": customBackgroundImage,
@@ -88,9 +115,9 @@ export default function GroupSwitch({
       >
         {tabs.map((tab: string, index: number) => (
           <div
-            key={tab}
+            key={isCountrySwitch ? `country-${tab}` : `group-${tab}`}
             ref={tagRefs.current[index]}
-            onClick={() => setCurrentTab(tab)}
+            onClick={() => handleTabClick(tab)}
             className={cn(
               "relative cursor-pointer rounded-3xl px-2.5 py-[8px] text-[13px] font-[600] transition-all duration-500",
               currentTab === tab ? "text-black dark:text-white" : "text-stone-400 dark:text-stone-500",
@@ -98,7 +125,7 @@ export default function GroupSwitch({
           >
             {currentTab === tab && (
               <m.div
-                layoutId={isCountrySwitch ? "country-switch" : "tab-switch"}
+                layoutId={`${layoutIdPrefix}${isCountrySwitch ? 'country-' : 'group-'}${tab}`}
                 style={{
                   position: "absolute",
                   inset: 0,

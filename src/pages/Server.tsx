@@ -46,6 +46,7 @@ export default function Servers() {
   }
 
   const handleTagChange = (newGroup: string) => {
+    console.log('切换组:', newGroup)
     setCurrentGroup(newGroup)
     setCurrentCountry("All") // 切换组时重置国家筛选
     sessionStorage.setItem("selectedGroup", newGroup)
@@ -54,6 +55,7 @@ export default function Servers() {
   }
 
   const handleCountryChange = (newCountry: string) => {
+    console.log('切换国家:', newCountry, '当前组:', currentGroup)
     setCurrentCountry(newCountry)
     sessionStorage.setItem("selectedCountry", newCountry)
     sessionStorage.setItem("scrollPosition", String(containerRef.current?.scrollTop || 0))
@@ -83,20 +85,35 @@ export default function Servers() {
   useEffect(() => {
     const savedGroup = sessionStorage.getItem("selectedGroup") || "All"
     const savedCountry = sessionStorage.getItem("selectedCountry") || "All"
+    
+    console.log('初始化分组和国家筛选:', { savedGroup, savedCountry })
+    
+    // 确保在组件挂载时应用保存的值
     setCurrentGroup(savedGroup)
     setCurrentCountry(savedCountry)
 
     restoreScrollPosition()
+    
+    // 如果没有保存值，初始化存储
+    if (!sessionStorage.getItem("selectedGroup")) {
+      sessionStorage.setItem("selectedGroup", "All")
+    }
+    
+    if (!sessionStorage.getItem("selectedCountry")) {
+      sessionStorage.setItem("selectedCountry", "All")
+    }
   }, [])
 
   const nezhaWsData = lastMessage ? (JSON.parse(lastMessage.data) as NezhaWebsocketResponse) : null
 
   // 获取所有可用的国家代码
   const availableCountries = nezhaWsData?.servers 
-    ? [...new Set(nezhaWsData.servers.map(server => server.country_code))]
+    ? [...new Set(nezhaWsData.servers.map(server => server.country_code?.toLowerCase()))]
       .filter(Boolean)
       .sort()
     : []
+
+  console.log('可用国家代码:', availableCountries)
 
   const groupTabs = [
     "All",
@@ -111,6 +128,13 @@ export default function Servers() {
     "All",
     ...availableCountries.map(code => code.toUpperCase())
   ]
+
+  console.log('标签信息:', {
+    组标签: groupTabs,
+    国家标签: countryTabs,
+    当前组: currentGroup,
+    当前国家: currentCountry
+  })
 
   // 获取cycle_transfer_stats数据
   const { data: serviceData } = useQuery({
@@ -150,16 +174,29 @@ export default function Servers() {
         const group = groupData?.data?.find(
           (g: ServerGroup) => g.group.name === currentGroup && Array.isArray(g.servers) && g.servers.includes(server.id),
         )
-        if (!group) return false
+        if (!group) {
+          return false
+        }
       }
       
       // 国家筛选
-      if (currentCountry !== "All" && server.country_code?.toUpperCase() !== currentCountry) {
-        return false
+      if (currentCountry !== "All") {
+        const serverCountry = server.country_code?.toUpperCase()
+        if (serverCountry !== currentCountry) {
+          return false
+        }
       }
       
       return true
     }) || []
+
+  // 记录筛选后的服务器数量
+  console.log('筛选结果:', {
+    组筛选: currentGroup,
+    国家筛选: currentCountry,
+    筛选前总数: nezhaWsData?.servers?.length || 0,
+    筛选后总数: filteredServers.length,
+  })
 
   const totalServers = filteredServers.length || 0
   const onlineServers = filteredServers.filter((server) => formatNezhaInfo(nezhaWsData.now, server).online)?.length || 0
