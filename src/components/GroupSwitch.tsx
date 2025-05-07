@@ -90,15 +90,7 @@ export default function GroupSwitch({
     }
   }, [currentTab, tabs])
 
-  // 记录当前组件类型和选中的标签
-  console.log(isCountrySwitch ? '国家筛选组件:' : '分组筛选组件:', {
-    tabs,
-    currentTab,
-    layoutIdPrefix
-  })
-
   const handleTabClick = (tab: string) => {
-    console.log(isCountrySwitch ? '点击国家标签:' : '点击分组标签:', tab)
     if (tab === currentTab) return; // 如果点击的是当前选中的标签，不执行操作
     setCurrentTab(tab)
   }

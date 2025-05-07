@@ -33,8 +33,15 @@ export default function Servers() {
   const [showMap, setShowMap] = useState<string>("0")
   const containerRef = useRef<HTMLDivElement>(null)
   const [settingsOpen, setSettingsOpen] = useState<boolean>(false)
+  
+  // 使用ref存储筛选状态，防止WebSocket消息刷新时重置
+  const groupRef = useRef<string>("All")
+  const countryRef = useRef<string>("All")
   const [currentGroup, setCurrentGroup] = useState<string>("All")
   const [currentCountry, setCurrentCountry] = useState<string>("All")
+  
+  // 保存是否已经初始化了筛选状态
+  const initializedRef = useRef<boolean>(false)
 
   const customBackgroundImage = (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
 
@@ -46,17 +53,21 @@ export default function Servers() {
   }
 
   const handleTagChange = (newGroup: string) => {
-    console.log('切换组:', newGroup)
+    groupRef.current = newGroup
+    countryRef.current = "All" // 切换组时重置国家筛选
+    
     setCurrentGroup(newGroup)
-    setCurrentCountry("All") // 切换组时重置国家筛选
+    setCurrentCountry("All")
+    
     sessionStorage.setItem("selectedGroup", newGroup)
     sessionStorage.setItem("selectedCountry", "All")
     sessionStorage.setItem("scrollPosition", String(containerRef.current?.scrollTop || 0))
   }
 
   const handleCountryChange = (newCountry: string) => {
-    console.log('切换国家:', newCountry, '当前组:', currentGroup)
+    countryRef.current = newCountry
     setCurrentCountry(newCountry)
+    
     sessionStorage.setItem("selectedCountry", newCountry)
     sessionStorage.setItem("scrollPosition", String(containerRef.current?.scrollTop || 0))
   }
@@ -82,16 +93,19 @@ export default function Servers() {
     }
   }, [])
 
+  // 仅在组件挂载时初始化一次状态
   useEffect(() => {
+    if (initializedRef.current) return;
+    
     const savedGroup = sessionStorage.getItem("selectedGroup") || "All"
     const savedCountry = sessionStorage.getItem("selectedCountry") || "All"
     
-    console.log('初始化分组和国家筛选:', { savedGroup, savedCountry })
+    groupRef.current = savedGroup
+    countryRef.current = savedCountry
     
-    // 确保在组件挂载时应用保存的值
     setCurrentGroup(savedGroup)
     setCurrentCountry(savedCountry)
-
+    
     restoreScrollPosition()
     
     // 如果没有保存值，初始化存储
@@ -102,7 +116,17 @@ export default function Servers() {
     if (!sessionStorage.getItem("selectedCountry")) {
       sessionStorage.setItem("selectedCountry", "All")
     }
+    
+    initializedRef.current = true
   }, [])
+
+  // 当WebSocket消息更新时，确保UI状态与ref同步
+  useEffect(() => {
+    if (!lastMessage || !initializedRef.current) return;
+    
+    setCurrentGroup(groupRef.current)
+    setCurrentCountry(countryRef.current)
+  }, [lastMessage])
 
   const nezhaWsData = lastMessage ? (JSON.parse(lastMessage.data) as NezhaWebsocketResponse) : null
 
@@ -112,8 +136,6 @@ export default function Servers() {
       .filter(Boolean)
       .sort()
     : []
-
-  console.log('可用国家代码:', availableCountries)
 
   const groupTabs = [
     "All",
@@ -128,13 +150,6 @@ export default function Servers() {
     "All",
     ...availableCountries.map(code => code.toUpperCase())
   ]
-
-  console.log('标签信息:', {
-    组标签: groupTabs,
-    国家标签: countryTabs,
-    当前组: currentGroup,
-    当前国家: currentCountry
-  })
 
   // 获取cycle_transfer_stats数据
   const { data: serviceData } = useQuery({
@@ -189,14 +204,6 @@ export default function Servers() {
       
       return true
     }) || []
-
-  // 记录筛选后的服务器数量
-  console.log('筛选结果:', {
-    组筛选: currentGroup,
-    国家筛选: currentCountry,
-    筛选前总数: nezhaWsData?.servers?.length || 0,
-    筛选后总数: filteredServers.length,
-  })
 
   const totalServers = filteredServers.length || 0
   const onlineServers = filteredServers.filter((server) => formatNezhaInfo(nezhaWsData.now, server).online)?.length || 0
