@@ -43,56 +43,28 @@ export default function GroupSwitch({
     }
   }, [])
 
-  useEffect(() => {
-    const container = scrollRef.current
-    if (!container) return
-
-    const isOverflowing = container.scrollWidth > container.clientWidth
-    if (!isOverflowing) return
-
-    const onWheel = (e: WheelEvent) => {
-      e.preventDefault()
-      container.scrollLeft += e.deltaY
+  // 处理标签点击
+  function handleClick(tab: string) {
+    // 避免重复点击当前选中的标签
+    if (tab === currentTab) return;
+    
+    try {
+      // 直接调用父组件传递的回调
+      setCurrentTab(tab);
+      console.log(`[${isCountrySwitch ? '国家' : '分组'}] 切换到: ${tab}`);
+      
+      // 手动滚动到可见区域
+      const index = tabs.indexOf(tab);
+      if (index !== -1 && tagRefs.current[index]?.current) {
+        tagRefs.current[index].current?.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+          inline: "center"
+        });
+      }
+    } catch (error) {
+      console.error('切换标签出错:', error);
     }
-
-    container.addEventListener("wheel", onWheel, { passive: false })
-
-    return () => {
-      container.removeEventListener("wheel", onWheel)
-    }
-  }, [])
-
-  useEffect(() => {
-    const storageKey = isCountrySwitch ? "selectedCountry" : "selectedGroup"
-    const savedValue = sessionStorage.getItem(storageKey)
-    if (savedValue && tabs.includes(savedValue)) {
-      setCurrentTab(savedValue)
-    }
-  }, [tabs, setCurrentTab, isCountrySwitch])
-
-  // 当tabs变化时更新tagRefs
-  useEffect(() => {
-    tagRefs.current = tabs.map(() => createRef<HTMLDivElement>())
-  }, [tabs])
-
-  // 处理选中标签的滚动逻辑
-  useEffect(() => {
-    const currentTagIndex = tabs.indexOf(currentTab)
-    if (currentTagIndex === -1) return // 如果当前选中的标签不在tabs中，不执行滚动
-
-    const currentTagRef = tagRefs.current[currentTagIndex]
-    if (currentTagRef && currentTagRef.current) {
-      currentTagRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-        inline: "center",
-      })
-    }
-  }, [currentTab, tabs])
-
-  const handleTabClick = (tab: string) => {
-    if (tab === currentTab) return; // 如果点击的是当前选中的标签，不执行操作
-    setCurrentTab(tab)
   }
 
   return (
@@ -109,7 +81,7 @@ export default function GroupSwitch({
           <div
             key={isCountrySwitch ? `country-${tab}` : `group-${tab}`}
             ref={tagRefs.current[index]}
-            onClick={() => handleTabClick(tab)}
+            onClick={() => handleClick(tab)}
             className={cn(
               "relative cursor-pointer rounded-3xl px-2.5 py-[8px] text-[13px] font-[600] transition-all duration-500",
               currentTab === tab ? "text-black dark:text-white" : "text-stone-400 dark:text-stone-500",

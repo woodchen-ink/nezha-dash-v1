@@ -1,5 +1,4 @@
 import GlobalMap from "@/components/GlobalMap"
-import GroupSwitch from "@/components/GroupSwitch"
 import ServerCard from "@/components/ServerCard"
 import ServerOverview from "@/components/ServerOverview"
 import { ServiceTracker } from "@/components/ServiceTracker"
@@ -17,8 +16,9 @@ import { NezhaWebsocketResponse } from "@/types/nezha-api"
 import { ServerGroup } from "@/types/nezha-api"
 import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon, ChartBarSquareIcon, MapIcon } from "@heroicons/react/20/solid"
 import { useQuery } from "@tanstack/react-query"
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
+import DirectCountrySelect from "@/components/DirectCountrySelect"
 
 export default function Servers() {
   const { t } = useTranslation()
@@ -52,25 +52,16 @@ export default function Servers() {
     }
   }
 
-  const handleTagChange = (newGroup: string) => {
-    groupRef.current = newGroup
-    countryRef.current = "All" // 切换组时重置国家筛选
+  const handleCountryChange = useCallback((newCountry: string) => {
+    countryRef.current = newCountry;
     
-    setCurrentGroup(newGroup)
-    setCurrentCountry("All")
+    // 强制立即更新状态
+    setCurrentCountry(newCountry);
     
-    sessionStorage.setItem("selectedGroup", newGroup)
-    sessionStorage.setItem("selectedCountry", "All")
-    sessionStorage.setItem("scrollPosition", String(containerRef.current?.scrollTop || 0))
-  }
-
-  const handleCountryChange = (newCountry: string) => {
-    countryRef.current = newCountry
-    setCurrentCountry(newCountry)
-    
-    sessionStorage.setItem("selectedCountry", newCountry)
-    sessionStorage.setItem("scrollPosition", String(containerRef.current?.scrollTop || 0))
-  }
+    // 保存到会话存储
+    sessionStorage.setItem("selectedCountry", newCountry);
+    sessionStorage.setItem("scrollPosition", String(containerRef.current?.scrollTop || 0));
+  }, []);
 
   useEffect(() => {
     const showServicesState = localStorage.getItem("showServices")
@@ -124,6 +115,7 @@ export default function Servers() {
   useEffect(() => {
     if (!lastMessage || !initializedRef.current) return;
     
+    // 保持用户选择的筛选状态
     setCurrentGroup(groupRef.current)
     setCurrentCountry(countryRef.current)
   }, [lastMessage])
@@ -136,15 +128,6 @@ export default function Servers() {
       .filter(Boolean)
       .sort()
     : []
-
-  const groupTabs = [
-    "All",
-    ...(groupData?.data
-      ?.filter((item: ServerGroup) => {
-        return Array.isArray(item.servers) && item.servers.some((serverId) => nezhaWsData?.servers?.some((server) => server.id === serverId))
-      })
-      ?.map((item: ServerGroup) => item.group.name) || []),
-  ]
 
   const countryTabs = [
     "All",
@@ -347,8 +330,6 @@ export default function Servers() {
               })}
             />
           </button>
-          <GroupSwitch tabs={groupTabs} currentTab={currentGroup} setCurrentTab={handleTagChange} />
-          <GroupSwitch tabs={countryTabs} currentTab={currentCountry} setCurrentTab={handleCountryChange} isCountrySwitch={true} />
         </section>
         <Popover onOpenChange={setSettingsOpen}>
           <PopoverTrigger asChild>
@@ -411,7 +392,17 @@ export default function Servers() {
       </div>
       {showMap === "1" && <GlobalMap now={nezhaWsData.now} serverList={nezhaWsData?.servers || []} />}
       {showServices === "1" && <ServiceTracker serverList={filteredServers} />}
-      <section ref={containerRef} className="grid grid-cols-1 gap-4 md:grid-cols-3 mt-6 server-card-list">
+      
+      {/* 优化直接国家选择器 */}
+      <div className="mt-4">
+        <DirectCountrySelect 
+          countries={countryTabs.filter(tab => tab !== "All")}
+          currentCountry={currentCountry}
+          onChange={handleCountryChange}
+        />
+      </div>
+      
+      <section ref={containerRef} className="grid grid-cols-1 gap-4 md:grid-cols-3 mt-4 server-card-list">
         {filteredServers.map((serverInfo) => {
           // 查找服务器所属的分组
           const serverGroup = groupData?.data?.find(
