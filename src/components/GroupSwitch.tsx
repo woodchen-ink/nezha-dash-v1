@@ -1,20 +1,44 @@
 import { cn } from "@/lib/utils"
 import { m } from "framer-motion"
-import { createRef, useEffect, useRef } from "react"
+import { createRef, useEffect, useRef, useState } from "react"
+import ServerFlag from "@/components/ServerFlag"
 
 export default function GroupSwitch({
   tabs,
   currentTab,
   setCurrentTab,
+  isCountrySwitch = false
 }: {
   tabs: string[]
   currentTab: string
   setCurrentTab: (tab: string) => void
+  isCountrySwitch?: boolean
 }) {
   const customBackgroundImage = (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+  const [isDarkMode, setIsDarkMode] = useState(false)
 
   const scrollRef = useRef<HTMLDivElement>(null)
   const tagRefs = useRef(tabs.map(() => createRef<HTMLDivElement>()))
+
+  useEffect(() => {
+    // 检测暗黑模式
+    setIsDarkMode(document.documentElement.classList.contains('dark'))
+    
+    // 监听主题变化
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class') {
+          setIsDarkMode(document.documentElement.classList.contains('dark'))
+        }
+      })
+    })
+    
+    observer.observe(document.documentElement, { attributes: true })
+    
+    return () => {
+      observer.disconnect()
+    }
+  }, [])
 
   useEffect(() => {
     const container = scrollRef.current
@@ -36,11 +60,12 @@ export default function GroupSwitch({
   }, [])
 
   useEffect(() => {
-    const savedGroup = sessionStorage.getItem("selectedGroup")
-    if (savedGroup && tabs.includes(savedGroup)) {
-      setCurrentTab(savedGroup)
+    const storageKey = isCountrySwitch ? "selectedCountry" : "selectedGroup"
+    const savedValue = sessionStorage.getItem(storageKey)
+    if (savedValue && tabs.includes(savedValue)) {
+      setCurrentTab(savedValue)
     }
-  }, [tabs, setCurrentTab])
+  }, [tabs, setCurrentTab, isCountrySwitch])
 
   useEffect(() => {
     const currentTagRef = tagRefs.current[tabs.indexOf(currentTab)]
@@ -52,7 +77,7 @@ export default function GroupSwitch({
         inline: "center",
       })
     }
-  }, [currentTab])
+  }, [currentTab, tabs])
 
   return (
     <div ref={scrollRef} className="scrollbar-hidden z-50 flex flex-col items-start overflow-x-scroll rounded-[50px]">
@@ -73,15 +98,22 @@ export default function GroupSwitch({
           >
             {currentTab === tab && (
               <m.div
-                layoutId="tab-switch"
-                className="absolute inset-0 z-10 h-full w-full content-center bg-white shadow-lg shadow-black/5 dark:bg-stone-700 dark:shadow-white/5"
+                layoutId={isCountrySwitch ? "country-switch" : "tab-switch"}
                 style={{
+                  position: "absolute",
+                  inset: 0,
+                  zIndex: 10,
+                  height: "100%",
+                  width: "100%",
+                  backgroundColor: isDarkMode ? "rgb(68 64 60)" : "white", // bg-stone-700 : white
+                  boxShadow: isDarkMode ? "0 1px 3px 0 rgba(255, 255, 255, 0.05)" : "0 1px 3px 0 rgba(0, 0, 0, 0.05)",
                   originY: "0px",
                   borderRadius: 46,
                 }}
               />
             )}
             <div className="relative z-20 flex items-center gap-1">
+              {isCountrySwitch && tab !== "All" && <ServerFlag country_code={tab.toLowerCase()} className="text-[10px]" />}
               <p className="whitespace-nowrap">{tab}</p>
             </div>
           </div>

@@ -34,6 +34,7 @@ export default function Servers() {
   const containerRef = useRef<HTMLDivElement>(null)
   const [settingsOpen, setSettingsOpen] = useState<boolean>(false)
   const [currentGroup, setCurrentGroup] = useState<string>("All")
+  const [currentCountry, setCurrentCountry] = useState<string>("All")
 
   const customBackgroundImage = (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
 
@@ -46,7 +47,15 @@ export default function Servers() {
 
   const handleTagChange = (newGroup: string) => {
     setCurrentGroup(newGroup)
+    setCurrentCountry("All") // 切换组时重置国家筛选
     sessionStorage.setItem("selectedGroup", newGroup)
+    sessionStorage.setItem("selectedCountry", "All")
+    sessionStorage.setItem("scrollPosition", String(containerRef.current?.scrollTop || 0))
+  }
+
+  const handleCountryChange = (newCountry: string) => {
+    setCurrentCountry(newCountry)
+    sessionStorage.setItem("selectedCountry", newCountry)
     sessionStorage.setItem("scrollPosition", String(containerRef.current?.scrollTop || 0))
   }
 
@@ -73,12 +82,21 @@ export default function Servers() {
 
   useEffect(() => {
     const savedGroup = sessionStorage.getItem("selectedGroup") || "All"
+    const savedCountry = sessionStorage.getItem("selectedCountry") || "All"
     setCurrentGroup(savedGroup)
+    setCurrentCountry(savedCountry)
 
     restoreScrollPosition()
   }, [])
 
   const nezhaWsData = lastMessage ? (JSON.parse(lastMessage.data) as NezhaWebsocketResponse) : null
+
+  // 获取所有可用的国家代码
+  const availableCountries = nezhaWsData?.servers 
+    ? [...new Set(nezhaWsData.servers.map(server => server.country_code))]
+      .filter(Boolean)
+      .sort()
+    : []
 
   const groupTabs = [
     "All",
@@ -87,6 +105,11 @@ export default function Servers() {
         return Array.isArray(item.servers) && item.servers.some((serverId) => nezhaWsData?.servers?.some((server) => server.id === serverId))
       })
       ?.map((item: ServerGroup) => item.group.name) || []),
+  ]
+
+  const countryTabs = [
+    "All",
+    ...availableCountries.map(code => code.toUpperCase())
   ]
 
   // 获取cycle_transfer_stats数据
@@ -122,11 +145,20 @@ export default function Servers() {
 
   let filteredServers =
     nezhaWsData?.servers?.filter((server) => {
-      if (currentGroup === "All") return true
-      const group = groupData?.data?.find(
-        (g: ServerGroup) => g.group.name === currentGroup && Array.isArray(g.servers) && g.servers.includes(server.id),
-      )
-      return !!group
+      // 组筛选
+      if (currentGroup !== "All") {
+        const group = groupData?.data?.find(
+          (g: ServerGroup) => g.group.name === currentGroup && Array.isArray(g.servers) && g.servers.includes(server.id),
+        )
+        if (!group) return false
+      }
+      
+      // 国家筛选
+      if (currentCountry !== "All" && server.country_code?.toUpperCase() !== currentCountry) {
+        return false
+      }
+      
+      return true
     }) || []
 
   const totalServers = filteredServers.length || 0
@@ -272,6 +304,7 @@ export default function Servers() {
             />
           </button>
           <GroupSwitch tabs={groupTabs} currentTab={currentGroup} setCurrentTab={handleTagChange} />
+          <GroupSwitch tabs={countryTabs} currentTab={currentCountry} setCurrentTab={handleCountryChange} isCountrySwitch={true} />
         </section>
         <Popover onOpenChange={setSettingsOpen}>
           <PopoverTrigger asChild>
