@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
 import React, { useEffect, useState } from "react"
-import { useTranslation } from "react-i18next"
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom"
 
 import { DashCommand } from "./components/DashCommand"
@@ -24,7 +23,6 @@ const App: React.FC = () => {
     refetchOnMount: true,
     refetchOnWindowFocus: true,
   })
-  const { i18n } = useTranslation()
   const { setTheme } = useTheme()
   const [isCustomCodeInjected, setIsCustomCodeInjected] = useState(false)
   const { backgroundImage: customBackgroundImage } = useBackground()
@@ -57,10 +55,6 @@ const App: React.FC = () => {
 
   if (settingData?.data?.config?.custom_code && !isCustomCodeInjected) {
     return null
-  }
-
-  if (settingData?.data?.config?.language && !localStorage.getItem("language")) {
-    i18n.changeLanguage(settingData?.data?.config?.language)
   }
 
   const customMobileBackgroundImage = window.CustomMobileBackgroundImage !== "" ? window.CustomMobileBackgroundImage : undefined
