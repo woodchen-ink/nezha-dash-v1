@@ -3,39 +3,25 @@
   <head>
     <script>
       // 在页面渲染前就执行主题初始化
-      try {
-        const storageKey = "vite-ui-theme"
-        let theme = localStorage.getItem(storageKey)
-        if (theme === "system" || !theme) {
-          theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
-        }
-        document.documentElement.classList.add(theme)
-      } catch (e) {
-        document.documentElement.classList.add("light")
-      }
+      document.documentElement.classList.add("dark")
       
       // 全局配置变量
       window.ShowServerDetails = true; // 是否显示服务器详细信息
     </script>
     <style>
       /* Prevent FOUC in Safari */
-      html:not(.dark):not(.light) * {
+      html:not(.dark) * {
         visibility: hidden;
       }
 
       :root {
-        color-scheme: light;
-        --bg: #ffffff;
+        color-scheme: dark;
+        --bg: #242424;
       }
 
       html.dark {
         color-scheme: dark;
         --bg: #242424;
-      }
-
-      html.light {
-        color-scheme: light;
-        --bg: #ffffff;
       }
 
       html {
@@ -67,31 +53,10 @@
     </style>
     <script>
       ;(function () {
-        const storageKey = "vite-ui-theme"
-        const theme = localStorage.getItem(storageKey) || "system"
         const root = document.documentElement
-
-        function updateThemeColor(isDark) {
-          const themeColor = isDark ? "#242424" : "#fafafa"
-          document.querySelector('meta[name="theme-color"]')?.setAttribute("content", themeColor)
-        }
-
-        function setTheme(newTheme) {
-          root.classList.remove("light", "dark")
-          root.classList.add(newTheme)
-          updateThemeColor(newTheme === "dark")
-        }
-
-        if (theme === "system") {
-          const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
-          setTheme(systemTheme)
-
-          window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
-            setTheme(e.matches ? "dark" : "light")
-          })
-        } else {
-          setTheme(theme)
-        }
+        root.classList.remove("light")
+        root.classList.add("dark")
+        document.querySelector('meta[name="theme-color"]')?.setAttribute("content", "#242424")
 
         // Add loaded class after React has mounted
         window.addEventListener("load", () => {

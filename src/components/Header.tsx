@@ -1,4 +1,3 @@
-import { ModeToggle } from "@/components/ThemeSwitcher"
 import { Separator } from "@/components/ui/separator"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useBackground } from "@/hooks/use-background"
@@ -102,7 +101,6 @@ function Header() {
             <Links />
             <DashboardLink />
           </div>
-          <ModeToggle />
           {(customBackgroundImage || sessionStorage.getItem("savedBackgroundImage")) && (
             <Button
               variant="outline"
