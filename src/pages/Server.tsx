@@ -274,7 +274,7 @@ export default function Servers() {
   })
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-0">
+    <div className="mx-auto w-full max-w-7xl px-0">
       <ServerOverview
         total={totalServers}
         online={onlineServers}
@@ -284,7 +284,7 @@ export default function Servers() {
         upSpeed={upSpeed}
         downSpeed={downSpeed}
       />
-      <div className="flex mt-6 items-center justify-between gap-2 server-overview-controls">
+      <div className="flex mt-4 items-center justify-between gap-2 server-overview-controls">
         <section className="flex items-center gap-2 w-full overflow-hidden">
           <button
             onClick={() => {
@@ -394,7 +394,7 @@ export default function Servers() {
       {showServices === "1" && <ServiceTracker serverList={filteredServers} />}
       
       {/* 优化直接国家选择器 */}
-      <div className="mt-4">
+      <div className="mt-3">
         <DirectCountrySelect 
           countries={countryTabs.filter(tab => tab !== "All")}
           currentCountry={currentCountry}
@@ -402,7 +402,7 @@ export default function Servers() {
         />
       </div>
       
-      <section ref={containerRef} className="grid grid-cols-1 gap-4 md:grid-cols-3 mt-4 server-card-list">
+      <section ref={containerRef} className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-4 server-card-list">
         {filteredServers.map((serverInfo) => {
           // 查找服务器所属的分组
           const serverGroup = groupData?.data?.find(

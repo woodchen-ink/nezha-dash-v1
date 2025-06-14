@@ -82,7 +82,7 @@ const App: React.FC = () => {
             "bg-background": !customBackgroundImage,
           })}
         >
-          <main className="flex z-20 min-h-[calc(100vh-calc(var(--spacing)*16))] flex-1 flex-col gap-4 p-4 md:p-10 md:pt-8">
+          <main className="flex z-20 min-h-[calc(100vh-calc(var(--spacing)*8))] flex-1 flex-col gap-2 p-2 md:p-6 md:pt-4">
             <RefreshToast />
             <Header />
             <DashCommand />

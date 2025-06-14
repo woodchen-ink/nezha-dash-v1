@@ -6,7 +6,7 @@ import { fetchLoginUser, fetchSetting } from "@/lib/nezha-api"
 import { cn } from "@/lib/utils"
 import NumberFlow, { NumberFlowGroup } from "@number-flow/react"
 import { useQuery } from "@tanstack/react-query"
-import { AnimatePresence, m } from "framer-motion"
+import { AnimatePresence } from "framer-motion"
 import { ImageMinus } from "lucide-react"
 import { DateTime } from "luxon"
 import { useEffect, useRef, useState } from "react"
@@ -74,7 +74,7 @@ function Header() {
   const customBackgroundImage = backgroundImage
 
   return (
-    <div className="mx-auto w-full max-w-5xl">
+    <div className="mx-auto w-full max-w-7xl">
       <section className="flex items-center justify-between header-top">
         <section
           onClick={() => {
@@ -191,18 +191,14 @@ export function RefreshToast() {
 
   return (
     <AnimatePresence>
-      <m.div
-        initial={{ opacity: 0, filter: "blur(10px)", scale: 0.8 }}
-        animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
-        exit={{ opacity: 0, filter: "blur(10px)", scale: 0.8 }}
-        transition={{ type: "spring", duration: 0.8 }}
+      <div
         className="fixed left-1/2 -translate-x-1/2 top-8 z-[999] flex items-center justify-between gap-4 rounded-[50px] border-[1px] border-solid bg-white px-2 py-1.5 shadow-xl shadow-black/5 dark:border-stone-700 dark:bg-stone-800 dark:shadow-none"
       >
         <section className="flex items-center gap-1.5">
           <LoadingSpinner />
           <p className="text-[12.5px] font-medium">{t("refreshing")}...</p>
         </section>
-      </m.div>
+      </div>
     </AnimatePresence>
   )
 }
@@ -281,7 +277,7 @@ function Overview() {
     return () => clearInterval(timer)
   }, [])
   return (
-    <section className={"mt-10 flex flex-col md:mt-16 header-timer"}>
+    <section className={"mt-6 flex flex-col md:mt-8 header-timer"}>
       <p className="text-base font-semibold">👋 {t("overview")}</p>
       <div className="flex items-center gap-1.5">
         <p className="text-sm font-medium opacity-50">{t("whereTheTimeIs")}</p>
