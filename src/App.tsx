@@ -66,6 +66,13 @@ const App: React.FC = () => {
               zIndex: -1
             }}
           />
+          {/* 毛玻璃蒙版层 */}
+          <div
+            className="fixed inset-0 backdrop-blur-sm bg-black/80"
+            style={{ 
+              zIndex: -1
+            }}
+          />
 
           <main className="relative flex min-h-screen flex-col gap-2 p-2 md:p-6 md:pt-4 bg-transparent">
             <RefreshToast />
