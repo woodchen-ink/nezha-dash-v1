@@ -383,9 +383,6 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
                 <Cpu className="size-[14px] mr-1 text-blue-500" />
                 <span className="text-xs">CPU</span>
               </div>
-              <span className={cn("text-xs font-bold", getColorClass(cpu))}>
-                {cpu.toFixed(0)}%
-              </span>
             </div>
             <ServerUsageBar value={cpu} />
             {/* CPU信息 */}
@@ -428,9 +425,6 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
                 </div>
                 <span className="text-xs">{t("serverCard.mem")}</span>
               </div>
-              <span className={cn("text-xs font-bold", getColorClass(mem))}>
-                {mem.toFixed(0)}%
-              </span>
             </div>
             <ServerUsageBar value={mem} />
             {/* 内存信息 */}
@@ -477,9 +471,6 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
                 <HardDrive className="size-[14px] mr-1 text-amber-500" />
                 <span className="text-xs">{t("serverCard.stg")}</span>
               </div>
-              <span className={cn("text-xs font-bold", getColorClass(stg))}>
-                {stg.toFixed(0)}%
-              </span>
             </div>
             <ServerUsageBar value={stg} />
             {/* 存储信息 */}
@@ -496,14 +487,14 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
             <div className="flex justify-between items-center mb-1">
               <div className="flex items-center">
                 <ArrowUp className="size-[14px] text-blue-500 mr-1" />
-                <span className="text-xs">{t("serverCard.upload")}</span>
+                <span className="text-xs">Up</span>
               </div>
               <span className="text-xs font-medium">{formatSpeed(up)}</span>
             </div>
             <div className="flex justify-between items-center mt-2">
               <div className="flex items-center">
                 <ArrowDown className="size-[14px] text-green-500 mr-1" />
-                <span className="text-xs">{t("serverCard.download")}</span>
+                <span className="text-xs">Down</span>
               </div>
               <span className="text-xs font-medium">{formatSpeed(down)}</span>
             </div>
