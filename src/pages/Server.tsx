@@ -274,7 +274,7 @@ export default function Servers() {
   })
 
   return (
-    <div className="mx-auto w-full max-w-7xl px-0">
+    <div className="mx-auto w-full max-w-[1600px] px-0">
       <ServerOverview
         total={totalServers}
         online={onlineServers}
@@ -402,7 +402,7 @@ export default function Servers() {
         />
       </div>
       
-      <section ref={containerRef} className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-4 server-card-list">
+      <section ref={containerRef} className="grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 mt-4 server-card-list">
         {filteredServers.map((serverInfo) => {
           // 查找服务器所属的分组
           const serverGroup = groupData?.data?.find(

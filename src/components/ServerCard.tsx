@@ -195,13 +195,11 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
     return (
       <Card
         className={cn(
-          "cursor-pointer hover:bg-accent/50 transition-all duration-300 border-red-300/30 dark:border-red-900/30 shadow-md hover:shadow-lg",
+          "cursor-pointer hover:bg-white/5 transition-all duration-300 backdrop-blur-md bg-white/10 dark:bg-black/10 border-red-300/50 dark:border-red-500/50 shadow-lg hover:shadow-xl",
           { "bg-card/70": customBackgroundImage }
         )}
         onClick={cardClick}
       >
-        <div className="absolute top-0 left-0 w-1 h-full bg-red-500 rounded-l-md"></div>
-
         {/* 离线卡片的分组标签 */}
         {groupName && (
           <div className="absolute top-2 right-2">
@@ -236,13 +234,13 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
           {serverCycleData && serverCycleData.length > 0 && (
             <div className="mt-3">
               {serverCycleData.map((cycle, index) => (
-                <div key={index} className="mt-3 bg-muted/30 rounded-md p-2">
+                <div key={index} className="mt-3 bg-white/5 dark:bg-black/5 backdrop-blur-sm rounded-md p-2 border border-white/10">
                   <div className="flex items-center justify-between mb-1">
                     <div className="flex items-center">
                       <BarChart3 className="size-[12px] mr-1 text-emerald-500" />
                       <span className="text-xs font-medium">{cycle.name}</span>
                     </div>
-                    <span className="text-[10px] bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded">
+                    <span className="text-[10px] bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded backdrop-blur-sm">
                       {new Date(cycle.from).toLocaleDateString()} - {new Date(cycle.to).toLocaleDateString()}
                     </span>
                   </div>
@@ -277,13 +275,11 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
   return (
     <Card
       className={cn(
-        "cursor-pointer hover:bg-accent/50 transition-all duration-300 border-green-300/30 dark:border-green-900/30 shadow-md hover:shadow-lg relative overflow-hidden",
+        "cursor-pointer hover:bg-white/5 transition-all duration-300 backdrop-blur-md bg-white/10 dark:bg-black/10 border-green-300/50 dark:border-green-500/50 shadow-lg hover:shadow-xl relative overflow-hidden",
         { "bg-card/70": customBackgroundImage }
       )}
       onClick={cardClick}
     >
-      {/* 左侧状态条 */}
-      <div className="absolute top-0 left-0 w-1 h-full bg-green-500 rounded-l-md"></div>
 
       <CardHeader className="p-4 pb-2 pt-2">
         <div className="flex justify-between">
@@ -333,13 +329,13 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
         {serverCycleData && serverCycleData.length > 0 && (
           <div className="mb-3 mt-2">
             {serverCycleData.map((cycle, index) => (
-              <div key={index} className="bg-muted/40 rounded-lg p-2 mb-2 last:mb-0">
+              <div key={index} className="bg-white/5 dark:bg-black/5 backdrop-blur-sm rounded-lg p-2 mb-2 last:mb-0 border border-white/10">
                 <div className="flex items-center justify-between mb-1">
                   <div className="flex items-center">
                     <BarChart3 className="size-[14px] mr-1 text-emerald-500" />
                     <span className="text-xs font-medium">{cycle.name}</span>
                   </div>
-                  <div className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded text-[10px] font-medium">
+                  <div className="bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded text-[10px] font-medium backdrop-blur-sm">
                     {cycle.progress.toFixed(1)}%
                   </div>
                 </div>
@@ -375,9 +371,9 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
         )}
 
         {/* 主要资源使用情况 - 全新设计 */}
-        <div className="grid grid-cols-3 gap-4 mt-3">
+        <div className="grid grid-cols-3 gap-3 mt-3">
           {/* CPU使用率 */}
-          <div className="bg-muted/40 rounded-lg p-2 flex flex-col">
+          <div className="bg-white/5 dark:bg-black/5 backdrop-blur-sm rounded-lg p-2 flex flex-col border border-white/10">
             <div className="flex items-center justify-between mb-1">
               <div className="flex items-center">
                 <Cpu className="size-[14px] mr-1 text-blue-500" />
@@ -391,7 +387,7 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <div className="bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded px-1.5 py-0.5 text-center">
+                      <div className="bg-blue-500/20 text-blue-600 dark:text-blue-400 rounded px-1.5 py-0.5 text-center backdrop-blur-sm">
                         {cpu_info[0].includes("Physical") ? "pCPU: " : "vCPU: "}
                         {cpu_info[0].match(/(\d+)\s+(?:Physical|Virtual)\s+Core/)?.[1] || "-"}
                       </div>
@@ -402,7 +398,7 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
                   </Tooltip>
                 </TooltipProvider>
                 {arch && (
-                  <div className="bg-green-500/10 text-green-600 dark:text-green-400 rounded px-1.5 py-0.5 text-center">
+                  <div className="bg-green-500/20 text-green-600 dark:text-green-400 rounded px-1.5 py-0.5 text-center backdrop-blur-sm">
                     {arch}
                   </div>
                 )}
@@ -411,7 +407,7 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
           </div>
 
           {/* 内存使用率 */}
-          <div className="bg-muted/40 rounded-lg p-2 flex flex-col">
+          <div className="bg-white/5 dark:bg-black/5 backdrop-blur-sm rounded-lg p-2 flex flex-col border border-white/10">
             <div className="flex items-center justify-between mb-1">
               <div className="flex items-center">
                 <div className="size-[14px] mr-1 text-purple-500 flex items-center justify-center">
@@ -429,16 +425,16 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
             <ServerUsageBar value={mem} />
             {/* 内存信息 */}
             <div className="mt-1.5 flex flex-col gap-1 text-[10px]">
-              <div className="bg-purple-500/10 text-purple-600 dark:text-purple-400 rounded px-1.5 py-0.5 text-center">
+              <div className="bg-purple-500/20 text-purple-600 dark:text-purple-400 rounded px-1.5 py-0.5 text-center backdrop-blur-sm">
                 {mem_total > 0 ? formatBytes(mem_total) : "-"}
               </div>
               {swap_total > 0 ? (
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <div className={cn("bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded px-1.5 py-0.5 text-center",
-                        Number(swap) > 90 ? "bg-red-500/10 text-red-600 dark:text-red-400" :
-                          Number(swap) > 70 ? "bg-orange-500/10 text-orange-600 dark:text-orange-400" : "")}>
+                      <div className={cn("bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 rounded px-1.5 py-0.5 text-center backdrop-blur-sm",
+                        Number(swap) > 90 ? "bg-red-500/20 text-red-600 dark:text-red-400" :
+                          Number(swap) > 70 ? "bg-orange-500/20 text-orange-600 dark:text-orange-400" : "")}>
                         SWAP:{swap.toFixed(0)}%
                       </div>
                     </TooltipTrigger>
@@ -457,7 +453,7 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
                   </Tooltip>
                 </TooltipProvider>
               ) : (
-                <div className="bg-amber-500/10 text-amber-600 dark:text-amber-400 rounded px-1.5 py-0.5 text-center">
+                <div className="bg-amber-500/20 text-amber-600 dark:text-amber-400 rounded px-1.5 py-0.5 text-center backdrop-blur-sm">
                   -
                 </div>
               )}
@@ -465,7 +461,7 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
           </div>
 
           {/* 存储使用率 */}
-          <div className="bg-muted/40 rounded-lg p-2 flex flex-col">
+          <div className="bg-white/5 dark:bg-black/5 backdrop-blur-sm rounded-lg p-2 flex flex-col border border-white/10">
             <div className="flex items-center justify-between mb-1">
               <div className="flex items-center">
                 <HardDrive className="size-[14px] mr-1 text-amber-500" />
@@ -474,16 +470,16 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
             </div>
             <ServerUsageBar value={stg} />
             {/* 存储信息 */}
-            <div className="mt-1.5 bg-amber-500/10 text-amber-600 dark:text-amber-400 rounded px-1.5 py-0.5 text-center text-[10px]">
+            <div className="mt-1.5 bg-amber-500/20 text-amber-600 dark:text-amber-400 rounded px-1.5 py-0.5 text-center text-[10px] backdrop-blur-sm">
               {disk_total > 0 ? formatBytes(disk_total) : "-"}
             </div>
           </div>
         </div>
 
         {/* 网络使用情况 */}
-        <div className="grid grid-cols-2 gap-4 mt-3">
+        <div className="grid grid-cols-2 gap-3 mt-3">
           {/* 网络速率 */}
-          <div className="bg-muted/40 rounded-lg p-2">
+          <div className="bg-white/5 dark:bg-black/5 backdrop-blur-sm rounded-lg p-2 border border-white/10">
             <div className="flex justify-between items-center mb-1">
               <div className="flex items-center">
                 <ArrowUp className="size-[14px] text-blue-500 mr-1" />
@@ -501,7 +497,7 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
           </div>
 
           {/* 连接数与进程数 */}
-          <div className="bg-muted/40 rounded-lg p-2 grid grid-cols-2 gap-2">
+          <div className="bg-white/5 dark:bg-black/5 backdrop-blur-sm rounded-lg p-2 grid grid-cols-2 gap-2 border border-white/10">
             <div className="flex items-center min-w-0">
               <Server className="size-[14px] text-indigo-500 mr-1 flex-shrink-0" />
               <span className="text-xs truncate" title={`TCP连接: ${tcp}`}>T: {formatLargeNumber(tcp)}</span>
@@ -529,14 +525,14 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
         {/* 网络传输信息 */}
         {showNetTransfer && (
           <div className="grid grid-cols-2 w-full gap-3 mt-1">
-            <div className="flex flex-col items-center bg-blue-500/10 rounded-md py-1.5 px-2">
+            <div className="flex flex-col items-center bg-blue-500/20 backdrop-blur-sm rounded-md py-1.5 px-2 border border-blue-300/20">
               <div className="flex items-center text-[10px] text-blue-600 dark:text-blue-400">
                 <ArrowUp className="size-[10px] mr-1" />
                 <span>{t("serverCard.upload")}</span>
               </div>
               <span className="text-[11px] font-medium">{formatBytes(net_out_transfer)}</span>
             </div>
-            <div className="flex flex-col items-center bg-green-500/10 rounded-md py-1.5 px-2">
+            <div className="flex flex-col items-center bg-green-500/20 backdrop-blur-sm rounded-md py-1.5 px-2 border border-green-300/20">
               <div className="flex items-center text-[10px] text-green-600 dark:text-green-400">
                 <ArrowDown className="size-[10px] mr-1" />
                 <span>{t("serverCard.download")}</span>
