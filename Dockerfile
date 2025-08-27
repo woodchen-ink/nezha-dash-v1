@@ -1,95 +1,47 @@
-# Multi-stage build for React + Nginx
+# 构建阶段
 FROM node:22-alpine AS builder
 
-# Set working directory
 WORKDIR /app
 
-# Copy package files
+# 复制依赖文件
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci
+# 安装依赖
+RUN npm ci --only=production
 
-# Copy source code
+# 复制源代码
 COPY . .
 
-# Build the application
+# 构建应用
 RUN npm run build
 
-# Production stage with Nginx
+# 生产阶段
 FROM nginx:alpine
 
-# Install gettext for envsubst
+# 安装envsubst工具（通常已包含在nginx:alpine中）
 RUN apk add --no-cache gettext
 
-# Remove default nginx config
-RUN rm /etc/nginx/conf.d/default.conf
-
-# Create nginx config template
-COPY <<EOF /etc/nginx/templates/default.conf.template
-server {
-    listen 80;
-    server_name localhost;
-
-    root /usr/share/nginx/html;
-    index index.html index.htm;
-
-    # Gzip compression
-    gzip on;
-    gzip_vary on;
-    gzip_min_length 1024;
-    gzip_comp_level 6;
-    gzip_types
-        text/plain
-        text/css
-        text/xml
-        text/javascript
-        application/json
-        application/javascript
-        application/xml+rss
-        application/atom+xml
-        image/svg+xml;
-
-    # Handle client-side routing
-    location / {
-        try_files \$uri \$uri/ /index.html;
-        
-        # Cache static assets
-        location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)\$ {
-            expires 1y;
-            add_header Cache-Control "public, immutable";
-        }
-    }
-
-    # API proxy configuration
-    location /api/ {
-        proxy_pass \${API_BACKEND_URL};
-        proxy_set_header Host \$host;
-        proxy_set_header X-Real-IP \$remote_addr;
-        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto \$scheme;
-        
-        # WebSocket support
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade \$http_upgrade;
-        proxy_set_header Connection "upgrade";
-        
-        # Timeouts
-        proxy_connect_timeout 60s;
-        proxy_send_timeout 60s;
-        proxy_read_timeout 60s;
-    }
-}
-EOF
-
-# Copy built application from builder stage
+# 复制构建产物
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Set default environment variable
-ENV API_BACKEND_URL=http://localhost:8080
+# 复制nginx配置模板
+COPY nginx.conf.template /etc/nginx/nginx.conf.template
 
-# Expose port
+# 创建启动脚本
+RUN echo '#!/bin/sh' > /docker-entrypoint.sh && \
+    echo 'set -e' >> /docker-entrypoint.sh && \
+    echo '' >> /docker-entrypoint.sh && \
+    echo '# 设置默认API_URL' >> /docker-entrypoint.sh && \
+    echo 'API_URL=${API_URL:-http://localhost:8080}' >> /docker-entrypoint.sh && \
+    echo '' >> /docker-entrypoint.sh && \
+    echo '# 使用envsubst替换nginx配置中的环境变量' >> /docker-entrypoint.sh && \
+    echo 'envsubst '"'"'${API_URL}'"'"' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf' >> /docker-entrypoint.sh && \
+    echo '' >> /docker-entrypoint.sh && \
+    echo '# 启动nginx' >> /docker-entrypoint.sh && \
+    echo 'exec nginx -g "daemon off;"' >> /docker-entrypoint.sh
+
+RUN chmod +x /docker-entrypoint.sh
+
 EXPOSE 80
 
-# Start nginx with environment variable substitution
-CMD ["/bin/sh", "-c", "envsubst '${API_BACKEND_URL}' < /etc/nginx/templates/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
