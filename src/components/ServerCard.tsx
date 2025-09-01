@@ -320,12 +320,17 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
                 </div>
                 <ServerUsageBar value={cpu} />
                 {cpu_info && cpu_info.length > 0 && (
-                  <div className="mt-1.5 space-y-1">
+                  <div className="mt-1.5 flex gap-1">
+                    {cpu_info.length > 1 && (
+                      <div className="bg-gray-100 text-gray-700 rounded px-1.5 py-0.5 text-[10px] font-medium flex-1 truncate">
+                        {cpu_info[1]}
+                      </div>
+                    )}
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <div className="bg-blue-100 text-blue-700 rounded px-1.5 py-0.5 text-[10px] text-center font-medium">
-                            {cpu_info[0].includes("Physical") ? "pCPU" : "vCPU"}: {cpu_info[0].match(/(\d+)\s+(?:Physical|Virtual)\s+Core/)?.[1] || "-"}Core
+                          <div className="bg-blue-100 text-blue-700 rounded px-1.5 py-0.5 text-[10px] font-medium">
+                            {cpu_info[0].includes("Physical") ? "pCPU" : "vCPU"}:{cpu_info[0].match(/(\d+)\s+(?:Physical|Virtual)\s+Core/)?.[1] || "-"}
                           </div>
                         </TooltipTrigger>
                         <TooltipContent className="max-w-[250px] text-xs whitespace-pre-wrap p-2">
@@ -333,11 +338,6 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
-                    {cpu_info.length > 1 && (
-                      <div className="bg-gray-100 text-gray-700 rounded px-1.5 py-0.5 text-[10px] text-center font-medium truncate">
-                        {cpu_info[1]}
-                      </div>
-                    )}
                   </div>
                 )}
               </div>
