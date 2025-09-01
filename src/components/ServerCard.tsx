@@ -9,9 +9,9 @@ import { useNavigate } from "react-router-dom"
 
 import PlanInfo from "./PlanInfo"
 import BillingInfo from "./billingInfo"
-import { Card, CardContent, CardHeader, CardFooter } from "./ui/card"
+import { Card, CardContent, CardFooter } from "./ui/card"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip"
-import { ArrowDown, ArrowUp, Clock, Cpu, HardDrive, Server, BarChart3 } from "lucide-react"
+import { ArrowUp, Clock, Cpu, HardDrive, Server, BarChart3 } from "lucide-react"
 
 interface ServerCardProps {
   now: number;
@@ -34,8 +34,6 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
     down,
     mem,
     stg,
-    net_in_transfer,
-    net_out_transfer,
     public_note,
     platform,
     cpu_info,
@@ -45,7 +43,6 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
     udp,
     process,
     uptime,
-    arch,
     swap,
     swap_total
   } = formatNezhaInfo(
@@ -166,13 +163,6 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
         : `${(speed * 1024).toFixed(2)}K/s`
   }
 
-  // 获取颜色等级
-  const getColorClass = (value: number) => {
-    if (value > 90) return "text-red-500"
-    if (value > 70) return "text-orange-400"
-    return "text-green-500"
-  }
-
   // 根据进度获取状态颜色
   const getProgressColorClass = (value: number) => {
     if (value > 90) return "bg-red-500"
@@ -270,240 +260,200 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
 
   return (
     <Card
-      className="cursor-pointer hover:shadow-lg transition-all duration-300 bg-card border border-green-200 shadow-sm relative overflow-hidden"
+      className="cursor-pointer hover:shadow-lg transition-all duration-300 bg-card border border-green-200 shadow-sm"
       onClick={cardClick}
     >
-
-      <CardHeader className="p-4 pb-2 pt-2">
-        <div className="flex justify-between">
+      <CardContent className="p-6">
+        {/* 顶部：服务器名称和状态 */}
+        <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
-            <span className="h-3 w-3 shrink-0 rounded-full bg-green-500 shadow-sm shadow-green-300 dark:shadow-green-900 animate-pulse"></span>
+            <span className="h-3 w-3 shrink-0 rounded-full bg-green-500 shadow-sm animate-pulse"></span>
             {showFlag && <ServerFlag country_code={country_code} />}
-            <h3 className="font-bold text-sm truncate">{name}</h3>
+            <h3 className="font-semibold text-base truncate">{name}</h3>
             {groupName && (
-              <div className="px-1.5 py-0.5 text-[10px] font-medium bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400 rounded-sm border border-green-200 dark:border-green-800">
+              <div className="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-md">
                 {groupName}
               </div>
             )}
           </div>
-
-          <div className="flex items-center text-xs gap-2 text-muted-foreground">
+          
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <div className="flex items-center">
               {platform.includes("Windows") ? (
-                <MageMicrosoftWindows className="size-[14px] mr-1" />
+                <MageMicrosoftWindows className="size-4 mr-1" />
               ) : (
                 <span className={`fl-${GetFontLogoClass(platform)} mr-1`} />
               )}
               <span>{platform.includes("Windows") ? "Windows" : GetOsName(platform)}</span>
             </div>
-          </div>
-        </div>
-
-        <div className="flex justify-between items-start mt-2">
-          {parsedData?.billingDataMod && (
-            <div>
-              <BillingInfo parsedData={parsedData} />
-            </div>
-          )}
-
-          <div className="flex flex-col gap-1 items-end">
             {uptime > 0 && (
-              <div className="flex items-center text-xs text-muted-foreground">
-                <Clock className="size-[12px] mr-1" />
+              <div className="flex items-center">
+                <Clock className="size-4 mr-1" />
                 <span>{formatUptime(uptime, t)}</span>
               </div>
             )}
           </div>
         </div>
-      </CardHeader>
 
-      <CardContent className="p-4 pt-0 pb-2">
-        {/* 流量使用统计 */}
-        {serverCycleData && serverCycleData.length > 0 && (
-          <div className="mb-3 mt-2">
-            {serverCycleData.map((cycle, index) => (
-              <div key={index} className="bg-white/5 dark:bg-black/5 backdrop-blur-sm rounded-lg p-2 mb-2 last:mb-0 border border-white/10">
-                <div className="flex items-center justify-between mb-1">
-                  <div className="flex items-center">
-                    <BarChart3 className="size-[14px] mr-1 text-emerald-500" />
-                    <span className="text-xs font-medium">{cycle.name}</span>
+        {/* 主要内容：左右布局 */}
+        <div className="grid grid-cols-2 gap-6">
+          {/* 左侧：资源使用情况 */}
+          <div className="space-y-4">
+            {/* 系统资源 */}
+            <div className="space-y-3">
+              <h4 className="text-sm font-medium text-muted-foreground">System Resources</h4>
+              
+              {/* CPU */}
+              <div className="bg-muted rounded-lg p-3 border border-border">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <Cpu className="size-4 text-blue-600" />
+                    <span className="text-sm font-medium">CPU</span>
                   </div>
-                  <div className="bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded text-[10px] font-medium backdrop-blur-sm">
-                    {cycle.progress.toFixed(1)}%
+                  <span className="text-sm font-semibold text-foreground">{cpu.toFixed(1)}%</span>
+                </div>
+                <ServerUsageBar value={cpu} />
+                {cpu_info && cpu_info.length > 0 && (
+                  <div className="mt-2">
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <div className="bg-blue-100 text-blue-700 rounded px-2 py-1 text-xs text-center font-medium">
+                            {cpu_info[0].includes("Physical") ? "物理" : "虚拟"}: {cpu_info[0].match(/(\d+)\s+(?:Physical|Virtual)\s+Core/)?.[1] || "-"} 核
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-[300px] text-xs whitespace-pre-wrap p-3">
+                          {cpu_info.join("\n")}
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   </div>
-                </div>
-
-                <div className="flex justify-between items-center text-xs mb-1">
-                  <div className="flex items-baseline gap-1">
-                    <span className="font-medium">{formatBytes(cycle.transfer)}</span>
-                    <span className="text-[10px] text-muted-foreground">/ {formatBytes(cycle.max)}</span>
-                  </div>
-                </div>
-
-                <div className="relative h-1">
-                  <div className="absolute inset-0 bg-muted rounded-full" />
-                  <div
-                    className={cn("absolute inset-0 rounded-full transition-all duration-300", getProgressColorClass(cycle.progress))}
-                    style={{ width: `${Math.min(cycle.progress, 100)}%` }}
-                  />
-                </div>
-
-                <div className="mt-1 text-[10px] text-muted-foreground flex justify-between">
-                  <span>
-                    {new Date(cycle.from).toLocaleDateString()} - {new Date(cycle.to).toLocaleDateString()}
-                  </span>
-                  {cycle.nextUpdate && (
-                    <span>
-                      {t("cycleTransfer.nextUpdate")}: {new Date(cycle.nextUpdate).toLocaleTimeString()}
-                    </span>
-                  )}
-                </div>
+                )}
               </div>
-            ))}
-          </div>
-        )}
 
-        {/* 资源使用情况 - Apple风格重设计 */}
-        <div className="border-t border-border pt-3 mt-3">
-          <div className="grid grid-cols-3 gap-3">
-            {/* CPU使用率 */}
-            <div className="bg-muted rounded-lg p-2 border border-border">
-              <div className="flex items-center gap-1 mb-1">
-                <Cpu className="size-3 text-blue-600 flex-shrink-0" />
-                <span className="text-xs font-medium truncate">CPU</span>
-              </div>
-              <div className="text-xs font-semibold mb-2">{cpu.toFixed(1)}%</div>
-              <ServerUsageBar value={cpu} />
-              {/* CPU信息 */}
-              {cpu_info && cpu_info.length > 0 && (
-                <div className="mt-2 space-y-1">
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <div className="bg-blue-100 text-blue-700 rounded px-1 py-0.5 text-[10px] text-center font-medium truncate">
-                          {cpu_info[0].includes("Physical") ? "p" : "v"}CPU: {cpu_info[0].match(/(\d+)\s+(?:Physical|Virtual)\s+Core/)?.[1] || "-"}
-                        </div>
-                      </TooltipTrigger>
-                      <TooltipContent className="max-w-[250px] text-xs whitespace-pre-wrap p-3">
-                        {cpu_info.join("\n")}
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                  {arch && (
-                    <div className="bg-green-100 text-green-700 rounded px-1 py-0.5 text-[10px] text-center font-medium truncate">
-                      {arch}
+              {/* 内存 */}
+              <div className="bg-muted rounded-lg p-3 border border-border">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <div className="size-4 text-purple-600 flex items-center justify-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M16 16H8V8H16V16Z"></path>
+                        <path d="M12 20V16"></path>
+                        <path d="M12 8V4"></path>
+                        <path d="M20 12H16"></path>
+                        <path d="M8 12H4"></path>
+                      </svg>
+                    </div>
+                    <span className="text-sm font-medium">内存</span>
+                  </div>
+                  <span className="text-sm font-semibold text-foreground">{mem.toFixed(1)}%</span>
+                </div>
+                <ServerUsageBar value={mem} />
+                <div className="mt-2 flex gap-2">
+                  <div className="bg-purple-100 text-purple-700 rounded px-2 py-1 text-xs font-medium flex-1 text-center">
+                    {mem_total > 0 ? formatBytes(mem_total) : "-"}
+                  </div>
+                  {swap_total > 0 && (
+                    <div className={cn("bg-indigo-100 text-indigo-700 rounded px-2 py-1 text-xs font-medium",
+                      Number(swap) > 90 ? "bg-red-100 text-red-700" :
+                        Number(swap) > 70 ? "bg-orange-100 text-orange-700" : "")}>
+                      SWAP: {swap.toFixed(0)}%
                     </div>
                   )}
                 </div>
-              )}
-            </div>
+              </div>
 
-            {/* 内存使用率 */}
-            <div className="bg-muted rounded-lg p-2 border border-border">
-              <div className="flex items-center gap-1 mb-1">
-                <div className="size-3 text-purple-600 flex items-center justify-center flex-shrink-0">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M16 16H8V8H16V16Z"></path>
-                    <path d="M12 20V16"></path>
-                    <path d="M12 8V4"></path>
-                    <path d="M20 12H16"></path>
-                    <path d="M8 12H4"></path>
-                  </svg>
+              {/* 存储 */}
+              <div className="bg-muted rounded-lg p-3 border border-border">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <HardDrive className="size-4 text-amber-600" />
+                    <span className="text-sm font-medium">存储</span>
+                  </div>
+                  <span className="text-sm font-semibold text-foreground">{stg.toFixed(1)}%</span>
                 </div>
-                <span className="text-xs font-medium truncate">MEM</span>
-              </div>
-              <div className="text-xs font-semibold mb-2">{mem.toFixed(1)}%</div>
-              <ServerUsageBar value={mem} />
-              {/* 内存信息 */}
-              <div className="mt-2 space-y-1">
-                <div className="bg-purple-100 text-purple-700 rounded px-1 py-0.5 text-[10px] text-center font-medium truncate">
-                  {mem_total > 0 ? formatBytes(mem_total) : "-"}
-                </div>
-                {swap_total > 0 && (
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <div className={cn("bg-indigo-100 text-indigo-700 rounded px-1 py-0.5 text-[10px] text-center font-medium truncate",
-                          Number(swap) > 90 ? "bg-red-100 text-red-700" :
-                            Number(swap) > 70 ? "bg-orange-100 text-orange-700" : "")}>
-                          SW: {swap.toFixed(0)}%
-                        </div>
-                      </TooltipTrigger>
-                      <TooltipContent className="text-xs">
-                        <div className="flex flex-col gap-1 p-2">
-                          <div className="flex justify-between items-center gap-3">
-                            <span>总容量:</span>
-                            <span>{formatBytes(swap_total)}</span>
-                          </div>
-                          <div className="flex justify-between items-center gap-3">
-                            <span>使用率:</span>
-                            <span className={getColorClass(Number(swap))}>{swap.toFixed(1)}%</span>
-                          </div>
-                        </div>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                )}
-              </div>
-            </div>
-
-            {/* 存储使用率 */}
-            <div className="bg-muted rounded-lg p-2 border border-border">
-              <div className="flex items-center gap-1 mb-1">
-                <HardDrive className="size-3 text-amber-600 flex-shrink-0" />
-                <span className="text-xs font-medium truncate">DISK</span>
-              </div>
-              <div className="text-xs font-semibold mb-2">{stg.toFixed(1)}%</div>
-              <ServerUsageBar value={stg} />
-              {/* 存储信息 */}
-              <div className="mt-2">
-                <div className="bg-amber-100 text-amber-700 rounded px-1 py-0.5 text-[10px] text-center font-medium truncate">
-                  {disk_total > 0 ? formatBytes(disk_total) : "-"}
+                <ServerUsageBar value={stg} />
+                <div className="mt-2">
+                  <div className="bg-amber-100 text-amber-700 rounded px-2 py-1 text-xs font-medium text-center">
+                    {disk_total > 0 ? formatBytes(disk_total) : "-"}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* 网络和连接信息 */}
-        <div className="border-t border-border pt-3 mt-3">
-          <div className="grid grid-cols-2 gap-3">
+          {/* 右侧：网络和连接信息 */}
+          <div className="space-y-4">
+            {/* 流量使用统计 */}
+            {serverCycleData && serverCycleData.length > 0 && (
+              <div className="space-y-3">
+                <h4 className="text-sm font-medium text-muted-foreground">Traffic Usage</h4>
+                {serverCycleData.map((cycle, index) => (
+                  <div key={index} className="bg-muted rounded-lg p-3 border border-border">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <BarChart3 className="size-4 text-emerald-600" />
+                        <span className="text-sm font-medium">{cycle.name}</span>
+                      </div>
+                      <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-1 rounded font-medium">
+                        {cycle.progress.toFixed(1)}%
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center text-xs mb-2">
+                      <span className="font-medium">{formatBytes(cycle.transfer)}</span>
+                      <span className="text-muted-foreground">/ {formatBytes(cycle.max)}</span>
+                    </div>
+                    <div className="relative h-2 bg-secondary rounded-full">
+                      <div
+                        className={cn("absolute inset-0 rounded-full transition-all duration-300", getProgressColorClass(cycle.progress))}
+                        style={{ width: `${Math.min(cycle.progress, 100)}%` }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
             {/* 网络速率 */}
-            <div className="bg-muted rounded-lg p-2 border border-border">
-              <div className="flex items-center gap-1 mb-1">
-                <ArrowUp className="size-3 text-blue-600 flex-shrink-0" />
-                <span className="text-xs font-medium truncate">Network</span>
-              </div>
-              <div className="space-y-1">
-                <div className="flex justify-between items-center">
-                  <span className="text-[10px] text-muted-foreground">Up</span>
-                  <span className="text-xs font-semibold">{formatSpeed(up)}</span>
+            <div className="space-y-3">
+              <h4 className="text-sm font-medium text-muted-foreground">Network & Connections</h4>
+              
+              <div className="bg-muted rounded-lg p-3 border border-border">
+                <div className="flex items-center gap-2 mb-2">
+                  <ArrowUp className="size-4 text-blue-600" />
+                  <span className="text-sm font-medium">网络速率</span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-[10px] text-muted-foreground">Down</span>
-                  <span className="text-xs font-semibold">{formatSpeed(down)}</span>
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-muted-foreground">上传</span>
+                    <span className="text-sm font-semibold">{formatSpeed(up)}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-muted-foreground">下载</span>
+                    <span className="text-sm font-semibold">{formatSpeed(down)}</span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* 连接数与进程数 */}
-            <div className="bg-muted rounded-lg p-2 border border-border">
-              <div className="flex items-center gap-1 mb-1">
-                <Server className="size-3 text-indigo-600 flex-shrink-0" />
-                <span className="text-xs font-medium truncate">Conn</span>
-              </div>
-              <div className="space-y-1">
-                <div className="flex justify-between items-center">
-                  <span className="text-[10px] text-muted-foreground">TCP</span>
-                  <span className="text-xs font-semibold">{formatLargeNumber(tcp)}</span>
+              {/* 连接信息 */}
+              <div className="bg-muted rounded-lg p-3 border border-border">
+                <div className="flex items-center gap-2 mb-2">
+                  <Server className="size-4 text-indigo-600" />
+                  <span className="text-sm font-medium">连接数</span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-[10px] text-muted-foreground">UDP</span>
-                  <span className="text-xs font-semibold">{formatLargeNumber(udp)}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-[10px] text-muted-foreground">Proc</span>
-                  <span className="text-xs font-semibold">{formatLargeNumber(process)}</span>
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-muted-foreground">TCP</span>
+                    <span className="text-sm font-semibold">{formatLargeNumber(tcp)}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-muted-foreground">UDP</span>
+                    <span className="text-sm font-semibold">{formatLargeNumber(udp)}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-muted-foreground">进程</span>
+                    <span className="text-sm font-semibold">{formatLargeNumber(process)}</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -511,48 +461,12 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
         </div>
       </CardContent>
 
-      <CardFooter className="p-4 pt-0 flex flex-col gap-2 pb-3">
-        {/* 套餐信息 */}
-        {parsedData?.planDataMod && (
-          <div className="w-full mt-2">
-            <PlanInfo parsedData={parsedData} />
-          </div>
-        )}
-
-        {/* 网络传输信息 */}
-        {showNetTransfer && (
-          <div className="grid grid-cols-2 w-full gap-3 mt-1">
-            <div className="flex flex-col items-center bg-blue-500/20 backdrop-blur-sm rounded-md py-1.5 px-2 border border-blue-300/20">
-              <div className="flex items-center text-[10px] text-blue-600 dark:text-blue-400">
-                <ArrowUp className="size-[10px] mr-1" />
-                <span>{t("serverCard.upload")}</span>
-              </div>
-              <span className="text-[11px] font-medium">{formatBytes(net_out_transfer)}</span>
-            </div>
-            <div className="flex flex-col items-center bg-green-500/20 backdrop-blur-sm rounded-md py-1.5 px-2 border border-green-300/20">
-              <div className="flex items-center text-[10px] text-green-600 dark:text-green-400">
-                <ArrowDown className="size-[10px] mr-1" />
-                <span>{t("serverCard.download")}</span>
-              </div>
-              <span className="text-[11px] font-medium">{formatBytes(net_in_transfer)}</span>
-            </div>
-          </div>
-        )}
-      </CardFooter>
-
-      {/* 视觉元素：左侧状态条 */}
-      <style>
-        {`
-        @keyframes pulse-animation {
-          0% { opacity: 0.6; }
-          50% { opacity: 1; }
-          100% { opacity: 0.6; }
-        }
-        .pulse-animation {
-          animation: pulse-animation 2s infinite;
-        }
-        `}
-      </style>
+      {/* 套餐信息 */}
+      {parsedData?.planDataMod && (
+        <CardFooter className="p-4 pt-0 pb-3">
+          <PlanInfo parsedData={parsedData} />
+        </CardFooter>
+      )}
     </Card>
   )
 }

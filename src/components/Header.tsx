@@ -74,7 +74,7 @@ function Header() {
   const customBackgroundImage = backgroundImage
 
   return (
-    <div className="mx-auto w-full max-w-[1600px] px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16">
+    <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16">
       <section className="flex items-center justify-between header-top">
         <section
           onClick={() => {
