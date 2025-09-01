@@ -266,11 +266,10 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
       className="cursor-pointer hover:shadow-lg transition-all duration-300 bg-card border border-green-200 shadow-sm"
       onClick={cardClick}
     >
-      <CardContent className="p-6">
+      <CardContent className="p-4">
         {/* 顶部：服务器名称和状态 */}
-        <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-green-500 shadow-sm animate-pulse"></span>
             {showFlag && <ServerFlag country_code={country_code} />}
             <h3 className="font-semibold text-sm truncate">{name}</h3>
             {groupName && (
@@ -304,14 +303,14 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
         </div>
 
         {/* 主要内容：左右布局，固定高度确保对齐 */}
-        <div className="grid grid-cols-2 gap-4 h-[340px]">
+        <div className="grid grid-cols-2 gap-3 h-[280px]">
           {/* 左侧：系统资源 */}
           <div className="flex flex-col h-full">
-            <h4 className="text-xs font-medium text-muted-foreground mb-2">System Resources</h4>
-            <div className="flex-1 space-y-2">
+            <h4 className="text-xs font-medium text-muted-foreground mb-1">System Resources</h4>
+            <div className="flex-1 space-y-1.5">
               {/* CPU */}
-              <div className="bg-muted rounded-md p-2 border border-border">
-                <div className="flex items-center justify-between mb-1.5">
+              <div className="bg-muted rounded-md p-1.5 border border-border">
+                <div className="flex items-center justify-between mb-1">
                   <div className="flex items-center gap-1.5">
                     <Cpu className="size-3 text-blue-600" />
                     <span className="text-xs font-medium">CPU</span>
@@ -343,8 +342,8 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
               </div>
 
               {/* 内存 */}
-              <div className="bg-muted rounded-md p-2 border border-border">
-                <div className="flex items-center justify-between mb-1.5">
+              <div className="bg-muted rounded-md p-1.5 border border-border">
+                <div className="flex items-center justify-between mb-1">
                   <div className="flex items-center gap-1.5">
                     <div className="size-3 text-purple-600 flex items-center justify-center">
                       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -375,8 +374,8 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
               </div>
 
               {/* 存储 */}
-              <div className="bg-muted rounded-md p-2 border border-border">
-                <div className="flex items-center justify-between mb-1.5">
+              <div className="bg-muted rounded-md p-1.5 border border-border">
+                <div className="flex items-center justify-between mb-1">
                   <div className="flex items-center gap-1.5">
                     <HardDrive className="size-3 text-amber-600" />
                     <span className="text-xs font-medium">存储</span>
@@ -392,8 +391,8 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
               </div>
 
               {/* 网络传输总量 */}
-              <div className="bg-muted rounded-md p-2 border border-border">
-                <div className="flex items-center gap-1.5 mb-1.5">
+              <div className="bg-muted rounded-md p-1.5 border border-border">
+                <div className="flex items-center gap-1.5 mb-1">
                   <BarChart3 className="size-3 text-green-600" />
                   <span className="text-xs font-medium">总传输</span>
                 </div>
@@ -416,11 +415,11 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
             {/* 流量使用统计 */}
             {serverCycleData && serverCycleData.length > 0 ? (
               <div className="flex flex-col h-full">
-                <h4 className="text-xs font-medium text-muted-foreground mb-2">Traffic Usage</h4>
-                <div className="flex-1 space-y-2">
+                <h4 className="text-xs font-medium text-muted-foreground mb-1.5">Traffic Usage</h4>
+                <div className="flex-1 space-y-1.5">
                   {serverCycleData.map((cycle, index) => (
-                    <div key={index} className="bg-muted rounded-md p-2 border border-border">
-                      <div className="flex items-center justify-between mb-1.5">
+                    <div key={index} className="bg-muted rounded-md p-1.5 border border-border">
+                      <div className="flex items-center justify-between mb-1">
                         <div className="flex items-center gap-1.5">
                           <BarChart3 className="size-3 text-emerald-600" />
                           <span className="text-xs font-medium truncate">{cycle.name}</span>
@@ -429,7 +428,7 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
                           {cycle.progress.toFixed(1)}%
                         </span>
                       </div>
-                      <div className="flex justify-between items-center text-[10px] mb-1.5">
+                      <div className="flex justify-between items-center text-[10px] mb-1">
                         <span className="font-medium">{formatBytes(cycle.transfer)}</span>
                         <span className="text-muted-foreground">/ {formatBytes(cycle.max)}</span>
                       </div>
@@ -443,10 +442,10 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
                   ))}
                   
                   {/* 补充空间：网络速率和连接信息 */}
-                  <div className="space-y-2 mt-auto">
+                  <div className="space-y-1.5 mt-auto">
                     {/* 网络速率 */}
-                    <div className="bg-muted rounded-md p-2 border border-border">
-                      <div className="flex items-center gap-1.5 mb-1.5">
+                    <div className="bg-muted rounded-md p-1.5 border border-border">
+                      <div className="flex items-center gap-1.5 mb-1">
                         <ArrowUp className="size-3 text-blue-600" />
                         <span className="text-xs font-medium">网络速率</span>
                       </div>
@@ -463,8 +462,8 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
                     </div>
 
                     {/* 连接信息 */}
-                    <div className="bg-muted rounded-md p-2 border border-border">
-                      <div className="flex items-center gap-1.5 mb-1.5">
+                    <div className="bg-muted rounded-md p-1.5 border border-border">
+                      <div className="flex items-center gap-1.5 mb-1">
                         <Server className="size-3 text-indigo-600" />
                         <span className="text-xs font-medium">连接</span>
                       </div>
@@ -489,11 +488,11 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
             ) : (
               /* 没有流量数据时的布局 */
               <div className="flex flex-col h-full">
-                <h4 className="text-xs font-medium text-muted-foreground mb-2">Network & Connections</h4>
-                <div className="flex-1 space-y-2">
+                <h4 className="text-xs font-medium text-muted-foreground mb-1.5">Network & Connections</h4>
+                <div className="flex-1 space-y-1.5">
                   {/* 网络速率 */}
-                  <div className="bg-muted rounded-md p-2 border border-border">
-                    <div className="flex items-center gap-1.5 mb-1.5">
+                  <div className="bg-muted rounded-md p-1.5 border border-border">
+                    <div className="flex items-center gap-1.5 mb-1">
                       <ArrowUp className="size-3 text-blue-600" />
                       <span className="text-xs font-medium">网络速率</span>
                     </div>
@@ -510,8 +509,8 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
                   </div>
 
                   {/* 连接信息 */}
-                  <div className="bg-muted rounded-md p-2 border border-border">
-                    <div className="flex items-center gap-1.5 mb-1.5">
+                  <div className="bg-muted rounded-md p-1.5 border border-border">
+                    <div className="flex items-center gap-1.5 mb-1">
                       <Server className="size-3 text-indigo-600" />
                       <span className="text-xs font-medium">连接数</span>
                     </div>
