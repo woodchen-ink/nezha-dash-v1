@@ -57,24 +57,8 @@ const App: React.FC = () => {
   return (
     <Router basename={import.meta.env.BASE_URL}>
       <ErrorBoundary>
-        <div className="relative min-h-screen">
-          {/* 固定定位的背景层 */}
-          <div
-            className="fixed inset-0 bg-cover bg-no-repeat bg-center dark:brightness-75"
-            style={{ 
-              backgroundImage: `url(https://random-api.czl.net/pic/normal)`,
-              zIndex: -1
-            }}
-          />
-          {/* 毛玻璃蒙版层 */}
-          <div
-            className="fixed inset-0 backdrop-blur-sm bg-black/80"
-            style={{ 
-              zIndex: -1
-            }}
-          />
-
-          <main className="relative flex min-h-screen flex-col gap-2 p-2 md:p-6 md:pt-4 bg-transparent">
+        <div className="min-h-screen bg-background">
+          <main className="flex min-h-screen flex-col gap-4 p-4 md:p-8">
             <RefreshToast />
             <Header />
             <DashCommand />

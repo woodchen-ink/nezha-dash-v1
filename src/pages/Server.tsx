@@ -284,29 +284,21 @@ export default function Servers() {
         upSpeed={upSpeed}
         downSpeed={downSpeed}
       />
-      <div className="flex mt-4 items-center justify-between gap-2 server-overview-controls">
-        <section className="flex items-center gap-2 w-full overflow-hidden">
+      <div className="flex mt-6 items-center justify-between gap-3">
+        <section className="flex items-center gap-3">
           <button
             onClick={() => {
               setShowMap(showMap === "0" ? "1" : "0")
               localStorage.setItem("showMap", showMap === "0" ? "1" : "0")
             }}
             className={cn(
-              "rounded-[50px] bg-white dark:bg-stone-800 cursor-pointer p-[10px] transition-all border dark:border-none border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]",
+              "rounded-xl bg-card cursor-pointer p-3 transition-all hover:bg-muted border border-border",
               {
-                "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] !bg-blue-600 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": showMap === "1",
-                "text-white": showMap === "1",
-              },
-              {
-                "bg-opacity-70 dark:bg-opacity-70": customBackgroundImage,
-              },
+                "bg-primary text-primary-foreground": showMap === "1",
+              }
             )}
           >
-            <MapIcon
-              className={cn("size-[13px]", {
-                "text-white": showMap === "1",
-              })}
-            />
+            <MapIcon className="size-4" />
           </button>
           <button
             onClick={() => {
@@ -314,57 +306,46 @@ export default function Servers() {
               localStorage.setItem("showServices", showServices === "0" ? "1" : "0")
             }}
             className={cn(
-              "rounded-[50px] bg-white dark:bg-stone-800 cursor-pointer p-[10px] transition-all border dark:border-none border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]",
+              "rounded-xl bg-card cursor-pointer p-3 transition-all hover:bg-muted border border-border",
               {
-                "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] !bg-blue-600 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": showServices === "1",
-                "text-white": showServices === "1",
-              },
-              {
-                "bg-opacity-70 dark:bg-opacity-70": customBackgroundImage,
-              },
+                "bg-primary text-primary-foreground": showServices === "1",
+              }
             )}
           >
-            <ChartBarSquareIcon
-              className={cn("size-[13px]", {
-                "text-white": showServices === "1",
-              })}
-            />
+            <ChartBarSquareIcon className="size-4" />
           </button>
         </section>
         <Popover onOpenChange={setSettingsOpen}>
           <PopoverTrigger asChild>
             <button
               className={cn(
-                "rounded-[50px] flex items-center gap-1 dark:text-white border dark:border-none text-black cursor-pointer dark:[text-shadow:_0_1px_0_rgb(0_0_0_/_20%)] dark:bg-stone-800 bg-white  p-[10px] transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ",
+                "rounded-xl flex items-center gap-2 bg-card px-4 py-3 transition-all hover:bg-muted border border-border",
                 {
-                  "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] dark:bg-stone-700 bg-stone-200": settingsOpen,
-                },
-                {
-                  "dark:bg-stone-800/70 bg-stone-100/70 ": customBackgroundImage,
-                },
+                  "bg-muted": settingsOpen,
+                }
               )}
             >
-              <p className="text-[10px] font-bold whitespace-nowrap">{sortType === "default" ? "Sort" : sortType.toUpperCase()}</p>
+              <p className="text-sm font-medium">{sortType === "default" ? "Sort" : sortType.charAt(0).toUpperCase() + sortType.slice(1)}</p>
               {sortOrder === "asc" && sortType !== "default" ? (
-                <ArrowUpIcon className="size-[13px]" />
+                <ArrowUpIcon className="size-4" />
               ) : sortOrder === "desc" && sortType !== "default" ? (
-                <ArrowDownIcon className="size-[13px]" />
+                <ArrowDownIcon className="size-4" />
               ) : (
-                <ArrowsUpDownIcon className="size-[13px]" />
+                <ArrowsUpDownIcon className="size-4" />
               )}
             </button>
           </PopoverTrigger>
-          <PopoverContent className="p-4 w-[240px] rounded-lg">
+          <PopoverContent className="p-4 w-60 rounded-xl border border-border">
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label className="text-xs font-medium text-muted-foreground">Sort by</Label>
+                <Label className="text-sm font-medium text-muted-foreground">Sort by</Label>
                 <Select value={sortType} onValueChange={setSortType}>
-                  <SelectTrigger className="w-full text-xs h-8">
+                  <SelectTrigger className="w-full rounded-lg">
                     <SelectValue placeholder="Choose type" />
                   </SelectTrigger>
                   <SelectContent>
                     {SORT_TYPES.map((type) => (
-                      <SelectItem key={type} value={type} className="text-xs">
+                      <SelectItem key={type} value={type}>
                         {type.charAt(0).toUpperCase() + type.slice(1)}
                       </SelectItem>
                     ))}
@@ -372,14 +353,14 @@ export default function Servers() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label className="text-xs font-medium text-muted-foreground">Sort order</Label>
+                <Label className="text-sm font-medium text-muted-foreground">Sort order</Label>
                 <Select value={sortOrder} onValueChange={setSortOrder} disabled={sortType === "default"}>
-                  <SelectTrigger className="w-full text-xs h-8">
+                  <SelectTrigger className="w-full rounded-lg">
                     <SelectValue placeholder="Choose order" />
                   </SelectTrigger>
                   <SelectContent>
                     {SORT_ORDERS.map((order) => (
-                      <SelectItem key={order} value={order} className="text-xs">
+                      <SelectItem key={order} value={order}>
                         {order.charAt(0).toUpperCase() + order.slice(1)}
                       </SelectItem>
                     ))}

@@ -15,13 +15,13 @@ export default function DirectCountrySelect({
 }: DirectCountrySelectProps) {
   return (
     <div className="w-full">
-      <div className="flex flex-wrap gap-1.5 pb-1">
+      <div className="flex flex-wrap gap-2">
         <button
           className={cn(
-            "px-3 py-1.5 text-xs rounded-md transition-all border",
+            "px-4 py-2 text-sm rounded-lg transition-all border font-medium",
             currentCountry === "All" 
-              ? "bg-blue-500 text-white border-blue-600 hover:bg-blue-600 shadow-sm" 
-              : "bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700"
+              ? "bg-primary text-primary-foreground border-primary" 
+              : "bg-card border-border hover:bg-muted"
           )}
           onClick={() => onChange("All")}
         >
@@ -32,14 +32,14 @@ export default function DirectCountrySelect({
           <button
             key={country}
             className={cn(
-              "px-3 py-1.5 text-xs rounded-md flex items-center gap-1.5 transition-all border",
+              "px-4 py-2 text-sm rounded-lg flex items-center gap-2 transition-all border font-medium",
               currentCountry === country 
-                ? "bg-blue-500 text-white border-blue-600 hover:bg-blue-600 shadow-sm" 
-                : "bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700"
+                ? "bg-primary text-primary-foreground border-primary" 
+                : "bg-card border-border hover:bg-muted"
             )}
             onClick={() => onChange(country)}
           >
-            <ServerFlag country_code={country.toLowerCase()} className="text-[12px]" />
+            <ServerFlag country_code={country.toLowerCase()} className="text-sm" />
             {country}
           </button>
         ))}

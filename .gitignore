@@ -29,4 +29,5 @@ dev-dist
 .edgeone
 .edgeone/*
 .tef_dist/*
-  CLAUDE.md
+CLAUDE.md
+.claude/*
