@@ -3,25 +3,25 @@
   <head>
     <script>
       // 在页面渲染前就执行主题初始化
-      document.documentElement.classList.add("dark")
+      document.documentElement.classList.add("light")
       
       // 全局配置变量
       window.ShowServerDetails = true; // 是否显示服务器详细信息
     </script>
     <style>
       /* Prevent FOUC in Safari */
-      html:not(.dark) * {
+      html:not(.light) * {
         visibility: hidden;
       }
 
       :root {
-        color-scheme: dark;
-        --bg: #242424;
+        color-scheme: light;
+        --bg: #F8F7F6;
       }
 
-      html.dark {
-        color-scheme: dark;
-        --bg: #242424;
+      html.light {
+        color-scheme: light;
+        --bg: #F8F7F6;
       }
 
       html {
@@ -54,9 +54,9 @@
     <script>
       ;(function () {
         const root = document.documentElement
-        root.classList.remove("light")
-        root.classList.add("dark")
-        document.querySelector('meta[name="theme-color"]')?.setAttribute("content", "#242424")
+        root.classList.remove("dark")
+        root.classList.add("light")
+        document.querySelector('meta[name="theme-color"]')?.setAttribute("content", "#F8F7F6")
 
         // Add loaded class after React has mounted
         window.addEventListener("load", () => {
