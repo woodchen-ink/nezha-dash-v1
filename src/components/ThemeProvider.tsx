@@ -1,6 +1,6 @@
 import { ReactNode, createContext } from "react"
 
-export type Theme = "dark"
+export type Theme = "dark" | "light"
 
 type ThemeProviderProps = {
   children: ReactNode
@@ -12,7 +12,7 @@ type ThemeProviderState = {
 }
 
 const initialState: ThemeProviderState = {
-  theme: "dark",
+  theme: "light",
   setTheme: () => null,
 }
 
@@ -20,13 +20,13 @@ const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
   const root = window.document.documentElement
-  root.classList.remove("light")
-  root.classList.add("dark")
-  const themeColor = "hsl(30 15% 8%)"
+  root.classList.remove("dark")
+  root.classList.add("light")
+  const themeColor = "hsl(36 8% 97%)"
   document.querySelector('meta[name="theme-color"]')?.setAttribute("content", themeColor)
 
   const value: ThemeProviderState = {
-    theme: "dark",
+    theme: "light",
     setTheme: () => null,
   }
 
