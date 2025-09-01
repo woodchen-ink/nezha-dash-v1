@@ -194,10 +194,7 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
   if (!online) {
     return (
       <Card
-        className={cn(
-          "cursor-pointer hover:bg-white/5 transition-all duration-300 backdrop-blur-md bg-white/10 dark:bg-black/10 border-red-300/50 dark:border-red-500/50 shadow-lg hover:shadow-xl",
-          { "bg-card/70": customBackgroundImage }
-        )}
+        className="cursor-pointer hover:shadow-lg transition-all duration-300 bg-card border border-red-200 shadow-sm"
         onClick={cardClick}
       >
         {/* 离线卡片的分组标签 */}
@@ -274,10 +271,7 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
 
   return (
     <Card
-      className={cn(
-        "cursor-pointer hover:bg-white/5 transition-all duration-300 backdrop-blur-md bg-white/10 dark:bg-black/10 border-green-300/50 dark:border-green-500/50 shadow-lg hover:shadow-xl relative overflow-hidden",
-        { "bg-card/70": customBackgroundImage }
-      )}
+      className="cursor-pointer hover:shadow-lg transition-all duration-300 bg-card border border-green-200 shadow-sm relative overflow-hidden"
       onClick={cardClick}
     >
 
@@ -370,145 +364,163 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
           </div>
         )}
 
-        {/* 主要资源使用情况 - 全新设计 */}
-        <div className="grid grid-cols-3 gap-3 mt-3">
-          {/* CPU使用率 */}
-          <div className="bg-white/5 dark:bg-black/5 backdrop-blur-sm rounded-lg p-2 flex flex-col border border-white/10">
-            <div className="flex items-center justify-between mb-1">
-              <div className="flex items-center">
-                <Cpu className="size-[14px] mr-1 text-blue-500" />
-                <span className="text-xs">CPU</span>
-              </div>
-            </div>
-            <ServerUsageBar value={cpu} />
-            {/* CPU信息 */}
-            {cpu_info && cpu_info.length > 0 && (
-              <div className="mt-1.5 flex flex-col gap-1 text-[10px]">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <div className="bg-blue-500/20 text-blue-600 dark:text-blue-400 rounded px-1.5 py-0.5 text-center backdrop-blur-sm">
-                        {cpu_info[0].includes("Physical") ? "pCPU: " : "vCPU: "}
-                        {cpu_info[0].match(/(\d+)\s+(?:Physical|Virtual)\s+Core/)?.[1] || "-"}
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent className="max-w-[250px] text-xs whitespace-pre-wrap p-2">
-                      {cpu_info.join("\n")}
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                {arch && (
-                  <div className="bg-green-500/20 text-green-600 dark:text-green-400 rounded px-1.5 py-0.5 text-center backdrop-blur-sm">
-                    {arch}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-
-          {/* 内存使用率 */}
-          <div className="bg-white/5 dark:bg-black/5 backdrop-blur-sm rounded-lg p-2 flex flex-col border border-white/10">
-            <div className="flex items-center justify-between mb-1">
-              <div className="flex items-center">
-                <div className="size-[14px] mr-1 text-purple-500 flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M16 16H8V8H16V16Z"></path>
-                    <path d="M12 20V16"></path>
-                    <path d="M12 8V4"></path>
-                    <path d="M20 12H16"></path>
-                    <path d="M8 12H4"></path>
-                  </svg>
+        {/* 资源使用情况 - Apple风格重设计 */}
+        <div className="border-t border-border pt-3 mt-3">
+          <div className="grid grid-cols-3 gap-3">
+            {/* CPU使用率 */}
+            <div className="bg-muted rounded-lg p-3 border border-border">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center">
+                  <Cpu className="size-4 mr-1.5 text-blue-600" />
+                  <span className="text-sm font-medium">CPU</span>
                 </div>
-                <span className="text-xs">{t("serverCard.mem")}</span>
+                <span className="text-sm font-semibold">{cpu.toFixed(1)}%</span>
               </div>
-            </div>
-            <ServerUsageBar value={mem} />
-            {/* 内存信息 */}
-            <div className="mt-1.5 flex flex-col gap-1 text-[10px]">
-              <div className="bg-purple-500/20 text-purple-600 dark:text-purple-400 rounded px-1.5 py-0.5 text-center backdrop-blur-sm">
-                {mem_total > 0 ? formatBytes(mem_total) : "-"}
-              </div>
-              {swap_total > 0 ? (
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <div className={cn("bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 rounded px-1.5 py-0.5 text-center backdrop-blur-sm",
-                        Number(swap) > 90 ? "bg-red-500/20 text-red-600 dark:text-red-400" :
-                          Number(swap) > 70 ? "bg-orange-500/20 text-orange-600 dark:text-orange-400" : "")}>
-                        SWAP:{swap.toFixed(0)}%
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent className="text-xs">
-                      <div className="flex flex-col gap-1 p-2">
-                        <div className="flex justify-between items-center gap-3">
-                          <span>总容量:</span>
-                          <span>{formatBytes(swap_total)}</span>
+              <ServerUsageBar value={cpu} />
+              {/* CPU信息 */}
+              {cpu_info && cpu_info.length > 0 && (
+                <div className="mt-2 space-y-1">
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div className="bg-blue-100 text-blue-700 rounded-md px-2 py-1 text-xs text-center font-medium">
+                          {cpu_info[0].includes("Physical") ? "pCPU: " : "vCPU: "}
+                          {cpu_info[0].match(/(\d+)\s+(?:Physical|Virtual)\s+Core/)?.[1] || "-"}
                         </div>
-                        <div className="flex justify-between items-center gap-3">
-                          <span>使用率:</span>
-                          <span className={getColorClass(Number(swap))}>{swap.toFixed(1)}%</span>
-                        </div>
-                      </div>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              ) : (
-                <div className="bg-amber-500/20 text-amber-600 dark:text-amber-400 rounded px-1.5 py-0.5 text-center backdrop-blur-sm">
-                  -
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-[250px] text-xs whitespace-pre-wrap p-3">
+                        {cpu_info.join("\n")}
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                  {arch && (
+                    <div className="bg-green-100 text-green-700 rounded-md px-2 py-1 text-xs text-center font-medium">
+                      {arch}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
-          </div>
 
-          {/* 存储使用率 */}
-          <div className="bg-white/5 dark:bg-black/5 backdrop-blur-sm rounded-lg p-2 flex flex-col border border-white/10">
-            <div className="flex items-center justify-between mb-1">
-              <div className="flex items-center">
-                <HardDrive className="size-[14px] mr-1 text-amber-500" />
-                <span className="text-xs">{t("serverCard.stg")}</span>
+            {/* 内存使用率 */}
+            <div className="bg-muted rounded-lg p-3 border border-border">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center">
+                  <div className="size-4 mr-1.5 text-purple-600 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M16 16H8V8H16V16Z"></path>
+                      <path d="M12 20V16"></path>
+                      <path d="M12 8V4"></path>
+                      <path d="M20 12H16"></path>
+                      <path d="M8 12H4"></path>
+                    </svg>
+                  </div>
+                  <span className="text-sm font-medium">{t("serverCard.mem")}</span>
+                </div>
+                <span className="text-sm font-semibold">{mem.toFixed(1)}%</span>
+              </div>
+              <ServerUsageBar value={mem} />
+              {/* 内存信息 */}
+              <div className="mt-2 space-y-1">
+                <div className="bg-purple-100 text-purple-700 rounded-md px-2 py-1 text-xs text-center font-medium">
+                  {mem_total > 0 ? formatBytes(mem_total) : "-"}
+                </div>
+                {swap_total > 0 && (
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div className={cn("bg-indigo-100 text-indigo-700 rounded-md px-2 py-1 text-xs text-center font-medium",
+                          Number(swap) > 90 ? "bg-red-100 text-red-700" :
+                            Number(swap) > 70 ? "bg-orange-100 text-orange-700" : "")}>
+                          SWAP: {swap.toFixed(0)}%
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent className="text-xs">
+                        <div className="flex flex-col gap-1 p-2">
+                          <div className="flex justify-between items-center gap-3">
+                            <span>总容量:</span>
+                            <span>{formatBytes(swap_total)}</span>
+                          </div>
+                          <div className="flex justify-between items-center gap-3">
+                            <span>使用率:</span>
+                            <span className={getColorClass(Number(swap))}>{swap.toFixed(1)}%</span>
+                          </div>
+                        </div>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                )}
               </div>
             </div>
-            <ServerUsageBar value={stg} />
-            {/* 存储信息 */}
-            <div className="mt-1.5 bg-amber-500/20 text-amber-600 dark:text-amber-400 rounded px-1.5 py-0.5 text-center text-[10px] backdrop-blur-sm">
-              {disk_total > 0 ? formatBytes(disk_total) : "-"}
+
+            {/* 存储使用率 */}
+            <div className="bg-muted rounded-lg p-3 border border-border">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center">
+                  <HardDrive className="size-4 mr-1.5 text-amber-600" />
+                  <span className="text-sm font-medium">{t("serverCard.stg")}</span>
+                </div>
+                <span className="text-sm font-semibold">{stg.toFixed(1)}%</span>
+              </div>
+              <ServerUsageBar value={stg} />
+              {/* 存储信息 */}
+              <div className="mt-2">
+                <div className="bg-amber-100 text-amber-700 rounded-md px-2 py-1 text-xs text-center font-medium">
+                  {disk_total > 0 ? formatBytes(disk_total) : "-"}
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* 网络使用情况 */}
-        <div className="grid grid-cols-2 gap-3 mt-3">
-          {/* 网络速率 */}
-          <div className="bg-white/5 dark:bg-black/5 backdrop-blur-sm rounded-lg p-2 border border-white/10">
-            <div className="flex justify-between items-center mb-1">
-              <div className="flex items-center">
-                <ArrowUp className="size-[14px] text-blue-500 mr-1" />
-                <span className="text-xs">Up</span>
+        {/* 网络和连接信息 */}
+        <div className="border-t border-border pt-3 mt-3">
+          <div className="grid grid-cols-2 gap-3">
+            {/* 网络速率 */}
+            <div className="bg-muted rounded-lg p-3 border border-border">
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center">
+                    <ArrowUp className="size-4 text-blue-600 mr-1.5" />
+                    <span className="text-sm font-medium">Up</span>
+                  </div>
+                  <span className="text-sm font-semibold">{formatSpeed(up)}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center">
+                    <ArrowDown className="size-4 text-green-600 mr-1.5" />
+                    <span className="text-sm font-medium">Down</span>
+                  </div>
+                  <span className="text-sm font-semibold">{formatSpeed(down)}</span>
+                </div>
               </div>
-              <span className="text-xs font-medium">{formatSpeed(up)}</span>
             </div>
-            <div className="flex justify-between items-center mt-2">
-              <div className="flex items-center">
-                <ArrowDown className="size-[14px] text-green-500 mr-1" />
-                <span className="text-xs">Down</span>
-              </div>
-              <span className="text-xs font-medium">{formatSpeed(down)}</span>
-            </div>
-          </div>
 
-          {/* 连接数与进程数 */}
-          <div className="bg-white/5 dark:bg-black/5 backdrop-blur-sm rounded-lg p-2 grid grid-cols-2 gap-2 border border-white/10">
-            <div className="flex items-center min-w-0">
-              <Server className="size-[14px] text-indigo-500 mr-1 flex-shrink-0" />
-              <span className="text-xs truncate" title={`TCP连接: ${tcp}`}>T: {formatLargeNumber(tcp)}</span>
-            </div>
-            <div className="flex items-center min-w-0">
-              <Server className="size-[14px] text-pink-500 mr-1 flex-shrink-0" />
-              <span className="text-xs truncate" title={`UDP连接: ${udp}`}>U: {formatLargeNumber(udp)}</span>
-            </div>
-            <div className="flex items-center min-w-0 col-span-2">
-              <Activity className="size-[14px] text-orange-500 mr-1 flex-shrink-0" />
-              <span className="text-xs truncate" title={`进程数: ${process}`}>P: {formatLargeNumber(process)}</span>
+            {/* 连接数与进程数 */}
+            <div className="bg-muted rounded-lg p-3 border border-border">
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center">
+                    <Server className="size-4 text-indigo-600 mr-1.5" />
+                    <span className="text-sm font-medium">TCP</span>
+                  </div>
+                  <span className="text-sm font-semibold">{formatLargeNumber(tcp)}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center">
+                    <Server className="size-4 text-pink-600 mr-1.5" />
+                    <span className="text-sm font-medium">UDP</span>
+                  </div>
+                  <span className="text-sm font-semibold">{formatLargeNumber(udp)}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center">
+                    <Activity className="size-4 text-orange-600 mr-1.5" />
+                    <span className="text-sm font-medium">Proc</span>
+                  </div>
+                  <span className="text-sm font-semibold">{formatLargeNumber(process)}</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
