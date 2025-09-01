@@ -320,11 +320,15 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
                 <ServerUsageBar value={cpu} />
                 {cpu_info && cpu_info.length > 0 && (
                   <div className="mt-1.5 flex gap-1">
-                    {cpu_info.length > 1 && (
-                      <div className="bg-gray-100 text-gray-700 rounded px-1.5 py-0.5 text-[10px] font-medium flex-1 truncate">
-                        {cpu_info[1]}
-                      </div>
-                    )}
+                    {/* 显示CPU型号信息 - 查找不包含Core信息的条目或使用第二个元素 */}
+                    {(() => {
+                      const cpuModel = cpu_info.find(info => !info.includes("Core")) || (cpu_info.length > 1 ? cpu_info[1] : null)
+                      return cpuModel && (
+                        <div className="bg-gray-100 text-gray-700 rounded px-1.5 py-0.5 text-[10px] font-medium flex-1 truncate">
+                          {cpuModel}
+                        </div>
+                      )
+                    })()}
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>
