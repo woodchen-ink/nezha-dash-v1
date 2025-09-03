@@ -487,14 +487,15 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
                               </span>
                             </div>
                           </div>
-                          {!isNeverExpire && daysLeftObject.days >= 0 && (
+                          {daysLeftObject.days >= 0 && (
                             <div className="relative h-1 bg-secondary rounded-full mt-1">
                               <div
                                 className={cn("absolute inset-0 rounded-full transition-all duration-300",
+                                  isNeverExpire ? "bg-blue-500" :
                                   daysLeftObject.remainingPercentage > 0.3 ? "bg-green-500" :
                                     daysLeftObject.remainingPercentage > 0.1 ? "bg-yellow-500" : "bg-red-500"
                                 )}
-                                style={{ width: `${Math.max(daysLeftObject.remainingPercentage * 100, 2)}%` }}
+                                style={{ width: isNeverExpire ? "100%" : `${Math.max(daysLeftObject.remainingPercentage * 100, 2)}%` }}
                               />
                             </div>
                           )}
@@ -599,14 +600,15 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
                               </span>
                             </div>
                           </div>
-                          {!isNeverExpire && daysLeftObject.days >= 0 && (
+                          {daysLeftObject.days >= 0 && (
                             <div className="relative h-1 bg-secondary rounded-full mt-1">
                               <div
                                 className={cn("absolute inset-0 rounded-full transition-all duration-300",
+                                  isNeverExpire ? "bg-blue-500" :
                                   daysLeftObject.remainingPercentage > 0.3 ? "bg-green-500" :
                                     daysLeftObject.remainingPercentage > 0.1 ? "bg-yellow-500" : "bg-red-500"
                                 )}
-                                style={{ width: `${Math.max(daysLeftObject.remainingPercentage * 100, 2)}%` }}
+                                style={{ width: isNeverExpire ? "100%" : `${Math.max(daysLeftObject.remainingPercentage * 100, 2)}%` }}
                               />
                             </div>
                           )}
