@@ -278,7 +278,7 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
               </div>
             )}
           </div>
-          
+
           <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
             <div className="flex items-center">
               {platform.includes("Windows") ? (
@@ -439,13 +439,13 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
                       </div>
                     </div>
                   ))}
-                  
+
                   {/* 账单信息 */}
                   {parsedData?.billingDataMod && (() => {
                     const billing = parsedData.billingDataMod
                     let daysLeftObject = { days: 0, remainingPercentage: 0 }
                     let isNeverExpire = false
-                    
+
                     if (billing.endDate?.startsWith("0000-00-00")) {
                       isNeverExpire = true
                     } else if (billing.endDate) {
@@ -455,7 +455,7 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
                         console.error('Error calculating billing days:', error)
                       }
                     }
-                    
+
                     return (
                       <div className="bg-muted rounded-md p-1.5 border border-border">
                         <div className="flex items-center gap-1.5 mb-1">
@@ -465,36 +465,34 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
                           <span className="text-xs font-medium">账单</span>
                         </div>
                         <div className="space-y-1">
-                          {billing.amount && billing.amount !== "0" && billing.amount !== "-1" && (
-                            <div className="flex justify-between items-center">
-                              <span className="text-[10px] text-muted-foreground">价格</span>
-                              <span className="text-xs font-semibold">{billing.amount}/{billing.cycle}</span>
-                            </div>
-                          )}
-                          {billing.amount === "0" && (
-                            <div className="flex justify-center">
-                              <span className="text-[10px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded font-medium">免费</span>
-                            </div>
-                          )}
-                          {billing.amount === "-1" && (
-                            <div className="flex justify-center">
-                              <span className="text-[10px] bg-pink-100 text-pink-700 px-1.5 py-0.5 rounded font-medium">按量计费</span>
-                            </div>
-                          )}
                           <div className="flex justify-between items-center">
-                            <span className="text-[10px] text-muted-foreground">
-                              {daysLeftObject.days < 0 ? "已过期" : "剩余"}
-                            </span>
-                            <span className={`text-xs font-semibold ${daysLeftObject.days < 0 ? "text-red-600" : "text-foreground"}`}>
-                              {isNeverExpire ? "永久" : `${Math.abs(daysLeftObject.days)}天`}
-                            </span>
+                            {/* 左侧：价格信息 */}
+                            <div className="flex items-center gap-1">
+                              {billing.amount && billing.amount !== "0" && billing.amount !== "-1" ? (
+                                <span className="text-xs font-semibold">{billing.amount}/{billing.cycle}</span>
+                              ) : billing.amount === "0" ? (
+                                <span className="text-[10px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded font-medium">免费</span>
+                              ) : billing.amount === "-1" ? (
+                                <span className="text-[10px] bg-pink-100 text-pink-700 px-1.5 py-0.5 rounded font-medium">按量计费</span>
+                              ) : null}
+                            </div>
+
+                            {/* 右侧：剩余时间 */}
+                            <div className="flex items-center gap-1">
+                              <span className="text-[10px] text-muted-foreground">
+                                {daysLeftObject.days < 0 ? "已过期" : "剩余"}
+                              </span>
+                              <span className={`text-xs font-semibold ${daysLeftObject.days < 0 ? "text-red-600" : "text-foreground"}`}>
+                                {isNeverExpire ? "永久" : `${Math.abs(daysLeftObject.days)}天`}
+                              </span>
+                            </div>
                           </div>
                           {!isNeverExpire && daysLeftObject.days >= 0 && (
-                            <div className="relative h-1.5 bg-secondary rounded-full mt-1">
+                            <div className="relative h-1 bg-secondary rounded-full mt-1">
                               <div
                                 className={cn("absolute inset-0 rounded-full transition-all duration-300",
                                   daysLeftObject.remainingPercentage > 0.3 ? "bg-green-500" :
-                                  daysLeftObject.remainingPercentage > 0.1 ? "bg-yellow-500" : "bg-red-500"
+                                    daysLeftObject.remainingPercentage > 0.1 ? "bg-yellow-500" : "bg-red-500"
                                 )}
                                 style={{ width: `${Math.max(daysLeftObject.remainingPercentage * 100, 2)}%` }}
                               />
@@ -504,7 +502,7 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
                       </div>
                     )
                   })()}
-                  
+
                   {/* 补充空间：网络速率和连接信息 */}
                   <div className="space-y-1.5 mt-auto">
                     {/* 网络速率 */}
@@ -559,7 +557,7 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
                     const billing = parsedData.billingDataMod
                     let daysLeftObject = { days: 0, remainingPercentage: 0 }
                     let isNeverExpire = false
-                    
+
                     if (billing.endDate?.startsWith("0000-00-00")) {
                       isNeverExpire = true
                     } else if (billing.endDate) {
@@ -569,7 +567,7 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
                         console.error('Error calculating billing days:', error)
                       }
                     }
-                    
+
                     return (
                       <div className="bg-muted rounded-md p-1.5 border border-border">
                         <div className="flex items-center gap-1.5 mb-1">
@@ -579,36 +577,34 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
                           <span className="text-xs font-medium">账单</span>
                         </div>
                         <div className="space-y-1">
-                          {billing.amount && billing.amount !== "0" && billing.amount !== "-1" && (
-                            <div className="flex justify-between items-center">
-                              <span className="text-[10px] text-muted-foreground">价格</span>
-                              <span className="text-xs font-semibold">{billing.amount}/{billing.cycle}</span>
-                            </div>
-                          )}
-                          {billing.amount === "0" && (
-                            <div className="flex justify-center">
-                              <span className="text-[10px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded font-medium">免费</span>
-                            </div>
-                          )}
-                          {billing.amount === "-1" && (
-                            <div className="flex justify-center">
-                              <span className="text-[10px] bg-pink-100 text-pink-700 px-1.5 py-0.5 rounded font-medium">按量计费</span>
-                            </div>
-                          )}
                           <div className="flex justify-between items-center">
-                            <span className="text-[10px] text-muted-foreground">
-                              {daysLeftObject.days < 0 ? "已过期" : "剩余"}
-                            </span>
-                            <span className={`text-xs font-semibold ${daysLeftObject.days < 0 ? "text-red-600" : "text-foreground"}`}>
-                              {isNeverExpire ? "永久" : `${Math.abs(daysLeftObject.days)}天`}
-                            </span>
+                            {/* 左侧：价格信息 */}
+                            <div className="flex items-center gap-1">
+                              {billing.amount && billing.amount !== "0" && billing.amount !== "-1" ? (
+                                <span className="text-xs font-semibold">{billing.amount}/{billing.cycle}</span>
+                              ) : billing.amount === "0" ? (
+                                <span className="text-[10px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded font-medium">免费</span>
+                              ) : billing.amount === "-1" ? (
+                                <span className="text-[10px] bg-pink-100 text-pink-700 px-1.5 py-0.5 rounded font-medium">按量计费</span>
+                              ) : null}
+                            </div>
+
+                            {/* 右侧：剩余时间 */}
+                            <div className="flex items-center gap-1">
+                              <span className="text-[10px] text-muted-foreground">
+                                {daysLeftObject.days < 0 ? "已过期" : "剩余"}
+                              </span>
+                              <span className={`text-xs font-semibold ${daysLeftObject.days < 0 ? "text-red-600" : "text-foreground"}`}>
+                                {isNeverExpire ? "永久" : `${Math.abs(daysLeftObject.days)}天`}
+                              </span>
+                            </div>
                           </div>
                           {!isNeverExpire && daysLeftObject.days >= 0 && (
-                            <div className="relative h-1.5 bg-secondary rounded-full mt-1">
+                            <div className="relative h-1 bg-secondary rounded-full mt-1">
                               <div
                                 className={cn("absolute inset-0 rounded-full transition-all duration-300",
                                   daysLeftObject.remainingPercentage > 0.3 ? "bg-green-500" :
-                                  daysLeftObject.remainingPercentage > 0.1 ? "bg-yellow-500" : "bg-red-500"
+                                    daysLeftObject.remainingPercentage > 0.1 ? "bg-yellow-500" : "bg-red-500"
                                 )}
                                 style={{ width: `${Math.max(daysLeftObject.remainingPercentage * 100, 2)}%` }}
                               />
@@ -618,24 +614,6 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
                       </div>
                     )
                   })()}
-                  
-                  {/* 网络速率 */}
-                  <div className="bg-muted rounded-md p-1.5 border border-border">
-                    <div className="flex items-center gap-1.5 mb-1">
-                      <ArrowUp className="size-3 text-blue-600" />
-                      <span className="text-xs font-medium">网络速率</span>
-                    </div>
-                    <div className="space-y-1">
-                      <div className="flex justify-between items-center">
-                        <span className="text-[10px] text-muted-foreground">上传</span>
-                        <span className="text-xs font-semibold">{formatSpeed(up)}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-[10px] text-muted-foreground">下载</span>
-                        <span className="text-xs font-semibold">{formatSpeed(down)}</span>
-                      </div>
-                    </div>
-                  </div>
 
                   {/* 连接信息 */}
                   <div className="bg-muted rounded-md p-1.5 border border-border">
@@ -658,6 +636,26 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
                       </div>
                     </div>
                   </div>
+
+                  {/* 网络速率 */}
+                  <div className="bg-muted rounded-md p-1.5 border border-border">
+                    <div className="flex items-center gap-1.5 mb-1">
+                      <ArrowUp className="size-3 text-blue-600" />
+                      <span className="text-xs font-medium">网络速率</span>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="flex justify-between items-center">
+                        <span className="text-[10px] text-muted-foreground">上传</span>
+                        <span className="text-xs font-semibold">{formatSpeed(up)}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-[10px] text-muted-foreground">下载</span>
+                        <span className="text-xs font-semibold">{formatSpeed(down)}</span>
+                      </div>
+                    </div>
+                  </div>
+
+
                 </div>
               </div>
             )}
