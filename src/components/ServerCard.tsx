@@ -302,8 +302,8 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
           </div>
         </div>
 
-        {/* 主要内容：左右布局，固定高度确保对齐 */}
-        <div className="grid grid-cols-2 gap-3 h-[280px]">
+        {/* 主要内容：左右布局 */}
+        <div className="grid grid-cols-2 gap-3 min-h-[250px]">
           {/* 左侧：系统资源 */}
           <div className="flex flex-col h-full">
             <h4 className="text-xs font-medium text-muted-foreground mb-1">System Resources</h4>
@@ -537,7 +537,7 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
 
       {/* 套餐信息 */}
       {parsedData?.planDataMod && (
-        <CardFooter className="p-4 pt-0 pb-3">
+        <CardFooter className="px-4 pt-2 pb-3">
           <PlanInfo parsedData={parsedData} />
         </CardFooter>
       )}
