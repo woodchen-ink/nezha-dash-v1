@@ -535,10 +535,17 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
         </div>
       </CardContent>
 
-      {/* 套餐信息 */}
-      {parsedData?.planDataMod && (
+      {/* 套餐和账单信息 */}
+      {(parsedData?.planDataMod || parsedData?.billingDataMod) && (
         <CardFooter className="px-4 pt-2 pb-3">
-          <PlanInfo parsedData={parsedData} />
+          <div className="space-y-2">
+            {parsedData?.billingDataMod && (
+              <BillingInfo parsedData={parsedData} />
+            )}
+            {parsedData?.planDataMod && (
+              <PlanInfo parsedData={parsedData} />
+            )}
+          </div>
         </CardFooter>
       )}
     </Card>
