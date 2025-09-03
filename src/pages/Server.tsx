@@ -43,7 +43,6 @@ export default function Servers() {
   // 保存是否已经初始化了筛选状态
   const initializedRef = useRef<boolean>(false)
 
-  const customBackgroundImage = (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
 
   const restoreScrollPosition = () => {
     const savedPosition = sessionStorage.getItem("scrollPosition")
