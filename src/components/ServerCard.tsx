@@ -504,26 +504,8 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
                     )
                   })()}
 
-                  {/* 补充空间：网络速率和连接信息 */}
+                  {/* 补充空间：连接信息和网络速率 */}
                   <div className="space-y-1.5 mt-auto">
-                    {/* 网络速率 */}
-                    <div className="bg-muted rounded-md p-1.5 border border-border">
-                      <div className="flex items-center gap-1.5 mb-1">
-                        <ArrowUp className="size-3 text-blue-600" />
-                        <span className="text-xs font-medium">网络速率</span>
-                      </div>
-                      <div className="space-y-1">
-                        <div className="flex justify-between items-center">
-                          <span className="text-[10px] text-muted-foreground">上传</span>
-                          <span className="text-xs font-semibold">{formatSpeed(up)}</span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <span className="text-[10px] text-muted-foreground">下载</span>
-                          <span className="text-xs font-semibold">{formatSpeed(down)}</span>
-                        </div>
-                      </div>
-                    </div>
-
                     {/* 连接信息 */}
                     <div className="bg-muted rounded-md p-1.5 border border-border">
                       <div className="flex items-center gap-1.5 mb-1">
@@ -542,6 +524,24 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
                         <div className="flex flex-col">
                           <span className="text-[10px] text-muted-foreground">进程</span>
                           <span className="text-xs font-semibold">{formatLargeNumber(process)}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 网络速率 */}
+                    <div className="bg-muted rounded-md p-1.5 border border-border">
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <ArrowUp className="size-3 text-blue-600" />
+                        <span className="text-xs font-medium">网络速率</span>
+                      </div>
+                      <div className="space-y-1">
+                        <div className="flex justify-between items-center">
+                          <span className="text-[10px] text-muted-foreground">上传</span>
+                          <span className="text-xs font-semibold">{formatSpeed(up)}</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-[10px] text-muted-foreground">下载</span>
+                          <span className="text-xs font-semibold">{formatSpeed(down)}</span>
                         </div>
                       </div>
                     </div>
