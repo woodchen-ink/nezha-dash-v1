@@ -535,16 +535,11 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
 
       </CardContent>
 
-      {/* 底部信息：备注和负载 */}
+      {/* 底部信息：套餐信息和负载 */}
       <CardFooter className="px-4 pt-2 pb-3">
         <div className="flex items-center justify-between w-full">
-          {/* 左侧：备注 */}
+          {/* 左侧：套餐信息 */}
           <div className="flex items-center gap-2">
-            {public_note && (
-              <div className="text-xs text-muted-foreground">
-                {public_note}
-              </div>
-            )}
             {parsedData?.planDataMod && (
               <PlanInfo parsedData={parsedData} />
             )}
