@@ -47,7 +47,10 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
     uptime,
     arch,
     swap,
-    swap_total
+    swap_total,
+    load_1,
+    load_5,
+    load_15
   } = formatNezhaInfo(
     now,
     serverInfo,
@@ -266,7 +269,7 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
       className="cursor-pointer hover:shadow-lg transition-all duration-300 bg-card border border-green-200 shadow-sm"
       onClick={cardClick}
     >
-      <CardContent className="p-4">
+      <CardContent className="p-4 relative">
         {/* 顶部：服务器名称和状态 */}
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
@@ -302,8 +305,8 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
           </div>
         </div>
 
-        {/* 主要内容：4列网格布局 */}
-        <div className="grid grid-cols-4 gap-2 auto-rows-max">
+        {/* 主要内容：网格布局 */}
+        <div className="grid grid-cols-4 gap-2 auto-rows-max relative">
           {/* CPU */}
           <div className="bg-muted rounded-md p-2 border border-border">
             <div className="flex items-center justify-between mb-2">
@@ -527,15 +530,38 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
               </div>
             </div>
           </div>
+
         </div>
+
       </CardContent>
 
-      {/* 套餐信息 */}
-      {parsedData?.planDataMod && (
-        <CardFooter className="px-4 pt-2 pb-3">
-          <PlanInfo parsedData={parsedData} />
-        </CardFooter>
-      )}
+      {/* 底部信息：备注和负载 */}
+      <CardFooter className="px-4 pt-2 pb-3">
+        <div className="flex items-center justify-between w-full">
+          {/* 左侧：备注 */}
+          <div className="flex items-center gap-2">
+            {public_note && (
+              <div className="text-xs text-muted-foreground">
+                {public_note}
+              </div>
+            )}
+            {parsedData?.planDataMod && (
+              <PlanInfo parsedData={parsedData} />
+            )}
+          </div>
+
+          {/* 右侧：系统负载 */}
+          <div className="flex items-center gap-1.5">
+            <svg className="size-3 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+            <div className="text-xs">
+              <span className="font-medium">负载:</span>
+              <span className="ml-1">{load_1} / {load_5} / {load_15}</span>
+            </div>
+          </div>
+        </div>
+      </CardFooter>
     </Card>
   )
 }
