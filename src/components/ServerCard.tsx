@@ -302,365 +302,230 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
           </div>
         </div>
 
-        {/* 主要内容：左右布局 */}
-        <div className="grid grid-cols-2 gap-3 min-h-[250px]">
-          {/* 左侧：系统资源 */}
-          <div className="flex flex-col h-full">
-            <h4 className="text-xs font-medium text-muted-foreground mb-1">System Resources</h4>
-            <div className="flex-1 space-y-1.5">
-              {/* CPU */}
-              <div className="bg-muted rounded-md p-1.5 border border-border">
-                <div className="flex items-center justify-between mb-1">
-                  <div className="flex items-center gap-1.5">
-                    <Cpu className="size-3 text-blue-600" />
-                    <span className="text-xs font-medium">CPU</span>
-                  </div>
-                  <span className="text-xs font-semibold">{cpu.toFixed(1)}%</span>
+        {/* 主要内容：4列网格布局 */}
+        <div className="grid grid-cols-4 gap-2 auto-rows-max">
+          {/* CPU */}
+          <div className="bg-muted rounded-md p-2 border border-border">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-1.5">
+                <Cpu className="size-3 text-blue-600" />
+                <span className="text-xs font-medium">CPU</span>
+              </div>
+              <span className="text-xs font-semibold">{cpu.toFixed(1)}%</span>
+            </div>
+            <ServerUsageBar value={cpu} />
+            {cpu_info && cpu_info.length > 0 && (
+              <div className="mt-2 flex gap-1">
+                <div className="bg-gray-100 text-gray-700 rounded px-1.5 py-0.5 text-[10px] font-medium flex-1 truncate">
+                  {cpu_info.join("\n")}
                 </div>
-                <ServerUsageBar value={cpu} />
-                {cpu_info && cpu_info.length > 0 && (
-                  <div className="mt-1.5 flex gap-1">
-                    {/* 显示完整CPU信息 - 使用和tooltip相同的数据源 */}
-                    <div className="bg-gray-100 text-gray-700 rounded px-1.5 py-0.5 text-[10px] font-medium flex-1 truncate">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="bg-blue-100 text-blue-700 rounded px-1.5 py-0.5 text-[10px] font-medium">
+                        {cpu_info[0].includes("Physical") ? "pCPU" : "vCPU"}:{cpu_info[0].match(/(\d+)\s+(?:Physical|Virtual)\s+Core/)?.[1] || "-"}
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent className="max-w-[250px] text-xs whitespace-pre-wrap p-2">
                       {cpu_info.join("\n")}
-                    </div>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <div className="bg-blue-100 text-blue-700 rounded px-1.5 py-0.5 text-[10px] font-medium">
-                            {cpu_info[0].includes("Physical") ? "pCPU" : "vCPU"}:{cpu_info[0].match(/(\d+)\s+(?:Physical|Virtual)\s+Core/)?.[1] || "-"}
-                          </div>
-                        </TooltipTrigger>
-                        <TooltipContent className="max-w-[250px] text-xs whitespace-pre-wrap p-2">
-                          {cpu_info.join("\n")}
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </div>
-                )}
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
+            )}
+          </div>
 
-              {/* 内存 */}
-              <div className="bg-muted rounded-md p-1.5 border border-border">
-                <div className="flex items-center justify-between mb-1">
-                  <div className="flex items-center gap-1.5">
-                    <div className="size-3 text-purple-600 flex items-center justify-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M16 16H8V8H16V16Z"></path>
-                        <path d="M12 20V16"></path>
-                        <path d="M12 8V4"></path>
-                        <path d="M20 12H16"></path>
-                        <path d="M8 12H4"></path>
-                      </svg>
-                    </div>
-                    <span className="text-xs font-medium">内存</span>
-                  </div>
-                  <span className="text-xs font-semibold">{mem.toFixed(1)}%</span>
+          {/* 内存 */}
+          <div className="bg-muted rounded-md p-2 border border-border">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-1.5">
+                <div className="size-3 text-purple-600 flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M16 16H8V8H16V16Z"></path>
+                    <path d="M12 20V16"></path>
+                    <path d="M12 8V4"></path>
+                    <path d="M20 12H16"></path>
+                    <path d="M8 12H4"></path>
+                  </svg>
                 </div>
-                <ServerUsageBar value={mem} />
-                <div className="mt-1.5 flex gap-1">
-                  <div className="bg-purple-100 text-purple-700 rounded px-1.5 py-0.5 text-[10px] font-medium flex-1 text-center">
-                    {mem_total > 0 ? formatBytes(mem_total) : "-"}
-                  </div>
-                  {swap_total > 0 && (
-                    <div className={cn("bg-indigo-100 text-indigo-700 rounded px-1.5 py-0.5 text-[10px] font-medium",
-                      Number(swap) > 90 ? "bg-red-100 text-red-700" :
-                        Number(swap) > 70 ? "bg-orange-100 text-orange-700" : "")}>
-                      SW:{swap.toFixed(0)}%
-                    </div>
-                  )}
-                </div>
+                <span className="text-xs font-medium">内存</span>
               </div>
-
-              {/* 存储 */}
-              <div className="bg-muted rounded-md p-1.5 border border-border">
-                <div className="flex items-center justify-between mb-1">
-                  <div className="flex items-center gap-1.5">
-                    <HardDrive className="size-3 text-amber-600" />
-                    <span className="text-xs font-medium">存储</span>
-                  </div>
-                  <span className="text-xs font-semibold">{stg.toFixed(1)}%</span>
-                </div>
-                <ServerUsageBar value={stg} />
-                <div className="mt-1.5">
-                  <div className="bg-amber-100 text-amber-700 rounded px-1.5 py-0.5 text-[10px] font-medium text-center">
-                    {disk_total > 0 ? formatBytes(disk_total) : "-"}
-                  </div>
-                </div>
+              <span className="text-xs font-semibold">{mem.toFixed(1)}%</span>
+            </div>
+            <ServerUsageBar value={mem} />
+            <div className="mt-2 flex gap-1">
+              <div className="bg-purple-100 text-purple-700 rounded px-1.5 py-0.5 text-[10px] font-medium flex-1 text-center">
+                {mem_total > 0 ? formatBytes(mem_total) : "-"}
               </div>
+              {swap_total > 0 && (
+                <div className={cn("bg-indigo-100 text-indigo-700 rounded px-1.5 py-0.5 text-[10px] font-medium",
+                  Number(swap) > 90 ? "bg-red-100 text-red-700" :
+                    Number(swap) > 70 ? "bg-orange-100 text-orange-700" : "")}>
+                  SW:{swap.toFixed(0)}%
+                </div>
+              )}
+            </div>
+          </div>
 
-              {/* 网络传输总量 */}
-              <div className="bg-muted rounded-md p-1.5 border border-border">
-                <div className="flex items-center gap-1.5 mb-1">
-                  <BarChart3 className="size-3 text-green-600" />
-                  <span className="text-xs font-medium">总传输</span>
-                </div>
-                <div className="space-y-1">
-                  <div className="flex justify-between items-center">
-                    <span className="text-[10px] text-muted-foreground">上传</span>
-                    <span className="text-xs font-semibold">{formatBytes(net_out_transfer)}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-[10px] text-muted-foreground">下载</span>
-                    <span className="text-xs font-semibold">{formatBytes(net_in_transfer)}</span>
-                  </div>
-                </div>
+          {/* 存储 */}
+          <div className="bg-muted rounded-md p-2 border border-border">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-1.5">
+                <HardDrive className="size-3 text-amber-600" />
+                <span className="text-xs font-medium">存储</span>
+              </div>
+              <span className="text-xs font-semibold">{stg.toFixed(1)}%</span>
+            </div>
+            <ServerUsageBar value={stg} />
+            <div className="mt-2">
+              <div className="bg-amber-100 text-amber-700 rounded px-1.5 py-0.5 text-[10px] font-medium text-center">
+                {disk_total > 0 ? formatBytes(disk_total) : "-"}
               </div>
             </div>
           </div>
 
-          {/* 右侧：流量和网络信息 */}
-          <div className="flex flex-col h-full">
-            {/* 流量使用统计 */}
-            {serverCycleData && serverCycleData.length > 0 ? (
-              <div className="flex flex-col h-full">
-                <h4 className="text-xs font-medium text-muted-foreground mb-1.5">Traffic & Billing</h4>
-                <div className="flex-1 space-y-1.5">
-                  {serverCycleData.map((cycle, index) => (
-                    <div key={index} className="bg-muted rounded-md p-1.5 border border-border">
-                      <div className="flex items-center justify-between mb-1">
-                        <div className="flex items-center gap-1.5">
-                          <BarChart3 className="size-3 text-emerald-600" />
-                          <span className="text-xs font-medium truncate">{cycle.name}</span>
-                        </div>
-                        <span className="text-[10px] bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded font-medium">
-                          {cycle.progress.toFixed(1)}%
-                        </span>
-                      </div>
-                      <div className="flex justify-between items-center text-[10px] mb-1">
-                        <span className="font-medium">{formatBytes(cycle.transfer)}</span>
-                        <span className="text-muted-foreground">/ {formatBytes(cycle.max)}</span>
-                      </div>
-                      <div className="relative h-1.5 bg-secondary rounded-full">
-                        <div
-                          className={cn("absolute inset-0 rounded-full transition-all duration-300", getProgressColorClass(cycle.progress))}
-                          style={{ width: `${Math.min(cycle.progress, 100)}%` }}
-                        />
-                      </div>
+          {/* 网络传输总量 */}
+          <div className="bg-muted rounded-md p-2 border border-border">
+            <div className="flex items-center gap-1.5 mb-2">
+              <BarChart3 className="size-3 text-green-600" />
+              <span className="text-xs font-medium">总传输</span>
+            </div>
+            <div className="space-y-1">
+              <div className="flex justify-between items-center">
+                <span className="text-[10px] text-muted-foreground">上传</span>
+                <span className="text-xs font-semibold">{formatBytes(net_out_transfer)}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-[10px] text-muted-foreground">下载</span>
+                <span className="text-xs font-semibold">{formatBytes(net_in_transfer)}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* 流量使用统计 */}
+          {serverCycleData && serverCycleData.length > 0 && serverCycleData.map((cycle, index) => (
+            <div key={index} className="bg-muted rounded-md p-2 border border-border">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-1.5">
+                  <BarChart3 className="size-3 text-emerald-600" />
+                  <span className="text-xs font-medium truncate">{cycle.name}</span>
+                </div>
+                <span className="text-[10px] bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded font-medium">
+                  {cycle.progress.toFixed(1)}%
+                </span>
+              </div>
+              <div className="flex justify-between items-center text-[10px] mb-1">
+                <span className="font-medium">{formatBytes(cycle.transfer)}</span>
+                <span className="text-muted-foreground">/ {formatBytes(cycle.max)}</span>
+              </div>
+              <div className="relative h-1.5 bg-secondary rounded-full">
+                <div
+                  className={cn("absolute inset-0 rounded-full transition-all duration-300", getProgressColorClass(cycle.progress))}
+                  style={{ width: `${Math.min(cycle.progress, 100)}%` }}
+                />
+              </div>
+            </div>
+          ))}
+
+          {/* 账单信息 */}
+          {parsedData?.billingDataMod && (() => {
+            const billing = parsedData.billingDataMod
+            let daysLeftObject = { days: 0, remainingPercentage: 0 }
+            let isNeverExpire = false
+
+            if (billing.endDate?.startsWith("0000-00-00")) {
+              isNeverExpire = true
+            } else if (billing.endDate) {
+              try {
+                daysLeftObject = getDaysBetweenDatesWithAutoRenewal(billing)
+              } catch (error) {
+                console.error('Error calculating billing days:', error)
+              }
+            }
+
+            return (
+              <div className="bg-muted rounded-md p-2 border border-border">
+                <div className="flex items-center gap-1.5 mb-2">
+                  <svg className="size-3 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                  </svg>
+                  <span className="text-xs font-medium">账单</span>
+                </div>
+                <div className="space-y-1">
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-1">
+                      {billing.amount && billing.amount !== "0" && billing.amount !== "-1" ? (
+                        <span className="text-xs font-semibold">{billing.amount}/{billing.cycle}</span>
+                      ) : billing.amount === "0" ? (
+                        <span className="text-[10px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded font-medium">免费</span>
+                      ) : billing.amount === "-1" ? (
+                        <span className="text-[10px] bg-pink-100 text-pink-700 px-1.5 py-0.5 rounded font-medium">按量计费</span>
+                      ) : null}
                     </div>
-                  ))}
-
-                  {/* 账单信息 */}
-                  {parsedData?.billingDataMod && (() => {
-                    const billing = parsedData.billingDataMod
-                    let daysLeftObject = { days: 0, remainingPercentage: 0 }
-                    let isNeverExpire = false
-
-                    if (billing.endDate?.startsWith("0000-00-00")) {
-                      isNeverExpire = true
-                    } else if (billing.endDate) {
-                      try {
-                        daysLeftObject = getDaysBetweenDatesWithAutoRenewal(billing)
-                      } catch (error) {
-                        console.error('Error calculating billing days:', error)
-                      }
-                    }
-
-                    return (
-                      <div className="bg-muted rounded-md p-1.5 border border-border">
-                        <div className="flex items-center gap-1.5 mb-1">
-                          <svg className="size-3 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                          </svg>
-                          <span className="text-xs font-medium">账单</span>
-                        </div>
-                        <div className="space-y-1">
-                          <div className="flex justify-between items-center">
-                            {/* 左侧：价格信息 */}
-                            <div className="flex items-center gap-1">
-                              {billing.amount && billing.amount !== "0" && billing.amount !== "-1" ? (
-                                <span className="text-xs font-semibold">{billing.amount}/{billing.cycle}</span>
-                              ) : billing.amount === "0" ? (
-                                <span className="text-[10px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded font-medium">免费</span>
-                              ) : billing.amount === "-1" ? (
-                                <span className="text-[10px] bg-pink-100 text-pink-700 px-1.5 py-0.5 rounded font-medium">按量计费</span>
-                              ) : null}
-                            </div>
-
-                            {/* 右侧：剩余时间 */}
-                            <div className="flex items-center gap-1">
-                              <span className="text-[10px] text-muted-foreground">
-                                {daysLeftObject.days < 0 ? "已过期" : "剩余"}
-                              </span>
-                              <span className={`text-xs font-semibold ${daysLeftObject.days < 0 ? "text-red-600" : "text-foreground"}`}>
-                                {isNeverExpire ? "永久" : `${Math.abs(daysLeftObject.days)}天`}
-                              </span>
-                            </div>
-                          </div>
-                          {daysLeftObject.days >= 0 && (
-                            <div className="relative h-1 bg-secondary rounded-full mt-1">
-                              <div
-                                className={cn("absolute inset-0 rounded-full transition-all duration-300",
-                                  isNeverExpire ? "bg-blue-500" :
-                                  daysLeftObject.remainingPercentage > 0.3 ? "bg-green-500" :
-                                    daysLeftObject.remainingPercentage > 0.1 ? "bg-yellow-500" : "bg-red-500"
-                                )}
-                                style={{ width: isNeverExpire ? "100%" : `${Math.max(daysLeftObject.remainingPercentage * 100, 2)}%` }}
-                              />
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )
-                  })()}
-
-                  {/* 补充空间：连接信息和网络速率 */}
-                  <div className="space-y-1.5 mt-auto">
-                    {/* 连接信息 */}
-                    <div className="bg-muted rounded-md p-1.5 border border-border">
-                      <div className="flex items-center gap-1.5 mb-1">
-                        <Server className="size-3 text-indigo-600" />
-                        <span className="text-xs font-medium">连接</span>
-                      </div>
-                      <div className="grid grid-cols-3 gap-1 text-center">
-                        <div className="flex flex-col">
-                          <span className="text-[10px] text-muted-foreground">TCP</span>
-                          <span className="text-xs font-semibold">{formatLargeNumber(tcp)}</span>
-                        </div>
-                        <div className="flex flex-col">
-                          <span className="text-[10px] text-muted-foreground">UDP</span>
-                          <span className="text-xs font-semibold">{formatLargeNumber(udp)}</span>
-                        </div>
-                        <div className="flex flex-col">
-                          <span className="text-[10px] text-muted-foreground">进程</span>
-                          <span className="text-xs font-semibold">{formatLargeNumber(process)}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* 网络速率 */}
-                    <div className="bg-muted rounded-md p-1.5 border border-border">
-                      <div className="flex items-center gap-1.5 mb-1">
-                        <ArrowUp className="size-3 text-blue-600" />
-                        <span className="text-xs font-medium">网络速率</span>
-                      </div>
-                      <div className="space-y-1">
-                        <div className="flex justify-between items-center">
-                          <span className="text-[10px] text-muted-foreground">上传</span>
-                          <span className="text-xs font-semibold">{formatSpeed(up)}</span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <span className="text-[10px] text-muted-foreground">下载</span>
-                          <span className="text-xs font-semibold">{formatSpeed(down)}</span>
-                        </div>
-                      </div>
+                    <div className="flex items-center gap-1">
+                      <span className="text-[10px] text-muted-foreground">
+                        {daysLeftObject.days < 0 ? "已过期" : "剩余"}
+                      </span>
+                      <span className={`text-xs font-semibold ${daysLeftObject.days < 0 ? "text-red-600" : "text-foreground"}`}>
+                        {isNeverExpire ? "永久" : `${Math.abs(daysLeftObject.days)}天`}
+                      </span>
                     </div>
                   </div>
+                  {daysLeftObject.days >= 0 && (
+                    <div className="relative h-1 bg-secondary rounded-full mt-1">
+                      <div
+                        className={cn("absolute inset-0 rounded-full transition-all duration-300",
+                          isNeverExpire ? "bg-blue-500" :
+                          daysLeftObject.remainingPercentage > 0.3 ? "bg-green-500" :
+                            daysLeftObject.remainingPercentage > 0.1 ? "bg-yellow-500" : "bg-red-500"
+                        )}
+                        style={{ width: isNeverExpire ? "100%" : `${Math.max(daysLeftObject.remainingPercentage * 100, 2)}%` }}
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
-            ) : (
-              /* 没有流量数据时的布局 */
-              <div className="flex flex-col h-full">
-                <h4 className="text-xs font-medium text-muted-foreground mb-1.5">Network & Billing</h4>
-                <div className="flex-1 space-y-1.5">
-                  {/* 账单信息 */}
-                  {parsedData?.billingDataMod && (() => {
-                    const billing = parsedData.billingDataMod
-                    let daysLeftObject = { days: 0, remainingPercentage: 0 }
-                    let isNeverExpire = false
+            )
+          })()}
 
-                    if (billing.endDate?.startsWith("0000-00-00")) {
-                      isNeverExpire = true
-                    } else if (billing.endDate) {
-                      try {
-                        daysLeftObject = getDaysBetweenDatesWithAutoRenewal(billing)
-                      } catch (error) {
-                        console.error('Error calculating billing days:', error)
-                      }
-                    }
-
-                    return (
-                      <div className="bg-muted rounded-md p-1.5 border border-border">
-                        <div className="flex items-center gap-1.5 mb-1">
-                          <svg className="size-3 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                          </svg>
-                          <span className="text-xs font-medium">账单</span>
-                        </div>
-                        <div className="space-y-1">
-                          <div className="flex justify-between items-center">
-                            {/* 左侧：价格信息 */}
-                            <div className="flex items-center gap-1">
-                              {billing.amount && billing.amount !== "0" && billing.amount !== "-1" ? (
-                                <span className="text-xs font-semibold">{billing.amount}/{billing.cycle}</span>
-                              ) : billing.amount === "0" ? (
-                                <span className="text-[10px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded font-medium">免费</span>
-                              ) : billing.amount === "-1" ? (
-                                <span className="text-[10px] bg-pink-100 text-pink-700 px-1.5 py-0.5 rounded font-medium">按量计费</span>
-                              ) : null}
-                            </div>
-
-                            {/* 右侧：剩余时间 */}
-                            <div className="flex items-center gap-1">
-                              <span className="text-[10px] text-muted-foreground">
-                                {daysLeftObject.days < 0 ? "已过期" : "剩余"}
-                              </span>
-                              <span className={`text-xs font-semibold ${daysLeftObject.days < 0 ? "text-red-600" : "text-foreground"}`}>
-                                {isNeverExpire ? "永久" : `${Math.abs(daysLeftObject.days)}天`}
-                              </span>
-                            </div>
-                          </div>
-                          {daysLeftObject.days >= 0 && (
-                            <div className="relative h-1 bg-secondary rounded-full mt-1">
-                              <div
-                                className={cn("absolute inset-0 rounded-full transition-all duration-300",
-                                  isNeverExpire ? "bg-blue-500" :
-                                  daysLeftObject.remainingPercentage > 0.3 ? "bg-green-500" :
-                                    daysLeftObject.remainingPercentage > 0.1 ? "bg-yellow-500" : "bg-red-500"
-                                )}
-                                style={{ width: isNeverExpire ? "100%" : `${Math.max(daysLeftObject.remainingPercentage * 100, 2)}%` }}
-                              />
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )
-                  })()}
-
-                  {/* 连接信息 */}
-                  <div className="bg-muted rounded-md p-1.5 border border-border">
-                    <div className="flex items-center gap-1.5 mb-1">
-                      <Server className="size-3 text-indigo-600" />
-                      <span className="text-xs font-medium">连接数</span>
-                    </div>
-                    <div className="space-y-1">
-                      <div className="flex justify-between items-center">
-                        <span className="text-[10px] text-muted-foreground">TCP</span>
-                        <span className="text-xs font-semibold">{formatLargeNumber(tcp)}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-[10px] text-muted-foreground">UDP</span>
-                        <span className="text-xs font-semibold">{formatLargeNumber(udp)}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-[10px] text-muted-foreground">进程</span>
-                        <span className="text-xs font-semibold">{formatLargeNumber(process)}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* 网络速率 */}
-                  <div className="bg-muted rounded-md p-1.5 border border-border">
-                    <div className="flex items-center gap-1.5 mb-1">
-                      <ArrowUp className="size-3 text-blue-600" />
-                      <span className="text-xs font-medium">网络速率</span>
-                    </div>
-                    <div className="space-y-1">
-                      <div className="flex justify-between items-center">
-                        <span className="text-[10px] text-muted-foreground">上传</span>
-                        <span className="text-xs font-semibold">{formatSpeed(up)}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-[10px] text-muted-foreground">下载</span>
-                        <span className="text-xs font-semibold">{formatSpeed(down)}</span>
-                      </div>
-                    </div>
-                  </div>
-
-
-                </div>
+          {/* 连接信息 */}
+          <div className="bg-muted rounded-md p-2 border border-border">
+            <div className="flex items-center gap-1.5 mb-2">
+              <Server className="size-3 text-indigo-600" />
+              <span className="text-xs font-medium">连接</span>
+            </div>
+            <div className="grid grid-cols-3 gap-1 text-center">
+              <div className="flex flex-col">
+                <span className="text-[10px] text-muted-foreground">TCP</span>
+                <span className="text-xs font-semibold">{formatLargeNumber(tcp)}</span>
               </div>
-            )}
+              <div className="flex flex-col">
+                <span className="text-[10px] text-muted-foreground">UDP</span>
+                <span className="text-xs font-semibold">{formatLargeNumber(udp)}</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[10px] text-muted-foreground">进程</span>
+                <span className="text-xs font-semibold">{formatLargeNumber(process)}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* 网络速率 */}
+          <div className="bg-muted rounded-md p-2 border border-border">
+            <div className="flex items-center gap-1.5 mb-2">
+              <ArrowUp className="size-3 text-blue-600" />
+              <span className="text-xs font-medium">网络速率</span>
+            </div>
+            <div className="space-y-1">
+              <div className="flex justify-between items-center">
+                <span className="text-[10px] text-muted-foreground">上传</span>
+                <span className="text-xs font-semibold">{formatSpeed(up)}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-[10px] text-muted-foreground">下载</span>
+                <span className="text-xs font-semibold">{formatSpeed(down)}</span>
+              </div>
+            </div>
           </div>
         </div>
       </CardContent>

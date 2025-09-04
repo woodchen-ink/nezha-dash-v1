@@ -382,7 +382,7 @@ export default function Servers() {
         />
       </div>
       
-      <section ref={containerRef} className="grid grid-cols-1 gap-6 lg:grid-cols-2 mt-4 server-card-list">
+      <section ref={containerRef} className="grid grid-cols-1 gap-6 mt-4 server-card-list">
         {filteredServers.map((serverInfo) => {
           // 查找服务器所属的分组
           const serverGroup = groupData?.data?.find(
