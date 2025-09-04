@@ -9,9 +9,9 @@ import { useNavigate } from "react-router-dom"
 
 import PlanInfo from "./PlanInfo"
 import BillingInfo from "./billingInfo"
-import { Card, CardContent, CardHeader, CardFooter } from "./ui/card"
+import { Card, CardContent, CardFooter } from "./ui/card"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip"
-import { ArrowDown, ArrowUp, Clock, Cpu, HardDrive, Server, BarChart3 } from "lucide-react"
+import { ArrowUp, Clock, Cpu, HardDrive, Server, BarChart3 } from "lucide-react"
 
 interface ServerCardProps {
   now: number;
@@ -62,8 +62,6 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
   }
 
   const showFlag = true
-  // @ts-expect-error ShowNetTransfer is a global variable
-  const showNetTransfer = window.ShowNetTransfer as boolean
 
   const parsedData = parsePublicNote(public_note)
 

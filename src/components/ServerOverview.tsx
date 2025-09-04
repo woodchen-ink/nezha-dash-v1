@@ -1,9 +1,7 @@
-import { Card, CardContent } from "@/components/ui/card"
 import { useStatus } from "@/hooks/use-status"
 import { formatBytes } from "@/lib/format"
 import { cn } from "@/lib/utils"
 import { ArrowDownCircleIcon, ArrowUpCircleIcon } from "@heroicons/react/20/solid"
-import { useTranslation } from "react-i18next"
 
 type ServerOverviewProps = {
   online: number
@@ -16,7 +14,6 @@ type ServerOverviewProps = {
 }
 
 export default function ServerOverview({ online, offline, total, up, down, upSpeed, downSpeed }: ServerOverviewProps) {
-  const { t } = useTranslation()
   const { status, setStatus } = useStatus()
 
   return (
