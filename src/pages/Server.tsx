@@ -3,18 +3,13 @@ import ServerCard from "@/components/ServerCard"
 import ServerOverview from "@/components/ServerOverview"
 import { ServiceTracker } from "@/components/ServiceTracker"
 import { Loader } from "@/components/loading/Loader"
-import { Label } from "@/components/ui/label"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { SORT_ORDERS, SORT_TYPES } from "@/context/sort-context"
-import { useSort } from "@/hooks/use-sort"
 import { useStatus } from "@/hooks/use-status"
 import { useWebSocketContext } from "@/hooks/use-websocket-context"
 import { fetchServerGroup, fetchService } from "@/lib/nezha-api"
 import { cn, formatNezhaInfo } from "@/lib/utils"
 import { NezhaWebsocketResponse } from "@/types/nezha-api"
 import { ServerGroup } from "@/types/nezha-api"
-import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon, ChartBarSquareIcon, MapIcon } from "@heroicons/react/20/solid"
+import { ChartBarSquareIcon, MapIcon } from "@heroicons/react/20/solid"
 import { useQuery } from "@tanstack/react-query"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -22,7 +17,6 @@ import DirectCountrySelect from "@/components/DirectCountrySelect"
 
 export default function Servers() {
   const { t } = useTranslation()
-  const { sortType, sortOrder, setSortOrder, setSortType } = useSort()
   const { data: groupData } = useQuery({
     queryKey: ["server-group"],
     queryFn: () => fetchServerGroup(),
@@ -32,7 +26,6 @@ export default function Servers() {
   const [showServices, setShowServices] = useState<string>("0")
   const [showMap, setShowMap] = useState<string>("0")
   const containerRef = useRef<HTMLDivElement>(null)
-  const [settingsOpen, setSettingsOpen] = useState<boolean>(false)
   
   // 使用ref存储筛选状态，防止WebSocket消息刷新时重置
   const groupRef = useRef<string>("All")
@@ -217,59 +210,14 @@ export default function Servers() {
       ? filteredServers
       : filteredServers.filter((server) => [status].includes(formatNezhaInfo(nezhaWsData.now, server).online ? "online" : "offline"))
 
+  // 简单按在线状态排序：在线的在前，离线的在后
   filteredServers = filteredServers.sort((a, b) => {
-    const serverAInfo = formatNezhaInfo(nezhaWsData.now, a)
-    const serverBInfo = formatNezhaInfo(nezhaWsData.now, b)
-
-    if (sortType !== "name") {
-      // 仅在非 "name" 排序时，先按在线状态排序
-      if (!serverAInfo.online && serverBInfo.online) return 1
-      if (serverAInfo.online && !serverBInfo.online) return -1
-      if (!serverAInfo.online && !serverBInfo.online) {
-        // 如果两者都离线，可以继续按照其他条件排序，或者保持原序
-        // 这里选择保持原序
-        return 0
-      }
-    }
-
-    let comparison = 0
-
-    switch (sortType) {
-      case "name":
-        comparison = a.name.localeCompare(b.name)
-        break
-      case "uptime":
-        comparison = (a.state?.uptime ?? 0) - (b.state?.uptime ?? 0)
-        break
-      case "system":
-        comparison = a.host.platform.localeCompare(b.host.platform)
-        break
-      case "cpu":
-        comparison = (a.state?.cpu ?? 0) - (b.state?.cpu ?? 0)
-        break
-      case "mem":
-        comparison = (formatNezhaInfo(nezhaWsData.now, a).mem ?? 0) - (formatNezhaInfo(nezhaWsData.now, b).mem ?? 0)
-        break
-      case "disk":
-        comparison = (formatNezhaInfo(nezhaWsData.now, a).disk ?? 0) - (formatNezhaInfo(nezhaWsData.now, b).disk ?? 0)
-        break
-      case "up":
-        comparison = (a.state?.net_out_speed ?? 0) - (b.state?.net_out_speed ?? 0)
-        break
-      case "down":
-        comparison = (a.state?.net_in_speed ?? 0) - (b.state?.net_in_speed ?? 0)
-        break
-      case "up total":
-        comparison = (a.state?.net_out_transfer ?? 0) - (b.state?.net_out_transfer ?? 0)
-        break
-      case "down total":
-        comparison = (a.state?.net_in_transfer ?? 0) - (b.state?.net_in_transfer ?? 0)
-        break
-      default:
-        comparison = 0
-    }
-
-    return sortOrder === "asc" ? comparison : -comparison
+    const aOnline = formatNezhaInfo(nezhaWsData.now, a).online
+    const bOnline = formatNezhaInfo(nezhaWsData.now, b).online
+    
+    if (aOnline && !bOnline) return -1
+    if (!aOnline && bOnline) return 1
+    return 0
   })
 
   return (
@@ -283,92 +231,35 @@ export default function Servers() {
         upSpeed={upSpeed}
         downSpeed={downSpeed}
       />
-      <div className="flex mt-6 items-center justify-between gap-3">
-        <section className="flex items-center gap-3">
-          <button
-            onClick={() => {
-              setShowMap(showMap === "0" ? "1" : "0")
-              localStorage.setItem("showMap", showMap === "0" ? "1" : "0")
-            }}
-            className={cn(
-              "rounded-xl bg-card cursor-pointer p-3 transition-all hover:bg-muted border border-border",
-              {
-                "bg-primary text-primary-foreground": showMap === "1",
-              }
-            )}
-          >
-            <MapIcon className="size-4" />
-          </button>
-          <button
-            onClick={() => {
-              setShowServices(showServices === "0" ? "1" : "0")
-              localStorage.setItem("showServices", showServices === "0" ? "1" : "0")
-            }}
-            className={cn(
-              "rounded-xl bg-card cursor-pointer p-3 transition-all hover:bg-muted border border-border",
-              {
-                "bg-primary text-primary-foreground": showServices === "1",
-              }
-            )}
-          >
-            <ChartBarSquareIcon className="size-4" />
-          </button>
-        </section>
-        <Popover onOpenChange={setSettingsOpen}>
-          <PopoverTrigger asChild>
-            <button
-              className={cn(
-                "rounded-xl flex items-center gap-2 bg-card px-4 py-3 transition-all hover:bg-muted border border-border",
-                {
-                  "bg-muted": settingsOpen,
-                }
-              )}
-            >
-              <p className="text-sm font-medium">{sortType === "default" ? "Sort" : sortType.charAt(0).toUpperCase() + sortType.slice(1)}</p>
-              {sortOrder === "asc" && sortType !== "default" ? (
-                <ArrowUpIcon className="size-4" />
-              ) : sortOrder === "desc" && sortType !== "default" ? (
-                <ArrowDownIcon className="size-4" />
-              ) : (
-                <ArrowsUpDownIcon className="size-4" />
-              )}
-            </button>
-          </PopoverTrigger>
-          <PopoverContent className="p-4 w-60 rounded-xl border border-border">
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label className="text-sm font-medium text-muted-foreground">Sort by</Label>
-                <Select value={sortType} onValueChange={setSortType}>
-                  <SelectTrigger className="w-full rounded-lg">
-                    <SelectValue placeholder="Choose type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {SORT_TYPES.map((type) => (
-                      <SelectItem key={type} value={type}>
-                        {type.charAt(0).toUpperCase() + type.slice(1)}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label className="text-sm font-medium text-muted-foreground">Sort order</Label>
-                <Select value={sortOrder} onValueChange={setSortOrder} disabled={sortType === "default"}>
-                  <SelectTrigger className="w-full rounded-lg">
-                    <SelectValue placeholder="Choose order" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {SORT_ORDERS.map((order) => (
-                      <SelectItem key={order} value={order}>
-                        {order.charAt(0).toUpperCase() + order.slice(1)}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          </PopoverContent>
-        </Popover>
+      <div className="flex mt-4 items-center gap-3">
+        <button
+          onClick={() => {
+            setShowMap(showMap === "0" ? "1" : "0")
+            localStorage.setItem("showMap", showMap === "0" ? "1" : "0")
+          }}
+          className={cn(
+            "rounded-lg bg-card cursor-pointer p-2 transition-all hover:bg-muted border border-border",
+            {
+              "bg-primary text-primary-foreground": showMap === "1",
+            }
+          )}
+        >
+          <MapIcon className="size-4" />
+        </button>
+        <button
+          onClick={() => {
+            setShowServices(showServices === "0" ? "1" : "0")
+            localStorage.setItem("showServices", showServices === "0" ? "1" : "0")
+          }}
+          className={cn(
+            "rounded-lg bg-card cursor-pointer p-2 transition-all hover:bg-muted border border-border",
+            {
+              "bg-primary text-primary-foreground": showServices === "1",
+            }
+          )}
+        >
+          <ChartBarSquareIcon className="size-4" />
+        </button>
       </div>
       {showMap === "1" && <GlobalMap now={nezhaWsData.now} serverList={nezhaWsData?.servers || []} />}
       {showServices === "1" && <ServiceTracker serverList={filteredServers} />}

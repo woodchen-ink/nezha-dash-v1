@@ -19,114 +19,60 @@ export default function ServerOverview({ online, offline, total, up, down, upSpe
   const { t } = useTranslation()
   const { status, setStatus } = useStatus()
 
-  // @ts-expect-error DisableAnimatedMan is a global variable
-  const disableAnimatedMan = window.DisableAnimatedMan as boolean
-
-  // @ts-expect-error CustomIllustration is a global variable
-  const customIllustration = window.CustomIllustration || "/animated-man.webp"
-
-
   return (
-    <>
-      <section className="grid grid-cols-2 gap-4 lg:grid-cols-4 server-overview">
-        <Card
-          onClick={() => {
-            setStatus("all")
-          }}
-          className="hover:border-primary cursor-pointer transition-all"
-        >
-          <CardContent className="flex h-full items-center p-6">
-            <section className="flex flex-col gap-2">
-              <p className="text-sm font-medium text-muted-foreground">{t("serverOverview.totalServers")}</p>
-              <div className="flex items-center gap-3">
-                <span className="relative flex h-3 w-3">
-                  <span className="relative inline-flex h-3 w-3 rounded-full bg-primary"></span>
-                </span>
-                <div className="text-2xl font-semibold">{total}</div>
-              </div>
-            </section>
-          </CardContent>
-        </Card>
-        <Card
-          onClick={() => {
-            setStatus("online")
-          }}
-          className={cn(
-            "cursor-pointer hover:border-green-500 transition-all",
-            {
-              "border-green-500": status === "online",
-            },
-          )}
-        >
-          <CardContent className="flex h-full items-center p-6">
-            <section className="flex flex-col gap-2">
-              <p className="text-sm font-medium text-muted-foreground">{t("serverOverview.onlineServers")}</p>
-              <div className="flex items-center gap-3">
-                <span className="relative flex h-3 w-3">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-75"></span>
-                  <span className="relative inline-flex h-3 w-3 rounded-full bg-green-500"></span>
-                </span>
-                <div className="text-2xl font-semibold">{online}</div>
-              </div>
-            </section>
-          </CardContent>
-        </Card>
-        <Card
-          onClick={() => {
-            setStatus("offline")
-          }}
-          className={cn(
-            "cursor-pointer hover:border-red-500 transition-all",
-            {
-              "border-red-500": status === "offline",
-            },
-          )}
-        >
-          <CardContent className="flex h-full items-center p-6">
-            <section className="flex flex-col gap-2">
-              <p className="text-sm font-medium text-muted-foreground">{t("serverOverview.offlineServers")}</p>
-              <div className="flex items-center gap-3">
-                <span className="relative flex h-3 w-3">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75"></span>
-                  <span className="relative inline-flex h-3 w-3 rounded-full bg-red-500"></span>
-                </span>
-                <div className="text-2xl font-semibold">{offline}</div>
-              </div>
-            </section>
-          </CardContent>
-        </Card>
-        <Card className="hover:border-primary transition-all">
-          <CardContent className="flex h-full items-center relative p-6">
-            <section className="flex flex-col gap-2 w-full">
-              <div className="flex items-center w-full justify-between">
-                <p className="text-sm font-medium text-muted-foreground">{t("serverOverview.network")}</p>
-              </div>
-              <section className="flex items-start flex-row gap-2">
-                <p className="text-xs text-blue-600 font-medium">↑{formatBytes(up)}</p>
-                <p className="text-xs text-purple-600 font-medium">↓{formatBytes(down)}</p>
-              </section>
-              <section className="flex flex-col sm:flex-row sm:items-center items-start gap-2">
-                <p className="text-xs flex items-center font-semibold">
-                  <ArrowUpCircleIcon className="size-4 mr-1 text-blue-600" />
-                  {formatBytes(upSpeed)}/s
-                </p>
-                <p className="text-xs flex items-center font-semibold">
-                  <ArrowDownCircleIcon className="size-4 mr-1 text-purple-600" />
-                  {formatBytes(downSpeed)}/s
-                </p>
-              </section>
-            </section>
-            {!disableAnimatedMan && (
-              <img
-                className="absolute right-3 top-[-40px] z-50 w-12 opacity-80"
-                alt={"animated-man"}
-                src={customIllustration}
-                loading="eager"
-              />
+    <div className="bg-card/50 backdrop-blur-sm border rounded-lg p-3 mb-4">
+      <div className="flex items-center justify-between flex-wrap gap-4">
+        {/* 服务器状态统计 */}
+        <div className="flex items-center gap-6">
+          <div 
+            onClick={() => setStatus("all")}
+            className="flex items-center gap-2 cursor-pointer hover:bg-muted/50 rounded px-2 py-1 transition-colors"
+          >
+            <div className="size-2 rounded-full bg-primary"></div>
+            <span className="text-sm text-muted-foreground">总计</span>
+            <span className="font-semibold">{total}</span>
+          </div>
+          
+          <div 
+            onClick={() => setStatus("online")}
+            className={cn(
+              "flex items-center gap-2 cursor-pointer hover:bg-muted/50 rounded px-2 py-1 transition-colors",
+              { "bg-green-50 dark:bg-green-900/20": status === "online" }
             )}
-          </CardContent>
-        </Card>
-      </section>
-    </>
+          >
+            <div className="size-2 rounded-full bg-green-500 animate-pulse"></div>
+            <span className="text-sm text-muted-foreground">在线</span>
+            <span className="font-semibold text-green-600">{online}</span>
+          </div>
+          
+          <div 
+            onClick={() => setStatus("offline")}
+            className={cn(
+              "flex items-center gap-2 cursor-pointer hover:bg-muted/50 rounded px-2 py-1 transition-colors",
+              { "bg-red-50 dark:bg-red-900/20": status === "offline" }
+            )}
+          >
+            <div className="size-2 rounded-full bg-red-500"></div>
+            <span className="text-sm text-muted-foreground">离线</span>
+            <span className="font-semibold text-red-600">{offline}</span>
+          </div>
+        </div>
+
+        {/* 网络流量统计 */}
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-1 text-sm">
+            <ArrowUpCircleIcon className="size-4 text-blue-600" />
+            <span className="text-blue-600 font-medium">{formatBytes(upSpeed)}/s</span>
+          </div>
+          <div className="flex items-center gap-1 text-sm">
+            <ArrowDownCircleIcon className="size-4 text-purple-600" />
+            <span className="text-purple-600 font-medium">{formatBytes(downSpeed)}/s</span>
+          </div>
+          <div className="text-xs text-muted-foreground">
+            总流量: ↑{formatBytes(up)} ↓{formatBytes(down)}
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
