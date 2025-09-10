@@ -356,7 +356,7 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
             <ServerUsageBar value={mem} />
             <div className="mt-2 flex gap-1">
               <div className="bg-purple-100 text-purple-700 rounded px-1.5 py-0.5 text-[10px] font-medium flex-1 text-center">
-                {mem_total > 0 ? formatBytes(mem_total) : "-"}
+                {mem_total > 0 ? `${formatBytes(mem_total * mem / 100)} / ${formatBytes(mem_total)}` : "-"}
               </div>
               {swap_total > 0 && (
                 <div className={cn("bg-indigo-100 text-indigo-700 rounded px-1.5 py-0.5 text-[10px] font-medium",
@@ -380,7 +380,7 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
             <ServerUsageBar value={stg} />
             <div className="mt-2">
               <div className="bg-amber-100 text-amber-700 rounded px-1.5 py-0.5 text-[10px] font-medium text-center">
-                {disk_total > 0 ? formatBytes(disk_total) : "-"}
+                {disk_total > 0 ? `${formatBytes(disk_total * stg / 100)} / ${formatBytes(disk_total)}` : "-"}
               </div>
             </div>
           </div>
