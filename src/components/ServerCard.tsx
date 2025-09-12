@@ -193,17 +193,17 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
         {/* 离线卡片的分组标签 */}
         {groupName && (
           <div className="absolute top-2 right-2">
-            <div className="px-1.5 py-0.5 text-[10px] font-medium bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400 rounded-sm border border-red-200 dark:border-red-800">
+            <div className="px-1.5 py-0.5 text-[10px] sm:text-xs font-medium bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400 rounded-sm border border-red-200 dark:border-red-800">
               {groupName}
             </div>
           </div>
         )}
 
-        <CardContent className="p-4 pt-6">
-          <div className="flex items-center gap-3 mb-2">
+        <CardContent className="p-3 sm:p-4 pt-5 sm:pt-6">
+          <div className="flex items-center gap-2 sm:gap-3 mb-2">
             <span className="h-3 w-3 shrink-0 rounded-full bg-red-500 shadow-sm pulse-animation shadow-red-300 dark:shadow-red-900"></span>
             {showFlag && <ServerFlag country_code={country_code} />}
-            <h3 className="font-bold text-sm truncate flex-1">{name}</h3>
+            <h3 className="font-bold text-sm sm:text-base truncate flex-1">{name}</h3>
           </div>
 
           <div className="flex justify-between items-start">
@@ -269,18 +269,18 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
     >
       <CardContent className="p-4 relative">
         {/* 顶部：服务器名称和状态 */}
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center justify-between mb-2 sm:mb-3">
           <div className="flex items-center gap-2">
             {showFlag && <ServerFlag country_code={country_code} />}
-            <h3 className="font-semibold text-sm truncate">{name}</h3>
+            <h3 className="font-semibold text-sm sm:text-base truncate">{name}</h3>
             {groupName && (
-              <div className="px-1.5 py-0.5 text-[10px] font-medium bg-green-100 text-green-700 rounded">
+              <div className="px-1.5 py-0.5 text-[10px] sm:text-xs font-medium bg-green-100 text-green-700 rounded">
                 {groupName}
               </div>
             )}
           </div>
 
-          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <div className="flex items-center gap-1 sm:gap-1.5 text-xs sm:text-sm text-muted-foreground">
             <div className="flex items-center">
               {platform.includes("Windows") ? (
                 <MageMicrosoftWindows className="size-3 mr-1" />
@@ -290,7 +290,7 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
               <span className="truncate">{platform.includes("Windows") ? "Win" : GetOsName(platform)}</span>
             </div>
             {arch && (
-              <div className="bg-blue-100 text-blue-700 rounded px-1.5 py-0.5 text-[10px] font-medium">
+              <div className="bg-blue-100 text-blue-700 rounded px-1.5 py-0.5 text-[10px] sm:text-xs font-medium">
                 {arch}
               </div>
             )}
@@ -303,27 +303,28 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
           </div>
         </div>
 
-        {/* 主要内容：网格布局 */}
-        <div className="grid grid-cols-4 gap-2 auto-rows-max relative">
+        {/* 主要内容：响应式网格布局 */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5 sm:gap-2 auto-rows-max relative">
+          {/* 移动端优先显示：CPU, 内存, 存储, 网络速率 */}
           {/* CPU */}
-          <div className="bg-muted rounded-md p-2 border border-border">
-            <div className="flex items-center justify-between mb-2">
+          <div className="bg-muted rounded-md p-1.5 sm:p-2 border border-border">
+            <div className="flex items-center justify-between mb-1 sm:mb-2">
               <div className="flex items-center gap-1.5">
                 <Cpu className="size-3 text-blue-600" />
-                <span className="text-xs font-medium">CPU</span>
+                <span className="text-xs sm:text-sm font-medium">CPU</span>
               </div>
-              <span className="text-xs font-semibold">{cpu.toFixed(1)}%</span>
+              <span className="text-xs sm:text-sm font-semibold">{cpu.toFixed(1)}%</span>
             </div>
             <ServerUsageBar value={cpu} />
             {cpu_info && cpu_info.length > 0 && (
               <div className="mt-2 flex gap-1">
-                <div className="bg-gray-100 text-gray-700 rounded px-1.5 py-0.5 text-[10px] font-medium flex-1 truncate">
+                <div className="bg-gray-100 text-gray-700 rounded px-1 sm:px-1.5 py-0.5 text-[9px] sm:text-[10px] font-medium flex-1 truncate">
                   {cpu_info.join("\n")}
                 </div>
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <div className="bg-blue-100 text-blue-700 rounded px-1.5 py-0.5 text-[10px] font-medium">
+                      <div className="bg-blue-100 text-blue-700 rounded px-1 sm:px-1.5 py-0.5 text-[9px] sm:text-[10px] font-medium">
                         {cpu_info[0].includes("Physical") ? "pCPU" : "vCPU"}:{cpu_info[0].match(/(\d+)\s+(?:Physical|Virtual)\s+Core/)?.[1] || "-"}
                       </div>
                     </TooltipTrigger>
@@ -337,8 +338,8 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
           </div>
 
           {/* 内存 */}
-          <div className="bg-muted rounded-md p-2 border border-border">
-            <div className="flex items-center justify-between mb-2">
+          <div className="bg-muted rounded-md p-1.5 sm:p-2 border border-border">
+            <div className="flex items-center justify-between mb-1 sm:mb-2">
               <div className="flex items-center gap-1.5">
                 <div className="size-3 text-purple-600 flex items-center justify-center">
                   <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -349,17 +350,17 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
                     <path d="M8 12H4"></path>
                   </svg>
                 </div>
-                <span className="text-xs font-medium">内存</span>
+                <span className="text-xs sm:text-sm font-medium">内存</span>
               </div>
-              <span className="text-xs font-semibold">{mem.toFixed(1)}%</span>
+              <span className="text-xs sm:text-sm font-semibold">{mem.toFixed(1)}%</span>
             </div>
             <ServerUsageBar value={mem} />
             <div className="mt-2 flex gap-1">
-              <div className="bg-purple-100 text-purple-700 rounded px-1.5 py-0.5 text-[10px] font-medium flex-1 text-center">
+              <div className="bg-purple-100 text-purple-700 rounded px-1 sm:px-1.5 py-0.5 text-[9px] sm:text-[10px] font-medium flex-1 text-center">
                 {mem_total > 0 ? `${formatBytes(mem_total * mem / 100)} / ${formatBytes(mem_total)}` : "-"}
               </div>
               {swap_total > 0 && (
-                <div className={cn("bg-indigo-100 text-indigo-700 rounded px-1.5 py-0.5 text-[10px] font-medium",
+                <div className={cn("bg-indigo-100 text-indigo-700 rounded px-1 sm:px-1.5 py-0.5 text-[9px] sm:text-[10px] font-medium",
                   Number(swap) > 90 ? "bg-red-100 text-red-700" :
                     Number(swap) > 70 ? "bg-orange-100 text-orange-700" : "")}>
                   SW:{swap.toFixed(0)}%
@@ -369,53 +370,72 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
           </div>
 
           {/* 存储 */}
-          <div className="bg-muted rounded-md p-2 border border-border">
-            <div className="flex items-center justify-between mb-2">
+          <div className="bg-muted rounded-md p-1.5 sm:p-2 border border-border">
+            <div className="flex items-center justify-between mb-1 sm:mb-2">
               <div className="flex items-center gap-1.5">
                 <HardDrive className="size-3 text-amber-600" />
-                <span className="text-xs font-medium">存储</span>
+                <span className="text-xs sm:text-sm font-medium">存储</span>
               </div>
-              <span className="text-xs font-semibold">{stg.toFixed(1)}%</span>
+              <span className="text-xs sm:text-sm font-semibold">{stg.toFixed(1)}%</span>
             </div>
             <ServerUsageBar value={stg} />
             <div className="mt-2">
-              <div className="bg-amber-100 text-amber-700 rounded px-1.5 py-0.5 text-[10px] font-medium text-center">
+              <div className="bg-amber-100 text-amber-700 rounded px-1 sm:px-1.5 py-0.5 text-[9px] sm:text-[10px] font-medium text-center">
                 {disk_total > 0 ? `${formatBytes(disk_total * stg / 100)} / ${formatBytes(disk_total)}` : "-"}
               </div>
             </div>
           </div>
 
-          {/* 网络传输总量 */}
-          <div className="bg-muted rounded-md p-2 border border-border">
-            <div className="flex items-center gap-1.5 mb-2">
-              <BarChart3 className="size-3 text-green-600" />
-              <span className="text-xs font-medium">总传输</span>
+          {/* 网络速率 - 移动端优先显示 */}
+          <div className="bg-muted rounded-md p-1.5 sm:p-2 border border-border">
+            <div className="flex items-center gap-1.5 mb-1 sm:mb-2">
+              <ArrowUp className="size-3 text-blue-600" />
+              <span className="text-xs sm:text-sm font-medium">网络速率</span>
             </div>
             <div className="space-y-1">
               <div className="flex justify-between items-center">
-                <span className="text-[10px] text-muted-foreground">上传</span>
-                <span className="text-xs font-semibold">{formatBytes(net_out_transfer)}</span>
+                <span className="text-[9px] sm:text-[10px] text-muted-foreground">上传</span>
+                <span className="text-xs sm:text-sm font-semibold">{formatSpeed(up)}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-[10px] text-muted-foreground">下载</span>
-                <span className="text-xs font-semibold">{formatBytes(net_in_transfer)}</span>
+                <span className="text-[9px] sm:text-[10px] text-muted-foreground">下载</span>
+                <span className="text-xs sm:text-sm font-semibold">{formatSpeed(down)}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* 以下在移动端隐藏，只在sm以上屏幕显示 */}
+          {/* 网络传输总量 */}
+          <div className="hidden sm:block bg-muted rounded-md p-1.5 sm:p-2 border border-border">
+            <div className="flex items-center gap-1.5 mb-1 sm:mb-2">
+              <BarChart3 className="size-3 text-green-600" />
+              <span className="text-xs sm:text-sm font-medium">总传输</span>
+            </div>
+            <div className="space-y-1">
+              <div className="flex justify-between items-center">
+                <span className="text-[9px] sm:text-[10px] text-muted-foreground">上传</span>
+                <span className="text-xs sm:text-sm font-semibold">{formatBytes(net_out_transfer)}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-[9px] sm:text-[10px] text-muted-foreground">下载</span>
+                <span className="text-xs sm:text-sm font-semibold">{formatBytes(net_in_transfer)}</span>
               </div>
             </div>
           </div>
 
           {/* 流量使用统计 */}
           {serverCycleData && serverCycleData.length > 0 && serverCycleData.map((cycle, index) => (
-            <div key={index} className="bg-muted rounded-md p-2 border border-border">
-              <div className="flex items-center justify-between mb-2">
+            <div key={index} className="bg-muted rounded-md p-1.5 sm:p-2 border border-border col-span-2 sm:col-span-1">
+              <div className="flex items-center justify-between mb-1 sm:mb-2">
                 <div className="flex items-center gap-1.5">
                   <BarChart3 className="size-3 text-emerald-600" />
-                  <span className="text-xs font-medium truncate">{cycle.name}</span>
+                  <span className="text-xs sm:text-sm font-medium truncate">{cycle.name}</span>
                 </div>
-                <span className="text-[10px] bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded font-medium">
+                <span className="text-[9px] sm:text-[10px] bg-emerald-100 text-emerald-700 px-1 sm:px-1.5 py-0.5 rounded font-medium">
                   {cycle.progress.toFixed(1)}%
                 </span>
               </div>
-              <div className="flex justify-between items-center text-[10px] mb-1">
+              <div className="flex justify-between items-center text-[9px] sm:text-[10px] mb-1">
                 <span className="font-medium">{formatBytes(cycle.transfer)}</span>
                 <span className="text-muted-foreground">/ {formatBytes(cycle.max)}</span>
               </div>
@@ -445,29 +465,29 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
             }
 
             return (
-              <div className="bg-muted rounded-md p-2 border border-border">
-                <div className="flex items-center gap-1.5 mb-2">
+              <div className="bg-muted rounded-md p-1.5 sm:p-2 border border-border col-span-2 sm:col-span-1">
+                <div className="flex items-center gap-1.5 mb-1 sm:mb-2">
                   <svg className="size-3 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
                   </svg>
-                  <span className="text-xs font-medium">账单</span>
+                  <span className="text-xs sm:text-sm font-medium">账单</span>
                 </div>
                 <div className="space-y-1">
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-1">
                       {billing.amount && billing.amount !== "0" && billing.amount !== "-1" ? (
-                        <span className="text-xs font-semibold">{billing.amount}/{billing.cycle}</span>
+                        <span className="text-xs sm:text-sm font-semibold">{billing.amount}/{billing.cycle}</span>
                       ) : billing.amount === "0" ? (
-                        <span className="text-[10px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded font-medium">免费</span>
+                        <span className="text-[9px] sm:text-[10px] bg-green-100 text-green-700 px-1 sm:px-1.5 py-0.5 rounded font-medium">免费</span>
                       ) : billing.amount === "-1" ? (
-                        <span className="text-[10px] bg-pink-100 text-pink-700 px-1.5 py-0.5 rounded font-medium">按量计费</span>
+                        <span className="text-[9px] sm:text-[10px] bg-pink-100 text-pink-700 px-1 sm:px-1.5 py-0.5 rounded font-medium">按量计费</span>
                       ) : null}
                     </div>
                     <div className="flex items-center gap-1">
-                      <span className="text-[10px] text-muted-foreground">
+                      <span className="text-[9px] sm:text-[10px] text-muted-foreground">
                         {daysLeftObject.days < 0 ? "已过期" : "剩余"}
                       </span>
-                      <span className={`text-xs font-semibold ${daysLeftObject.days < 0 ? "text-red-600" : "text-foreground"}`}>
+                      <span className={`text-xs sm:text-sm font-semibold ${daysLeftObject.days < 0 ? "text-red-600" : "text-foreground"}`}>
                         {isNeverExpire ? "永久" : `${Math.abs(daysLeftObject.days)}天`}
                       </span>
                     </div>
@@ -489,42 +509,24 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
             )
           })()}
 
-          {/* 连接信息 */}
-          <div className="bg-muted rounded-md p-2 border border-border">
-            <div className="flex items-center gap-1.5 mb-2">
+          {/* 连接信息 - 在移动端隐藏 */}
+          <div className="hidden sm:block bg-muted rounded-md p-1.5 sm:p-2 border border-border">
+            <div className="flex items-center gap-1.5 mb-1 sm:mb-2">
               <Server className="size-3 text-indigo-600" />
-              <span className="text-xs font-medium">连接</span>
+              <span className="text-xs sm:text-sm font-medium">连接</span>
             </div>
             <div className="grid grid-cols-3 gap-1 text-center">
               <div className="flex flex-col">
-                <span className="text-[10px] text-muted-foreground">TCP</span>
-                <span className="text-xs font-semibold">{formatLargeNumber(tcp)}</span>
+                <span className="text-[9px] sm:text-[10px] text-muted-foreground">TCP</span>
+                <span className="text-xs sm:text-sm font-semibold">{formatLargeNumber(tcp)}</span>
               </div>
               <div className="flex flex-col">
-                <span className="text-[10px] text-muted-foreground">UDP</span>
-                <span className="text-xs font-semibold">{formatLargeNumber(udp)}</span>
+                <span className="text-[9px] sm:text-[10px] text-muted-foreground">UDP</span>
+                <span className="text-xs sm:text-sm font-semibold">{formatLargeNumber(udp)}</span>
               </div>
               <div className="flex flex-col">
-                <span className="text-[10px] text-muted-foreground">进程</span>
-                <span className="text-xs font-semibold">{formatLargeNumber(process)}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* 网络速率 */}
-          <div className="bg-muted rounded-md p-2 border border-border">
-            <div className="flex items-center gap-1.5 mb-2">
-              <ArrowUp className="size-3 text-blue-600" />
-              <span className="text-xs font-medium">网络速率</span>
-            </div>
-            <div className="space-y-1">
-              <div className="flex justify-between items-center">
-                <span className="text-[10px] text-muted-foreground">上传</span>
-                <span className="text-xs font-semibold">{formatSpeed(up)}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-[10px] text-muted-foreground">下载</span>
-                <span className="text-xs font-semibold">{formatSpeed(down)}</span>
+                <span className="text-[9px] sm:text-[10px] text-muted-foreground">进程</span>
+                <span className="text-xs sm:text-sm font-semibold">{formatLargeNumber(process)}</span>
               </div>
             </div>
           </div>
@@ -534,7 +536,7 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
       </CardContent>
 
       {/* 底部信息：套餐信息和负载 */}
-      <CardFooter className="px-4 pt-2 pb-3">
+      <CardFooter className="px-3 sm:px-4 pt-1.5 sm:pt-2 pb-2 sm:pb-3">
         <div className="flex items-center justify-between w-full">
           {/* 左侧：套餐信息 */}
           <div className="flex items-center gap-2">
@@ -548,7 +550,7 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
             <svg className="size-3 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
             </svg>
-            <div className="text-xs">
+            <div className="text-xs sm:text-sm">
               <span className="font-medium">负载:</span>
               <span className="ml-1">{load_1} / {load_5} / {load_15}</span>
             </div>
