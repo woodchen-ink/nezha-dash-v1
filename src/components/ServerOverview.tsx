@@ -17,7 +17,7 @@ export default function ServerOverview({ online, offline, total, up, down, upSpe
   const { status, setStatus } = useStatus()
 
   return (
-    <div className="bg-card/50 backdrop-blur-sm border rounded-lg p-3 mb-4">
+    <div className="glass-panel rounded-xl p-3 mb-4">
       <div className="flex items-center justify-between flex-wrap gap-4">
         {/* 服务器状态统计 */}
         <div className="flex items-center gap-6">

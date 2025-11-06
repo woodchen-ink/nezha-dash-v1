@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react"
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom"
 
 import { DashCommand } from "./components/DashCommand"
+import DynamicBackground from "./components/DynamicBackground"
 import ErrorBoundary from "./components/ErrorBoundary"
 import Footer from "./components/Footer"
 import Header, { RefreshToast } from "./components/Header"
@@ -57,8 +58,11 @@ const App: React.FC = () => {
   return (
     <Router basename={import.meta.env.BASE_URL}>
       <ErrorBoundary>
-        <div className="min-h-screen bg-background">
-          <main className="flex min-h-screen flex-col gap-4 p-4 md:p-8">
+        <div className="min-h-screen relative">
+          {/* 动态背景层 */}
+          <DynamicBackground />
+
+          <main className="flex min-h-screen flex-col gap-4 p-4 md:p-8 relative z-10">
             <RefreshToast />
             <Header />
             <DashCommand />

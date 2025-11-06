@@ -83,8 +83,8 @@ export default function ServerDetailOverview({ server_id }: { server_id: string 
 
   return (
     <div
-      className={cn({
-        "bg-card/70 p-4 rounded-[10px]": customBackgroundImage,
+      className={cn("glass-panel p-4 rounded-xl", {
+        "backdrop-blur-xl": customBackgroundImage,
       })}
     >
       <div

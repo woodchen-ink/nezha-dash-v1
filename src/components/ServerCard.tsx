@@ -187,7 +187,7 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
   if (!online) {
     return (
       <Card
-        className="cursor-pointer hover:shadow-lg transition-all duration-300 bg-card border border-red-200 shadow-sm"
+        className="cursor-pointer transition-all duration-300 border-red-300/40"
         onClick={cardClick}
       >
         {/* 离线卡片的分组标签 */}
@@ -264,7 +264,7 @@ export default function ServerCard({ now, serverInfo, cycleStats, groupName }: S
 
   return (
     <Card
-      className="cursor-pointer hover:shadow-lg transition-all duration-300 bg-card border border-green-200 shadow-sm"
+      className="cursor-pointer transition-all duration-300 border-green-300/40"
       onClick={cardClick}
     >
       <CardContent className="p-4 relative">

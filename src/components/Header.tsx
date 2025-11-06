@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 import { useQuery } from "@tanstack/react-query"
 import { AnimatePresence } from "framer-motion"
 import { ImageMinus } from "lucide-react"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 
@@ -104,8 +104,8 @@ function Header() {
               variant="outline"
               size="sm"
               onClick={handleBackgroundToggle}
-              className={cn("rounded-full px-[9px] bg-white dark:bg-black", {
-                "bg-white/70 dark:bg-black/70": customBackgroundImage,
+              className={cn("glass-panel rounded-full px-[9px]", {
+                "backdrop-blur-xl": customBackgroundImage,
                 "hidden sm:block": customMobileBackgroundImage,
               })}
             >
@@ -115,8 +115,8 @@ function Header() {
           <Button
             variant="outline"
             size="sm"
-            className={cn("hover:bg-white dark:hover:bg-black cursor-default rounded-full flex items-center px-[9px] bg-white dark:bg-black", {
-              "bg-white/70 dark:bg-black/70": customBackgroundImage,
+            className={cn("glass-panel cursor-default rounded-full flex items-center px-[9px]", {
+              "backdrop-blur-xl": customBackgroundImage,
             })}
           >
             {connected ? onlineCount : <Loader visible={true} />}
